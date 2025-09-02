@@ -1,5 +1,6 @@
 let words = [], allWords = [], index = 0, correct_answers = 0, wrong_answers = 0, reverse = false;
-let currentWord = null; // текущее слово
+let currentWord = null;
+let remainingWords = []; // для случайного выбора без повторов
 
 const switchBtn = document.getElementById('switchBtn');
 const fiftyBtn = document.getElementById('fiftyBtn');
@@ -29,8 +30,8 @@ function loadWordList(listName){
 
       if(words.length < 4){ alert('Список должен содержать минимум 4 слова!'); return; }
 
-      allWords = [...words]; // сохраняем полный список
-      shuffleArray(words);     // перемешиваем порядок вопросов
+      allWords = [...words];
+      remainingWords = shuffleArray([...words]); // создаём очередь случайных слов
       index = 0; correct_answers = 0; wrong_answers = 0;
       currentWord = null;
       loadNextWord();
@@ -38,10 +39,12 @@ function loadWordList(listName){
     .catch(err => { console.error(err); alert('Ошибка при загрузке списка'); });
 }
 
-// Выбираем следующее слово случайно
+// Выбираем следующее слово случайно без повторов
 function loadNextWord(){
-  const randIndex = Math.floor(Math.random() * words.length);
-  currentWord = words[randIndex];
+  if(remainingWords.length === 0){
+    remainingWords = shuffleArray([...allWords]);
+  }
+  currentWord = remainingWords.pop();
   index++;
   drawCurrentQuestion();
 }
@@ -52,7 +55,8 @@ function drawCurrentQuestion(){
   const correct = reverse ? currentWord.word : currentWord.trans;
 
   // Всегда используем полный список allWords для вариантов
-  const allOptions = allWords.map(x => reverse ? x.word : x.trans).filter(x => x !== correct);
+  const allOptions = allWords.map(x => reverse ? x.word : x.trans)
+                             .filter(x => x !== correct);
   let options = [correct, ...shuffleArray(allOptions).slice(0,3)];
   options = shuffleArray(options);
 
@@ -82,9 +86,7 @@ function checkAnswer(btn, correct){
     else if(b === btn) b.classList.add('wrong');
   });
 
-  setTimeout(() => {
-    loadNextWord(); // выбираем новое слово только после ответа
-  }, btn.textContent === correct ? 500 : 4000);
+  setTimeout(() => loadNextWord(), btn.textContent === correct ? 500 : 4000);
 }
 
 // 50/50
