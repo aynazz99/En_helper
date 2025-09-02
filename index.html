@@ -3,23 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Word Quiz</title>
 <link rel="manifest" href="manifest.json">
 <style>
-body {
+html, body {
+  height: 100%;
   margin: 0;
+  padding: 0;
+}
+body {
   font-family: Arial, sans-serif;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 header {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 15px 25px;
+  padding: 15px 20px;
   box-sizing: border-box;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -60,8 +68,8 @@ button {
   background-color: #1976D2;
 }
 #word {
-  font-size: 2.5rem;
-  margin: 25px 0;
+  font-size: calc(20px + 2vw);
+  margin: 20px 0;
   text-align: center;
   font-weight: bold;
 }
@@ -99,17 +107,13 @@ button {
   background-color: #ddd;
   color: #666;
 }
-#progress {
-  margin: 20px 0;
-  font-size: 1rem;
-}
 #progressBar {
   width: 90%;
   max-width: 600px;
   height: 20px;
   background: #eee;
   border-radius: 10px;
-  margin-bottom: 25px;
+  margin: 15px 0;
 }
 #progressFill {
   width: 0%;
@@ -117,6 +121,9 @@ button {
   background: #4CAF50;
   border-radius: 10px;
   transition: width 0.3s;
+}
+#progress {
+  font-size: 1rem;
 }
 </style>
 </head>
