@@ -71,7 +71,14 @@ button {
 #progressFill { width: 0%; height: 100%; background: #4CAF50; border-radius: 10px; transition: width 0.3s; }
 #progress { font-size: 1rem; text-align: center; }
 
-#wordLists { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center; }
+#wordLists {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 20px 0 10px 0; /* сверху 20px, снизу 10px */
+}
+
 
 @media (max-width: 480px) {
   header { padding: 10px; }
@@ -113,3 +120,4 @@ button {
 <script src="main.js"></script>
 </body>
 </html>
+
