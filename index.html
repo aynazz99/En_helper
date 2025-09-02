@@ -6,22 +6,118 @@
 <title>Word Quiz</title>
 <link rel="manifest" href="manifest.json">
 <style>
-body {margin:0;font-family:Arial,sans-serif;background:white;display:flex;flex-direction:column;align-items:center;min-height:100vh;}
-header {width:100%;display:flex;justify-content:space-between;padding:10px 20px;align-items:center;}
-button {padding:10px 20px;font-weight:bold;border:none;border-radius:12px;cursor:pointer;transition:background-color 0.3s, transform 0.2s;}
-button:hover {transform: scale(1.05);}
-.word {font-size:2rem;margin:20px;text-align:center;}
-.answers {display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px;width:90%;max-width:600px;}
-#progress {margin-top:auto;padding-bottom:20px;font-size:1rem;}
-#switchBtn {font-size:18px;background:transparent;}
-#switchBtn:hover {background:rgba(0,0,0,0.05);transform:scale(1.2);}
-#fiftyBtn {background:#2196F3;color:white;font-size:14px;}
-#fiftyBtn:hover {background:#1976D2;}
-.answerBtn {background:#f2f2f2;border:1px solid #ccc;border-radius:10px;font-size:1rem;height:50px;}
-.answerBtn:hover {background:#e6e6e6;}
-.answerBtn.correct {background:#4CAF50;color:white;font-weight:bold;}
-.answerBtn.wrong {background:#F44336;color:white;font-weight:bold;}
-.answerBtn.disabled {background:#ddd;color:#666;}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 25px;
+  box-sizing: border-box;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+#title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+header div {
+  display: flex;
+  gap: 10px;
+}
+button {
+  padding: 10px 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+#fileInput {
+  cursor: pointer;
+}
+#switchBtn {
+  font-size: 20px;
+  background: transparent;
+  border: none;
+}
+#switchBtn:hover {
+  background-color: rgba(0,0,0,0.05);
+  transform: scale(1.2);
+}
+#fiftyBtn {
+  background-color: #2196F3;
+  color: white;
+}
+#fiftyBtn:hover {
+  background-color: #1976D2;
+}
+#word {
+  font-size: 2.5rem;
+  margin: 25px 0;
+  text-align: center;
+  font-weight: bold;
+}
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 90%;
+  max-width: 600px;
+}
+.answerBtn {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  height: 60px;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  cursor: pointer;
+  font-weight: bold;
+}
+.answerBtn:hover {
+  background-color: #e6e6e6;
+  transform: scale(1.02);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.answerBtn.correct {
+  background-color: #4CAF50;
+  color: white;
+}
+.answerBtn.wrong {
+  background-color: #F44336;
+  color: white;
+}
+.answerBtn.disabled {
+  background-color: #ddd;
+  color: #666;
+}
+#progress {
+  margin: 20px 0;
+  font-size: 1rem;
+}
+#progressBar {
+  width: 90%;
+  max-width: 600px;
+  height: 20px;
+  background: #eee;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
+#progressFill {
+  width: 0%;
+  height: 100%;
+  background: #4CAF50;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
 </style>
 </head>
 <body>
@@ -35,13 +131,15 @@ button:hover {transform: scale(1.05);}
   </div>
 </header>
 
-<div class="word" id="word"></div>
+<div id="word"></div>
 <div class="answers" id="answers">
   <button class="answerBtn"></button>
   <button class="answerBtn"></button>
   <button class="answerBtn"></button>
   <button class="answerBtn"></button>
 </div>
+
+<div id="progressBar"><div id="progressFill"></div></div>
 <div id="progress"></div>
 
 <script>
@@ -52,6 +150,7 @@ const fiftyBtn=document.getElementById('fiftyBtn');
 const wordDiv=document.getElementById('word');
 const answersDiv=document.getElementById('answers');
 const progressDiv=document.getElementById('progress');
+const progressFill=document.getElementById('progressFill');
 
 fileInput.addEventListener('change', e=>{
   const file=e.target.files[0];
@@ -81,6 +180,7 @@ function loadQuestion(){
   options=shuffle(options);
   wordDiv.textContent=question;
   progressDiv.textContent=`${index+1} из ${words.length} (${correct_answers}/${wrong_answers})`;
+  progressFill.style.width=`${((index+1)/words.length)*100}%`;
   const buttons=answersDiv.querySelectorAll('.answerBtn');
   buttons.forEach((btn,i)=>{
     btn.textContent=options[i];
@@ -107,7 +207,6 @@ function useFifty(){
 
 function shuffle(arr){return arr.sort(()=>Math.random()-0.5);}
 
-// Service Worker
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered'));
 }
