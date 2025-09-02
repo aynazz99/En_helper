@@ -1,5 +1,5 @@
 let words = [], allWords = [], index = 0, correct_answers = 0, wrong_answers = 0, reverse = false;
-let currentWord = null; // хранит текущее слово
+let currentWord = null; // текущее слово
 
 const switchBtn = document.getElementById('switchBtn');
 const fiftyBtn = document.getElementById('fiftyBtn');
@@ -8,16 +8,16 @@ const answersDiv = document.getElementById('answers');
 const progressDiv = document.getElementById('progress');
 const progressFill = document.getElementById('progressFill');
 
-// Смена языка (переворачиваем, но не меняем слово)
+// Смена языка
 switchBtn.addEventListener('click', () => {
   reverse = !reverse;
-  if(currentWord) loadQuestion(); // просто перерисовываем текущий вопрос
+  if(currentWord) drawCurrentQuestion(); // только перерисовать текущий вопрос
 });
 
 // Кнопка 50/50
 fiftyBtn.addEventListener('click', useFifty);
 
-// Подгрузка списка слов из папки data
+// Загрузка списка слов
 function loadWordList(listName){
   fetch(`data/${listName}.txt`)
     .then(res => res.text())
@@ -29,28 +29,29 @@ function loadWordList(listName){
 
       if(words.length < 4){ alert('Список должен содержать минимум 4 слова!'); return; }
 
-      allWords = [...words];   // сохраняем полный список для вариантов
-      shuffleArray(words);     // перемешиваем вопросы
+      allWords = [...words]; // сохраняем полный список
+      shuffleArray(words);     // перемешиваем порядок вопросов
       index = 0; correct_answers = 0; wrong_answers = 0;
       currentWord = null;
-      loadQuestion();
+      loadNextWord();
     })
     .catch(err => { console.error(err); alert('Ошибка при загрузке списка'); });
 }
 
-// Показ вопроса
-function loadQuestion(){
-  // Выбираем новое слово, если currentWord пустой
-  if(!currentWord){
-    const randIndex = Math.floor(Math.random() * words.length);
-    currentWord = words[randIndex];
-    index++;
-  }
+// Выбираем следующее слово случайно
+function loadNextWord(){
+  const randIndex = Math.floor(Math.random() * words.length);
+  currentWord = words[randIndex];
+  index++;
+  drawCurrentQuestion();
+}
 
+// Отображение текущего вопроса и вариантов
+function drawCurrentQuestion(){
   const question = reverse ? currentWord.trans : currentWord.word;
   const correct = reverse ? currentWord.word : currentWord.trans;
 
-  // Формируем варианты из всего списка allWords, кроме правильного
+  // Всегда используем полный список allWords для вариантов
   const allOptions = allWords.map(x => reverse ? x.word : x.trans).filter(x => x !== correct);
   let options = [correct, ...shuffleArray(allOptions).slice(0,3)];
   options = shuffleArray(options);
@@ -73,6 +74,7 @@ function loadQuestion(){
 // Проверка ответа
 function checkAnswer(btn, correct){
   if(btn.textContent === correct) correct_answers++; else wrong_answers++;
+
   const buttons = answersDiv.querySelectorAll('.answerBtn');
   buttons.forEach(b => {
     b.disabled = true;
@@ -81,8 +83,7 @@ function checkAnswer(btn, correct){
   });
 
   setTimeout(() => {
-    currentWord = null; // готовим новое слово
-    loadQuestion();
+    loadNextWord(); // выбираем новое слово только после ответа
   }, btn.textContent === correct ? 500 : 4000);
 }
 
