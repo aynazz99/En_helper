@@ -61,7 +61,20 @@ button {
 
 #word { font-size: calc(20px + 4vw); text-align: center; margin: 20px 0; word-wrap: break-word; font-weight: bold; }
 .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 95%; max-width: 600px; }
-.answerBtn { background-color: #f2f2f2; border: 1px solid #ccc; border-radius: 12px; font-size: 1.2rem; height: 60px; transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; cursor: pointer; font-weight: bold; }
+.answerBtn {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  padding: 10px;            /* вместо фиксированной высоты */
+  min-height: 50px;          /* минимальная высота */
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  cursor: pointer;
+  font-weight: bold;
+  word-wrap: break-word;     /* перенос слов */
+  white-space: normal;       /* разрешаем перенос текста */
+}
+
 .answerBtn:hover { background-color: #e6e6e6; transform: scale(1.02); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 .answerBtn.correct { background-color: #4CAF50; color: white; }
 .answerBtn.wrong { background-color: #F44336; color: white; }
@@ -120,4 +133,5 @@ button {
 <script src="main.js"></script>
 </body>
 </html>
+
 
