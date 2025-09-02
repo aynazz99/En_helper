@@ -1,0 +1,50 @@
+Go on;Продолжай
+Come back;Вернуться
+Get up;Вставать
+Come in;Входить
+Go out;Выходить
+Start up;Запускать
+Turn off;Выключать
+Turn on;Включать
+Break down;Ломаться
+Wake up;Просыпаться
+Give up;Сдаваться, бросать
+Cut off;Прерывать, отключать
+Call off;Отменять
+Finish up;Заканчивать
+Close down;Закрываться
+Get on;Садиться, ладить
+Get off;Выйти (из транспорта)
+Give back;Возвращать
+Hand in;Сдавать (работу)
+Pick up;Подбирать, забирать
+Look after;Заботиться
+Look for;Искать
+Look out;Осторожно!
+Put off;Откладывать
+Take over;Брать под контроль
+Talk over;Обсудить
+Bring up;Поднимать тему
+Call up;Позвонить
+Hang out;Тусоваться
+Run into;Случайно встретить
+Deal with;Справляться с
+Break up;Расставаться
+Come across;Наткнуться
+Fall apart;Разваливаться
+Get over;Преодолевать
+Carry out;Выполнять
+Set up;Организовывать, устанавливать
+Turn up;Появляться, усиливать звук
+Bring about;Вызывать (событие)
+Check out;Проверять, изучать
+Go back;Возвращаться
+Look back;Оглядываться назад
+Come along;Сопровождать, продвигаться
+Keep on;Продолжать
+Run out;Заканчиваться
+Set off;Отправляться
+Take off;Взлетать, снимать одежду
+Turn down;Отказывать, убавлять звук
+Check in;Регистрироваться
+Drop off;Высаживать, засыпать
