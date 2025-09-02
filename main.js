@@ -42,12 +42,15 @@ function loadWordList(listName){
 // Выбираем следующее слово случайно без повторов
 function loadNextWord(){
   if(remainingWords.length === 0){
+    // Начинаем новый раунд: перемешиваем все слова заново
     remainingWords = shuffleArray([...allWords]);
+    index = 0; // можно сбросить прогресс или оставить
   }
   currentWord = remainingWords.pop();
   index++;
   drawCurrentQuestion();
 }
+
 
 // Отображение текущего вопроса и вариантов
 function drawCurrentQuestion(){
