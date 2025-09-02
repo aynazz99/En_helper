@@ -1,6 +1,6 @@
 let words = [], allWords = [], index = 0, correct_answers = 0, wrong_answers = 0, reverse = false;
 let currentWord = null;
-let remainingWords = []; // для случайного выбора без повторов
+let remainingWords = [];
 
 const switchBtn = document.getElementById('switchBtn');
 const fiftyBtn = document.getElementById('fiftyBtn');
@@ -12,7 +12,7 @@ const progressFill = document.getElementById('progressFill');
 // Смена языка
 switchBtn.addEventListener('click', () => {
   reverse = !reverse;
-  if(currentWord) drawCurrentQuestion(); // только перерисовать текущий вопрос
+  if(currentWord) drawCurrentQuestion();
 });
 
 // Кнопка 50/50
@@ -31,7 +31,7 @@ function loadWordList(listName){
       if(words.length < 4){ alert('Список должен содержать минимум 4 слова!'); return; }
 
       allWords = [...words];
-      remainingWords = shuffleArray([...words]); // создаём очередь случайных слов
+      remainingWords = shuffleArray([...allWords]); // очередь случайных слов без повторов
       index = 0; correct_answers = 0; wrong_answers = 0;
       currentWord = null;
       loadNextWord();
@@ -39,25 +39,23 @@ function loadWordList(listName){
     .catch(err => { console.error(err); alert('Ошибка при загрузке списка'); });
 }
 
-// Выбираем следующее слово случайно без повторов
+// Берём следующее слово из remainingWords
 function loadNextWord(){
   if(remainingWords.length === 0){
-    // Начинаем новый раунд: перемешиваем все слова заново
-    remainingWords = shuffleArray([...allWords]);
-    index = 0; // можно сбросить прогресс или оставить
+    alert('Вы прошли все слова!'); 
+    return;
   }
-  currentWord = remainingWords.pop();
+  currentWord = remainingWords.pop(); // берём слово без случайного индекса
   index++;
   drawCurrentQuestion();
 }
-
 
 // Отображение текущего вопроса и вариантов
 function drawCurrentQuestion(){
   const question = reverse ? currentWord.trans : currentWord.word;
   const correct = reverse ? currentWord.word : currentWord.trans;
 
-  // Всегда используем полный список allWords для вариантов
+  // Всегда формируем варианты из полного списка
   const allOptions = allWords.map(x => reverse ? x.word : x.trans)
                              .filter(x => x !== correct);
   let options = [correct, ...shuffleArray(allOptions).slice(0,3)];
