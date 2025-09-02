@@ -6,7 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Word Quiz</title>
-<link rel="manifest" href="manifest.json">
 <style>
 html, body {
   width: 100%;
@@ -33,7 +32,7 @@ header {
   box-sizing: border-box;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  flex-wrap: wrap; /* перенос контента при малой ширине */
+  flex-wrap: wrap;
 }
 #title {
   font-weight: bold;
@@ -42,11 +41,11 @@ header {
 header div {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap; /* перенос кнопок */
+  flex-wrap: wrap;
   justify-content: flex-end;
 }
 button {
-  padding: 8px 4vw; /* адаптивные отступы */
+  padding: 8px 4vw;
   font-weight: bold;
   border: none;
   border-radius: 12px;
@@ -54,40 +53,14 @@ button {
   transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
   min-width: 50px;
 }
-#fileInput { cursor: pointer; }
-#switchBtn {
-  font-size: 1.2rem;
-  background: transparent;
-  border: none;
-}
+#switchBtn { font-size: 1.2rem; background: transparent; border: none; }
 #switchBtn:hover { background-color: rgba(0,0,0,0.05); transform: scale(1.2);}
 #fiftyBtn { background-color: #2196F3; color: white; }
 #fiftyBtn:hover { background-color: #1976D2; }
 
-#word {
-  font-size: calc(20px + 4vw);
-  text-align: center;
-  margin: 20px 0;
-  word-wrap: break-word;
-  font-weight: bold;
-}
-.answers {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  width: 95%;
-  max-width: 600px;
-}
-.answerBtn {
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  font-size: 1.2rem;
-  height: 60px;
-  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-  cursor: pointer;
-  font-weight: bold;
-}
+#word { font-size: calc(20px + 4vw); text-align: center; margin: 20px 0; word-wrap: break-word; font-weight: bold; }
+.answers { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 95%; max-width: 600px; }
+.answerBtn { background-color: #f2f2f2; border: 1px solid #ccc; border-radius: 12px; font-size: 1.2rem; height: 60px; transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; cursor: pointer; font-weight: bold; }
 .answerBtn:hover { background-color: #e6e6e6; transform: scale(1.02); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 .answerBtn.correct { background-color: #4CAF50; color: white; }
 .answerBtn.wrong { background-color: #F44336; color: white; }
@@ -97,36 +70,33 @@ button {
 #progressFill { width: 0%; height: 100%; background: #4CAF50; border-radius: 10px; transition: width 0.3s; }
 #progress { font-size: 1rem; text-align: center; }
 
+#wordLists { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center; }
+
 @media (max-width: 480px) {
-  header {
-    padding: 10px;
-  }
-  #title {
-    font-size: 1rem;
-  }
-  button {
-    font-size: 0.9rem;
-    padding: 6px 10px;
-  }
-  #word {
-    font-size: calc(18px + 4vw);
-  }
-  #progress {
-    font-size: 0.9rem;
-  }
+  header { padding: 10px; }
+  #title { font-size: 1rem; }
+  button { font-size: 0.9rem; padding: 6px 10px; }
+  #word { font-size: calc(18px + 4vw); }
+  #progress { font-size: 0.9rem; }
 }
 </style>
 </head>
 <body>
 
 <header>
-  <span id="title"></span>
+  <span id="title">Word Quiz</span>
   <div>
-    <input type="file" id="fileInput">
     <button id="switchBtn">🔄</button>
     <button id="fiftyBtn">50/50</button>
   </div>
 </header>
+
+<!-- Выбор списка слов -->
+<div id="wordLists">
+  <button onclick="loadWordList('list1')">Список 1</button>
+  <button onclick="loadWordList('list2')">Список 2</button>
+  <button onclick="loadWordList('list3')">Список 3</button>
+</div>
 
 <div id="word"></div>
 <div class="answers" id="answers">
@@ -140,44 +110,57 @@ button {
 <div id="progress"></div>
 
 <script>
-let words=[],index=0,correct_answers=0,wrong_answers=0,reverse=false;
+// === Списки слов как JS-массивы ===
+const lists = {
+  list1: [
+    {word: "Над", trans: "above"},
+    {word: "Через", trans: "across"},
+    {word: "После", trans: "after"},
+    {word: "Вместо", trans: "instead"}
+  ],
+  list2: [
+    {word: "Вдоль", trans: "along"},
+    {word: "Количество", trans: "amount"},
+    {word: "Подотчетный", trans: "answerable"},
+    {word: "Кто-нибудь", trans: "anyone"}
+  ],
+  list3: [
+    {word: "Начинать", trans: "begin"},
+    {word: "Сдавать", trans: "deliver"},
+    {word: "Слушать", trans: "hear"},
+    {word: "Вера", trans: "belief"}
+  ]
+};
 
-const fileInput=document.getElementById('fileInput');
-const switchBtn=document.getElementById('switchBtn');
-const fiftyBtn=document.getElementById('fiftyBtn');
-const wordDiv=document.getElementById('word');
-const answersDiv=document.getElementById('answers');
-const progressDiv=document.getElementById('progress');
-const progressFill=document.getElementById('progressFill');
+// === Переменные ===
+let words = [], index = 0, correct_answers = 0, wrong_answers = 0, reverse = false;
 
-fileInput.addEventListener('change', e=>{
-  const file=e.target.files[0];
-  const reader=new FileReader();
-  reader.onload=()=>{
-    words=reader.result.split('\n').map(line=>{
-      const [word,trans]=line.split(';').map(x=>x.trim());
-      return {word,trans};
-    }).filter(x=>x.word&&x.trans);
-    if(words.length<4){alert('Должно быть как минимум 4 слова!');return;}
-    words=shuffleArray(words);
-    index=0; correct_answers=0; wrong_answers=0;
-    loadQuestion();
-  }
-  reader.readAsText(file);
-});
+const switchBtn = document.getElementById('switchBtn');
+const fiftyBtn = document.getElementById('fiftyBtn');
+const wordDiv = document.getElementById('word');
+const answersDiv = document.getElementById('answers');
+const progressDiv = document.getElementById('progress');
+const progressFill = document.getElementById('progressFill');
 
 switchBtn.addEventListener('click',()=>{reverse=!reverse;loadQuestion();});
 fiftyBtn.addEventListener('click',useFifty);
 
+// === Подгрузка выбранного списка ===
+function loadWordList(listName) {
+  words = shuffleArray([...lists[listName]]);
+  index = 0; correct_answers = 0; wrong_answers = 0;
+  loadQuestion();
+}
+
+// === Показ вопроса ===
 function loadQuestion(){
   if(words.length === 0){
     alert(`Вы ответили правильно на ${correct_answers} из ${index}`);
     return;
   }
 
-  // Случайный индекс слова
   const randIndex = Math.floor(Math.random() * words.length);
-  const w = words.splice(randIndex, 1)[0]; // удаляем слово из массива
+  const w = words.splice(randIndex, 1)[0];
   index++;
 
   const question = reverse ? w.trans : w.word;
@@ -188,8 +171,8 @@ function loadQuestion(){
   options = shuffleArray(options);
 
   wordDiv.textContent = question;
-  progressDiv.textContent = `${index} из ${index+words.length} (${correct_answers}/${wrong_answers})`;
-  progressFill.style.width = `${(index/(index+words.length))*100}%`;
+  progressDiv.textContent = `${index} из ${index + words.length} (${correct_answers}/${wrong_answers})`;
+  progressFill.style.width = `${(index / (index + words.length)) * 100}%`;
 
   const buttons = answersDiv.querySelectorAll('.answerBtn');
   buttons.forEach((btn,i)=>{
@@ -202,35 +185,36 @@ function loadQuestion(){
   fiftyBtn.disabled = false;
 }
 
-
+// === Проверка ответа ===
 function checkAnswer(btn,correct){
   if(btn.textContent===correct) correct_answers++; else wrong_answers++;
-  const buttons=answersDiv.querySelectorAll('.answerBtn');
-  buttons.forEach(b=>{b.disabled=true; if(b.textContent===correct)b.classList.add('correct'); else if(b===btn)b.classList.add('wrong');});
-  setTimeout(()=>{index++; loadQuestion();}, btn.textContent===correct?500:4000);
+  const buttons = answersDiv.querySelectorAll('.answerBtn');
+  buttons.forEach(b => {
+    b.disabled=true;
+    if(b.textContent===correct) b.classList.add('correct');
+    else if(b===btn) b.classList.add('wrong');
+  });
+  setTimeout(()=>{ loadQuestion(); }, btn.textContent===correct?500:4000);
 }
 
+// === 50/50 ===
 function useFifty(){
-  const correct=reverse?words[index].word:words[index].trans;
-  let wrongBtns=Array.from(answersDiv.querySelectorAll('.answerBtn')).filter(b=>b.textContent!==correct && !b.disabled);
+  const correct = reverse ? words[index-1].word : words[index-1].trans;
+  let wrongBtns = Array.from(answersDiv.querySelectorAll('.answerBtn')).filter(b => b.textContent !== correct && !b.disabled);
   shuffleArray(wrongBtns);
-  wrongBtns.slice(0,2).forEach(b=>{b.disabled=true; b.classList.add('disabled');});
-  fiftyBtn.disabled=true;
+  wrongBtns.slice(0,2).forEach(b => { b.disabled = true; b.classList.add('disabled'); });
+  fiftyBtn.disabled = true;
 }
 
+// === Перемешивание массива ===
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
+    [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
-}
-
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered'));
 }
 </script>
 
 </body>
 </html>
-
