@@ -9,19 +9,21 @@
 <link rel="manifest" href="manifest.json">
 <style>
 html, body {
+  width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 body {
-  font-family: Arial, sans-serif;
-  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-height: 100vh;
-  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background-color: white;
 }
 header {
   width: 100%;
@@ -48,36 +50,28 @@ button {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
 }
-#fileInput {
-  cursor: pointer;
-}
+#fileInput { cursor: pointer; }
 #switchBtn {
   font-size: 20px;
   background: transparent;
   border: none;
 }
-#switchBtn:hover {
-  background-color: rgba(0,0,0,0.05);
-  transform: scale(1.2);
-}
-#fiftyBtn {
-  background-color: #2196F3;
-  color: white;
-}
-#fiftyBtn:hover {
-  background-color: #1976D2;
-}
+#switchBtn:hover { background-color: rgba(0,0,0,0.05); transform: scale(1.2);}
+#fiftyBtn { background-color: #2196F3; color: white; }
+#fiftyBtn:hover { background-color: #1976D2; }
+
 #word {
-  font-size: calc(20px + 2vw);
-  margin: 20px 0;
+  font-size: calc(20px + 4vw);
   text-align: center;
+  margin: 20px 0;
+  word-wrap: break-word;
   font-weight: bold;
 }
 .answers {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
-  width: 90%;
+  width: 95%;
   max-width: 600px;
 }
 .answerBtn {
@@ -90,41 +84,14 @@ button {
   cursor: pointer;
   font-weight: bold;
 }
-.answerBtn:hover {
-  background-color: #e6e6e6;
-  transform: scale(1.02);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-.answerBtn.correct {
-  background-color: #4CAF50;
-  color: white;
-}
-.answerBtn.wrong {
-  background-color: #F44336;
-  color: white;
-}
-.answerBtn.disabled {
-  background-color: #ddd;
-  color: #666;
-}
-#progressBar {
-  width: 90%;
-  max-width: 600px;
-  height: 20px;
-  background: #eee;
-  border-radius: 10px;
-  margin: 15px 0;
-}
-#progressFill {
-  width: 0%;
-  height: 100%;
-  background: #4CAF50;
-  border-radius: 10px;
-  transition: width 0.3s;
-}
-#progress {
-  font-size: 1rem;
-}
+.answerBtn:hover { background-color: #e6e6e6; transform: scale(1.02); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.answerBtn.correct { background-color: #4CAF50; color: white; }
+.answerBtn.wrong { background-color: #F44336; color: white; }
+.answerBtn.disabled { background-color: #ddd; color: #666; }
+
+#progressBar { width: 95%; max-width: 600px; height: 20px; background: #eee; border-radius: 10px; margin: 15px 0; }
+#progressFill { width: 0%; height: 100%; background: #4CAF50; border-radius: 10px; transition: width 0.3s; }
+#progress { font-size: 1rem; }
 </style>
 </head>
 <body>
@@ -151,6 +118,7 @@ button {
 
 <script>
 let words=[],index=0,correct_answers=0,wrong_answers=0,reverse=false;
+
 const fileInput=document.getElementById('fileInput');
 const switchBtn=document.getElementById('switchBtn');
 const fiftyBtn=document.getElementById('fiftyBtn');
@@ -168,7 +136,8 @@ fileInput.addEventListener('change', e=>{
       return {word,trans};
     }).filter(x=>x.word&&x.trans);
     if(words.length<4){alert('Должно быть как минимум 4 слова!');return;}
-    index=0;correct_answers=0;wrong_answers=0;
+    words=shuffleArray(words); // перемешиваем порядок вопросов
+    index=0; correct_answers=0; wrong_answers=0;
     loadQuestion();
   }
   reader.readAsText(file);
@@ -178,13 +147,13 @@ switchBtn.addEventListener('click',()=>{reverse=!reverse;loadQuestion();});
 fiftyBtn.addEventListener('click',useFifty);
 
 function loadQuestion(){
-  if(index>=words.length){alert(`Вы ответили правильно на ${correct_answers} из ${words.length}`);return;}
+  if(index>=words.length){alert(`Вы ответили правильно на ${correct_answers} из ${words.length}`); return;}
   const w=words[index];
   const question=reverse?w.trans:w.word;
   const correct=reverse?w.word:w.trans;
   const allOptions=words.map(x=>reverse?x.word:x.trans).filter(x=>x!==correct);
-  let options=[correct,...shuffle(allOptions).slice(0,3)];
-  options=shuffle(options);
+  let options=[correct,...shuffleArray(allOptions).slice(0,3)];
+  options=shuffleArray(options);
   wordDiv.textContent=question;
   progressDiv.textContent=`${index+1} из ${words.length} (${correct_answers}/${wrong_answers})`;
   progressFill.style.width=`${((index+1)/words.length)*100}%`;
@@ -199,20 +168,27 @@ function loadQuestion(){
 }
 
 function checkAnswer(btn,correct){
-  if(btn.textContent===correct)correct_answers++;else wrong_answers++;
+  if(btn.textContent===correct) correct_answers++; else wrong_answers++;
   const buttons=answersDiv.querySelectorAll('.answerBtn');
-  buttons.forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b===btn)b.classList.add('wrong');});
-  setTimeout(()=>{index++;loadQuestion();},btn.textContent===correct?500:4000);
+  buttons.forEach(b=>{b.disabled=true; if(b.textContent===correct)b.classList.add('correct'); else if(b===btn)b.classList.add('wrong');});
+  setTimeout(()=>{index++; loadQuestion();}, btn.textContent===correct?500:4000);
 }
 
 function useFifty(){
   const correct=reverse?words[index].word:words[index].trans;
-  let wrongBtns=Array.from(answersDiv.querySelectorAll('.answerBtn')).filter(b=>b.textContent!==correct&&!b.disabled);
-  shuffle(wrongBtns);wrongBtns.slice(0,2).forEach(b=>{b.disabled=true;b.classList.add('disabled');});
+  let wrongBtns=Array.from(answersDiv.querySelectorAll('.answerBtn')).filter(b=>b.textContent!==correct && !b.disabled);
+  shuffleArray(wrongBtns);
+  wrongBtns.slice(0,2).forEach(b=>{b.disabled=true; b.classList.add('disabled');});
   fiftyBtn.disabled=true;
 }
 
-function shuffle(arr){return arr.sort(()=>Math.random()-0.5);}
+function shuffleArray(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
 
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered'));
