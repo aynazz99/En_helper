@@ -170,25 +170,38 @@ switchBtn.addEventListener('click',()=>{reverse=!reverse;loadQuestion();});
 fiftyBtn.addEventListener('click',useFifty);
 
 function loadQuestion(){
-  if(index>=words.length){alert(`Вы ответили правильно на ${correct_answers} из ${words.length}`); return;}
-  const w=words[index];
-  const question=reverse?w.trans:w.word;
-  const correct=reverse?w.word:w.trans;
-  const allOptions=words.map(x=>reverse?x.word:x.trans).filter(x=>x!==correct);
-  let options=[correct,...shuffleArray(allOptions).slice(0,3)];
-  options=shuffleArray(options);
-  wordDiv.textContent=question;
-  progressDiv.textContent=`${index+1} из ${words.length} (${correct_answers}/${wrong_answers})`;
-  progressFill.style.width=`${((index+1)/words.length)*100}%`;
-  const buttons=answersDiv.querySelectorAll('.answerBtn');
+  if(words.length === 0){
+    alert(`Вы ответили правильно на ${correct_answers} из ${index}`);
+    return;
+  }
+
+  // Случайный индекс слова
+  const randIndex = Math.floor(Math.random() * words.length);
+  const w = words.splice(randIndex, 1)[0]; // удаляем слово из массива
+  index++;
+
+  const question = reverse ? w.trans : w.word;
+  const correct = reverse ? w.word : w.trans;
+
+  const allOptions = words.map(x => reverse ? x.word : x.trans).filter(x => x !== correct);
+  let options = [correct, ...shuffleArray(allOptions).slice(0,3)];
+  options = shuffleArray(options);
+
+  wordDiv.textContent = question;
+  progressDiv.textContent = `${index} из ${index+words.length} (${correct_answers}/${wrong_answers})`;
+  progressFill.style.width = `${(index/(index+words.length))*100}%`;
+
+  const buttons = answersDiv.querySelectorAll('.answerBtn');
   buttons.forEach((btn,i)=>{
-    btn.textContent=options[i];
-    btn.disabled=false;
-    btn.className='answerBtn';
-    btn.onclick=()=>checkAnswer(btn,correct);
+    btn.textContent = options[i];
+    btn.disabled = false;
+    btn.className = 'answerBtn';
+    btn.onclick = () => checkAnswer(btn, correct);
   });
-  fiftyBtn.disabled=false;
+
+  fiftyBtn.disabled = false;
 }
+
 
 function checkAnswer(btn,correct){
   if(btn.textContent===correct) correct_answers++; else wrong_answers++;
@@ -220,3 +233,4 @@ if('serviceWorker' in navigator){
 
 </body>
 </html>
+
