@@ -396,15 +396,32 @@ function drawCurrentQuestion(){
 }
 
 function checkAnswer(btn, correct){
-  if(btn.textContent===correct) correct_answers++; else wrong_answers++;
-  const buttons=answersDiv.querySelectorAll('.answerBtn');
+  if(!currentWord){ 
+    // список не выбран — подсвечиваем select
+    listSelect.style.borderColor = 'red';
+    listSelect.style.transition = 'transform 0.2s, border-color 0.2s';
+    listSelect.style.transform = 'translateY(-5px)';
+    setTimeout(()=>{
+      listSelect.style.transform = 'translateY(5px)';
+      setTimeout(()=>{
+        listSelect.style.transform = 'translateY(0)';
+        listSelect.style.borderColor = '#ccc';
+      }, 100);
+    }, 100);
+    return;
+  }
+
+  // обычная проверка ответа
+  if(btn.textContent === correct) correct_answers++; else wrong_answers++;
+  const buttons = answersDiv.querySelectorAll('.answerBtn');
   buttons.forEach(b=>{
-    b.disabled=true;
-    if(b.textContent===correct) b.classList.add('correct');
-    else if(b===btn) b.classList.add('wrong');
+    b.disabled = true;
+    if(b.textContent === correct) b.classList.add('correct');
+    else if(b === btn) b.classList.add('wrong');
   });
-  setTimeout(()=>loadNextWord(), btn.textContent===correct?500:2000);
+  setTimeout(()=>loadNextWord(), btn.textContent === correct ? 500 : 2000);
 }
+
 
 function checkTextAnswer(userAnswer, correct){
 if(!userAnswer){
@@ -519,6 +536,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
