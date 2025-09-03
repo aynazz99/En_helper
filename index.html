@@ -152,15 +152,19 @@ header > div {
 
 #addListForm { display:none; flex-direction:column; gap:5px; margin:10px 0; width:95%; max-width:600px; }
 
+#welcomeWrapper {
+  flex-grow: 1;              /* занимает всё свободное место */
+  display: flex;
+  align-items: center;       /* по вертикали по центру */
+  justify-content: center;   /* по горизонтали по центру */
+}
+
 #welcome {
-  font-size: 3rem;           
-  font-weight: bold;            
+  font-size: 10rem;
+  font-weight: bold;
   text-align: center;
-  margin: 20px 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-  color: #ffffff;               
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
-  transition: opacity 0.5s ease; 
+  color: #ffffff;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
 /* поле ввода */
@@ -259,7 +263,10 @@ header > div {
   <button id="submitAnswerBtn" type="button" tabindex="-1">Ответить</button>
 </div>
 
-<div id="welcome" style="font-size:1.2rem; text-align:center; margin:15px 0;">Добро пожаловать</div>
+<div id="welcomeWrapper">
+  <div id="welcome">Добро пожаловать</div>
+</div>
+
   
 <script>
 let words=[], allWords=[], index=0, correct_answers=0, wrong_answers=0;
@@ -488,5 +495,6 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
