@@ -89,6 +89,8 @@ button { padding:8px 4vw; font-weight:bold; border:none; border-radius:12px; cur
 <div id="progressBar"><div id="progressFill"></div></div>
 <div id="progress"></div>
 
+<div id="welcome" style="font-size:1.2rem; text-align:center; margin:15px 0;">Добро пожаловать</div>
+  
 <script>
 // Основной JS викторины
 let words=[], allWords=[], index=0, correct_answers=0, wrong_answers=0;
@@ -112,6 +114,11 @@ function loadNextWord(){
   if(remainingWords.length===0){ alert('Вы прошли все слова!'); return; }
   currentWord=remainingWords.pop();
   index++;
+    // Скрываем "Добро пожаловать" при первом вопросе
+  const welcomeDiv = document.getElementById('welcome');
+  if(welcomeDiv.style.display !== 'none'){
+    welcomeDiv.style.display = 'none';
+  }
   drawCurrentQuestion();
 }
 
@@ -223,5 +230,6 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
