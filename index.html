@@ -27,7 +27,24 @@ const database = firebase.database();
 <link rel="manifest" href="manifest.json">
 <style>
 html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; touch-action:manipulation; }
-body { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; font-family:Arial,sans-serif; background:white; }
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  
+  /* фон */
+  background-image: url('mountains.jpg'); /* путь к твоей картинке */
+  background-size: cover;      /* растягивает картинку на весь экран */
+  background-position: center; /* центрирует */
+  background-repeat: no-repeat;
+  
+  /* опционально, чтобы текст лучше читался */
+  color: white;
+}
+
 header { width:100%; display:flex; justify-content:space-between; padding:15px 20px; box-sizing:border-box; align-items:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); flex-wrap:wrap; }
 #title { font-weight:bold; font-size:1.2rem; }
 header div { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
@@ -254,6 +271,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
