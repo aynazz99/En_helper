@@ -301,6 +301,14 @@ const submitAnswerBtn=document.getElementById('submitAnswerBtn');
 const submitWrapper=document.getElementById('submitWrapper');
 const progressDiv=document.getElementById('progress');
 const progressFill=document.getElementById('progressFill');
+// Скрываем прогресс при загрузке страницы
+progressDiv.style.display = 'none';
+progressFill.style.display = 'none';
+// Скрываем кнопки при загрузке страницы
+switchBtn.style.display = 'none';
+fiftyBtn.style.display = 'none';
+modeBtn.style.display = 'none';
+
 
 function focusInputSoon() {
   if (!inputMode) return;
@@ -508,7 +516,13 @@ listSelect.onchange=()=>{
     remainingWords=shuffleArray([...allWords]);
     index=0; correct_answers=0; wrong_answers=0; currentWord=null;
     wordDiv.classList.remove("placeholder");
-    answersDiv.style.display = 'grid'; // показываем кнопки
+// Показываем кнопки и прогресс после выбора списка
+    answersDiv.style.display = 'grid';
+    progressDiv.style.display = 'block';
+    progressFill.style.display = 'block';
+    switchBtn.style.display = 'inline-block';
+    fiftyBtn.style.display = 'inline-block';
+    modeBtn.style.display = 'inline-block';
     loadNextWord();
   });
 };
@@ -539,6 +553,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
