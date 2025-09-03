@@ -26,33 +26,102 @@ const database = firebase.database();
 
 <link rel="manifest" href="manifest.json">
 <style>
-html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; touch-action:manipulation; }
+html, body { 
+  width:100%; 
+  height:100%; 
+  margin:0; 
+  padding:0; 
+  overflow:hidden; 
+  touch-action:manipulation; 
+}
+
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height: 100vh;
+  min-height:100vh;
   font-family: Arial, sans-serif;
   
-  /* фон */
-  background-image: url('mountains.jpg'); /* путь к твоей картинке */
-  background-size: cover;      /* растягивает картинку на весь экран */
-  background-position: center; /* центрирует */
+  /* фон с горами */
+  background-image: url('mountains.jpg');
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   
-  /* опционально, чтобы текст лучше читался */
+  /* цвет текста по умолчанию */
   color: white;
 }
 
-header { width:100%; display:flex; justify-content:space-between; padding:15px 20px; box-sizing:border-box; align-items:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); flex-wrap:wrap; }
-#title { font-weight:bold; font-size:1.2rem; }
-header div { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
-button { padding:8px 4vw; font-weight:bold; border:none; border-radius:12px; cursor:pointer; transition:background-color 0.3s, transform 0.2s, box-shadow 0.2s; min-width:50px; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  flex-wrap: nowrap; /* запрет переноса */
+  width: 100%;
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0; /* позволяет сжиматься */
+}
+
+#title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Селект списка */
+#listSelect {
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  min-width: 100px;
+  flex-shrink: 1; 
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: white;
+  cursor: pointer;
+}
+
+#listSelect::-ms-expand { display: none; }
+
+/* Кнопка "+" */
+#addListToggle {
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-weight: bold;
+  background-color: #2196F3;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0; /* не сжимается */
+}
+
+/* Кнопки справа */
+#switchBtn, #fiftyBtn {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 #switchBtn { font-size:1.2rem; background:transparent; border:none; }
 #switchBtn:hover { background-color: rgba(0,0,0,0.05); transform:scale(1.2);}
 #fiftyBtn { background-color:#2196F3; color:white; }
 #fiftyBtn:hover { background-color:#1976D2; }
+
+/* Слова и ответы */
 #word { font-size:calc(20px + 4vw); text-align:center; margin:20px 0; word-wrap:break-word; font-weight:bold; }
 .answers { display:grid; grid-template-columns:1fr 1fr; gap:15px; width:95%; max-width:600px; }
 .answerBtn { background-color:#f2f2f2; border:1px solid #ccc; border-radius:12px; font-size:1.2rem; padding:10px; min-height:50px; transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; cursor:pointer; font-weight:bold; word-wrap:break-word; white-space:normal; }
@@ -60,37 +129,32 @@ button { padding:8px 4vw; font-weight:bold; border:none; border-radius:12px; cur
 .answerBtn.correct { background-color:#4CAF50; color:white; }
 .answerBtn.wrong { background-color:#F44336; color:white; }
 .answerBtn.disabled { background-color:#ddd; color:#666; }
+
 #progressBar { width:95%; max-width:600px; height:20px; background:#eee; border-radius:10px; margin:15px 0; }
 #progressFill { width:0%; height:100%; background:#4CAF50; border-radius:10px; transition:width 0.3s; }
 #progress { font-size:1rem; text-align:center; }
 
 #addListForm { display:none; flex-direction:column; gap:5px; margin:10px 0; width:95%; max-width:600px; }
+
+/* Приветствие */
 #welcome {
-  font-size: 10rem;           
+  font-size: 3rem;           
   font-weight: bold;            
   text-align: center;
   margin: 20px 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   color: #ffffff;               
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
   transition: opacity 0.5s ease; 
 }
-#listSelect {
-  padding: 8px 12px;          /* внутренние отступы, чтобы текст помещался */
-  border-radius: 12px;        /* скруглённые углы */
-  border: 1px solid #ccc;     /* лёгкая рамка */
-  font-size: 1rem;            /* размер шрифта */
-  background: white;           /* фон */
-  cursor: pointer;
-  min-width: 150px;           /* минимальная ширина, чтобы текст помещался */
-  box-sizing: border-box;
+
+@media (max-width:480px){
+  #title { font-size: 1rem; }
+  #listSelect { font-size: 0.8rem; min-width: 80px; }
+  #addListToggle, #switchBtn, #fiftyBtn { padding: 4px 8px; font-size: 0.8rem; }
+  #word { font-size: calc(18px + 4vw); }
+  #progress { font-size: 0.9rem; }
 }
-
-/* Если надо, чтобы стрелка выпадающего списка тоже была красивой */
-#listSelect::-ms-expand { display: none; } /* для IE/Edge */
-
-
-@media (max-width:480px){ header{padding:10px;} #title{font-size:1rem;} button{font-size:0.9rem; padding:6px 10px;} #word{font-size:calc(18px + 4vw);} #progress{font-size:0.9rem;} }
 </style>
 </head>
 <body>
@@ -271,6 +335,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
