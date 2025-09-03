@@ -48,6 +48,16 @@ button { padding:8px 4vw; font-weight:bold; border:none; border-radius:12px; cur
 #progress { font-size:1rem; text-align:center; }
 
 #addListForm { display:none; flex-direction:column; gap:5px; margin:10px 0; width:95%; max-width:600px; }
+#welcome {
+  font-size: 2.5rem;           
+  font-weight: bold;            
+  text-align: center;
+  margin: 20px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  color: #ff5722;               
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+  transition: opacity 0.5s ease; 
+}
 
 @media (max-width:480px){ header{padding:10px;} #title{font-size:1rem;} button{font-size:0.9rem; padding:6px 10px;} #word{font-size:calc(18px + 4vw);} #progress{font-size:0.9rem;} }
 </style>
@@ -230,6 +240,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
