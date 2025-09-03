@@ -293,6 +293,34 @@ const modeBtn=document.getElementById('modeBtn');
 const fiftyBtn=document.getElementById('fiftyBtn');
 const wordDiv=document.getElementById('word');
 const answersDiv=document.getElementById('answers');
+// Создаём контейнер для ошибок, если его ещё нет
+let wrongAnswersContainer = document.getElementById('wrongAnswersContainer');
+if (!wrongAnswersContainer) {
+  wrongAnswersContainer = document.createElement('div');
+  wrongAnswersContainer.id = 'wrongAnswersContainer';
+  wrongAnswersContainer.style.display = 'grid';
+  wrongAnswersContainer.style.gridTemplateColumns = '1fr 1fr';
+  wrongAnswersContainer.style.columnGap = '20px';
+  wrongAnswersContainer.style.width = '95%';
+  wrongAnswersContainer.style.maxWidth = '600px';
+  wrongAnswersContainer.style.margin = '20px 0';
+  wrongAnswersContainer.style.fontSize = '1rem';
+  wrongAnswersContainer.style.color = 'white';
+
+  // Создаём 2 колонки
+  const col1 = document.createElement('div');
+  const col2 = document.createElement('div');
+  col1.id = 'wrongCol1';
+  col2.id = 'wrongCol2';
+  wrongAnswersContainer.appendChild(col1);
+  wrongAnswersContainer.appendChild(col2);
+
+  // Вставляем в конец body
+  document.body.appendChild(wrongAnswersContainer);
+}
+
+// Индекс для распределения слов по колонкам
+let wrongIndex = 0;
 // Скрываем кнопки при загрузке страницы
 answersDiv.style.display = 'none';
 const inputModeDiv=document.getElementById('inputModeDiv');
@@ -311,28 +339,7 @@ switchBtn.style.display = 'none';
 fiftyBtn.style.display = 'none';
 modeBtn.style.display = 'none';
 progressBar.style.display = 'none';
-// Контейнер для неверных ответов в две колонки
-const wrongAnswersContainer = document.createElement('div');
-wrongAnswersContainer.id = 'wrongAnswersContainer';
-wrongAnswersContainer.style.display = 'grid';
-wrongAnswersContainer.style.gridTemplateColumns = '1fr 1fr';
-wrongAnswersContainer.style.columnGap = '20px';
-wrongAnswersContainer.style.width = '95%';
-wrongAnswersContainer.style.maxWidth = '600px';
-wrongAnswersContainer.style.margin = '20px 0';
-wrongAnswersContainer.style.fontSize = '1rem';
-wrongAnswersContainer.style.color = 'white';
 
-// Добавляем внутрь две колонки
-const col1 = document.createElement('div');
-const col2 = document.createElement('div');
-wrongAnswersContainer.appendChild(col1);
-wrongAnswersContainer.appendChild(col2);
-
-// Добавляем контейнер в конец body
-document.body.appendChild(wrongAnswersContainer);
-
-let wrongIndex = 0; // индекс для чередования колонок
 
 
 function focusInputSoon() {
@@ -384,6 +391,23 @@ modeBtn.addEventListener('click', ()=>{
   if(currentWord) drawCurrentQuestion();
 });
 
+function addWrongAnswer(word, trans) {
+  const wrongItem = document.createElement('div');
+  wrongItem.textContent = `❌ ${word} — ${trans}`;
+  wrongItem.style.marginBottom = '5px';
+
+  const col1 = document.getElementById('wrongCol1');
+  const col2 = document.getElementById('wrongCol2');
+
+  if (wrongIndex % 2 === 0) {
+    col1.appendChild(wrongItem);
+  } else {
+    col2.appendChild(wrongItem);
+  }
+
+  wrongIndex++;
+}
+  
 function loadNextWord(){
   if(remainingWords.length===0){
     // Без alert, чтобы не закрывать клавиатуру
@@ -553,6 +577,10 @@ listSelect.onchange=()=>{
     fiftyBtn.style.display = 'inline-block';
     modeBtn.style.display = 'inline-block';
     progressBar.style.display = 'block';
+    document.getElementById('wrongCol1').innerHTML = '';
+    document.getElementById('wrongCol2').innerHTML = '';
+    wrongIndex = 0;
+
     loadNextWord();
   });
 };
@@ -570,20 +598,6 @@ addListBtn.onclick=()=>{
     alert('Список добавлен!'); newListName.value=''; newListText.value=''; addListForm.style.display='none'; loadAllLists();
   }).catch(err=>console.error(err));
 };
-  
-function addWrongAnswer(word, trans) {
-  const wrongItem = document.createElement('div');
-  wrongItem.textContent = `❌ ${word} — ${trans}`;
-  wrongItem.style.marginBottom = '5px';
-
-  if (wrongIndex % 2 === 0) {
-    col1.appendChild(wrongItem);
-  } else {
-    col2.appendChild(wrongItem);
-  }
-
-  wrongIndex++;
-}
 
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
@@ -608,6 +622,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 
 </body>
 </html>
+
 
 
 
