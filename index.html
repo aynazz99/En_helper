@@ -529,6 +529,39 @@ const addListBtn=document.getElementById('addListBtn');
 const newListName=document.getElementById('newListName');
 const newListText=document.getElementById('newListText');
 
+const listContainer = document.getElementById('listContainer');
+const deleteListBtn = document.getElementById('deleteListBtn');
+const ADMIN_CODE = "1234"; // код для удаления списка
+
+// Показ кнопки удаления при выборе списка
+listSelect.addEventListener('change', () => {
+  deleteListBtn.style.display = listSelect.value ? 'inline-block' : 'none';
+});
+
+// Удаление списка
+deleteListBtn.addEventListener('click', () => {
+  const code = prompt("Введите код для удаления списка:");
+  if(code !== ADMIN_CODE){
+    alert("Неверный код!");
+    return;
+  }
+  const selected = listSelect.value;
+  if(!selected) return;
+
+  // Удаляем из Firebase
+  database.ref('lists/'+selected).remove()
+    .then(() => {
+      alert(`Список "${selected}" удалён`);
+      // Удаляем из выпадающего списка
+      const option = listSelect.querySelector(`option[value="${selected}"]`);
+      if(option) option.remove();
+      listSelect.value = ""; // сброс выбора
+      deleteListBtn.style.display = 'none';
+    })
+    .catch(err => console.error(err));
+});
+
+
 function loadAllLists(){
   database.ref('lists').once('value').then(snapshot=>{
     const data=snapshot.val()||{};
