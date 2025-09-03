@@ -6,6 +6,24 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Word Quiz</title>
+  <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCgSFDj7fRw6HSvZyOz1g5IM749f2sY55M",
+  authDomain: "wordquiz-659d7.firebaseapp.com",
+  databaseURL: "https://wordquiz-659d7-default-rtdb.firebaseio.com",
+  projectId: "wordquiz-659d7",
+  storageBucket: "wordquiz-659d7.firebasestorage.app",
+  messagingSenderId: "785560761880",
+  appId: "1:785560761880:web:9455e5767af0e0b9b1f56d"
+};
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
+
 <link rel="manifest" href="manifest.json">
 <style>
 html, body {
@@ -104,7 +122,29 @@ button {
 </style>
 </head>
 <body>
+<header>
+  <span id="title">Word Quiz</span>
+  
+  <!-- Выбор и добавление списков прямо в header -->
+  <div style="display:flex; gap:10px; align-items:center;">
+    <select id="listSelect">
+      <option disabled selected>Выберите список</option>
+    </select>
+    <button id="addListToggle">+</button>
+  </div>
+  
+  <div>
+    <button id="switchBtn">🔄</button>
+    <button id="fiftyBtn">50/50</button>
+  </div>
+</header>
 
+<!-- Форма добавления нового списка (по клику на +) -->
+<div id="addListForm" style="display:none; flex-direction:column; gap:5px; margin:10px 0;">
+  <input type="text" id="newListName" placeholder="Имя нового списка">
+  <textarea id="newListText" placeholder="Скопируйте сюда слова в формате слово;перевод" rows="5"></textarea>
+  <button id="addListBtn">Добавить список</button>
+</div>
 <header>
   <span id="title">Word Quiz</span>
   <div>
@@ -156,6 +196,7 @@ button {
 
 </body>
 </html>
+
 
 
 
