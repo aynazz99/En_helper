@@ -92,14 +92,13 @@ header > div {
 #listSelect::-ms-expand { display: none; }
 
 #addListToggle {
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-weight: bold;
-  background-color: #2196F3;
-  color: white;
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;  /* делаем побольше */
   cursor: pointer;
-  flex-shrink: 0;
+  line-height: 1;
 }
+
 
 #switchBtn, #modeBtn, #fiftyBtn {
   padding: 8px 12px;
@@ -109,8 +108,23 @@ header > div {
   flex-shrink: 0;
 }
 
-#switchBtn { font-size:1.2rem; background:transparent; border:none; }
-#switchBtn:hover { background-color: rgba(0,0,0,0.05); transform:scale(1.2);}
+#switchBtn {
+  font-size: 1.2rem;
+  background-color: #4CAF50; /* зелёный фон */
+  color: white;              /* белый текст/иконка */
+  border: none;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+#switchBtn:hover {
+  background-color: #45a049; /* темнее при наведении */
+  transform: scale(1.05);
+}
+
 #modeBtn { background-color:#FF9800; color:white; border:none; }
 #modeBtn:hover { background-color:#F57C00; }
 #fiftyBtn { background-color:#2196F3; color:white; }
@@ -207,7 +221,7 @@ header > div {
     <select id="listSelect">
       <option disabled selected>Выберите список</option>
     </select>
-    <button id="addListToggle">+</button>
+    <button id="addListToggle">🆕</button>
   </div>
   <div>
     <button id="switchBtn">🌐</button>
@@ -474,4 +488,5 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
