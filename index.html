@@ -117,16 +117,13 @@ header > div {
 #fiftyBtn:hover { background-color:#1976D2; }
 
 #word {
-  font-size: calc(20px + 4vw);
-  text-align: center;
-  margin: 20px 0;
-  word-wrap: break-word;
-  font-weight: bold;
+  font-size:calc(20px + 4vw);
+  text-align:center;
+  margin:20px 0;
+  word-wrap:break-word;
+  font-weight:bold;
 }
-
-#word.placeholder {
-  color: red;   /* стиль для сообщения до выбора списка */
-}
+#word.placeholder { color: #ff4d4f; } /* красная надпись до выбора списка */
 
 .answers { display:grid; grid-template-columns:1fr 1fr; gap:15px; width:95%; max-width:600px; }
 .answerBtn { background-color:#f2f2f2; border:1px solid #ccc; border-radius:12px; font-size:1.2rem; padding:10px; min-height:50px; transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; cursor:pointer; font-weight:bold; word-wrap:break-word; white-space:normal; }
@@ -161,7 +158,21 @@ header > div {
   border: 2px solid #ccc;
   box-sizing: border-box;
   margin-top: 10px;
+  background: #fff;
+  color: #000;
 }
+
+/* фидбек под полем ввода */
+#feedback {
+  width: 95%;
+  max-width: 600px;
+  min-height: 1.2em;
+  margin-top: 8px;
+  text-align: left;
+  font-size: 1rem;
+}
+#feedback.ok { color: #C8E6C9; }
+#feedback.err { color: #FFCDD2; }
 
 /* кнопка ответа снизу */
 #submitAnswerBtn {
@@ -177,11 +188,7 @@ header > div {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
 }
-
-#submitAnswerBtn:hover {
-  background-color: #45a049;
-  transform: scale(1.02);
-}
+#submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
 
 @media (max-width:480px){
   #title { font-size: 1rem; }
@@ -215,7 +222,7 @@ header > div {
   <button id="addListBtn">Добавить список</button>
 </div>
 
-<div id="word"></div>
+<div id="word" class="placeholder">Сначала выберите список слов</div>
 
 <div class="answers" id="answers">
   <button class="answerBtn"></button>
@@ -226,7 +233,8 @@ header > div {
 
 <!-- режим ввода -->
 <div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
-  <input type="text" id="answerInput" placeholder="Введите ответ">
+  <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
+  <div id="feedback"></div>
 </div>
 
 <div id="progressBar"><div id="progressFill"></div></div>
@@ -234,7 +242,7 @@ header > div {
 
 <!-- кнопка ответа вынесена вниз -->
 <div id="submitWrapper" style="display:none; text-align:center; margin:20px 0; width:95%; max-width:600px;">
-  <button id="submitAnswerBtn">Ответить</button>
+  <button id="submitAnswerBtn" type="button" tabindex="-1">Ответить</button>
 </div>
 
 <div id="welcome" style="font-size:1.2rem; text-align:center; margin:15px 0;">Добро пожаловать</div>
@@ -251,13 +259,41 @@ const wordDiv=document.getElementById('word');
 const answersDiv=document.getElementById('answers');
 const inputModeDiv=document.getElementById('inputModeDiv');
 const answerInput=document.getElementById('answerInput');
+const feedback=document.getElementById('feedback');
 const submitAnswerBtn=document.getElementById('submitAnswerBtn');
 const submitWrapper=document.getElementById('submitWrapper');
 const progressDiv=document.getElementById('progress');
 const progressFill=document.getElementById('progressFill');
 
+function focusInputSoon() {
+  if (!inputMode) return;
+  requestAnimationFrame(()=>{
+    answerInput.focus({ preventScroll: true });
+    // курсор в конец
+    const len = answerInput.value.length;
+    try { answerInput.setSelectionRange(len, len); } catch(e){}
+  });
+}
+
 switchBtn.addEventListener('click', ()=>{reverse=!reverse; if(currentWord) drawCurrentQuestion();});
 fiftyBtn.addEventListener('click', useFifty);
+
+// НЕ даём кнопке воровать фокус (чтобы клавиатура не закрывалась)
+submitAnswerBtn.addEventListener('mousedown', e => e.preventDefault());
+submitAnswerBtn.addEventListener('touchstart', e => {
+  e.preventDefault();
+  submitFromButton();
+}, {passive:false});
+submitAnswerBtn.addEventListener('click', e => {
+  e.preventDefault();
+  submitFromButton();
+});
+
+function submitFromButton(){
+  if(!currentWord) return;
+  const correct = reverse ? currentWord.word : currentWord.trans;
+  checkTextAnswer((answerInput.value||"").trim(), correct);
+}
 
 modeBtn.addEventListener('click', ()=>{
   inputMode=!inputMode;
@@ -267,6 +303,7 @@ modeBtn.addEventListener('click', ()=>{
     submitWrapper.style.display='block';
     fiftyBtn.style.display='none';
     modeBtn.textContent='🎲';
+    focusInputSoon();
   } else {
     answersDiv.style.display='grid';
     inputModeDiv.style.display='none';
@@ -278,17 +315,29 @@ modeBtn.addEventListener('click', ()=>{
 });
 
 function loadNextWord(){
-  if(remainingWords.length===0){ alert('Вы прошли все слова!'); return; }
+  if(remainingWords.length===0){
+    // Без alert, чтобы не закрывать клавиатуру
+    wordDiv.textContent='Готово! Вы прошли все слова 🎉';
+    wordDiv.classList.remove('placeholder');
+    answersDiv.style.display='none';
+    inputModeDiv.style.display='none';
+    submitWrapper.style.display='none';
+    return;
+  }
   currentWord=remainingWords.pop();
   index++;
   document.getElementById('welcome').style.display='none';
   drawCurrentQuestion();
+  focusInputSoon();
 }
 
 function drawCurrentQuestion(){
   const question=reverse?currentWord.trans:currentWord.word;
   const correct=reverse?currentWord.word:currentWord.trans;
+
   wordDiv.textContent=question;
+  wordDiv.classList.remove('placeholder');
+
   progressDiv.textContent=`${index} из ${allWords.length} (${correct_answers}/${wrong_answers})`;
   progressFill.style.width=`${(index/allWords.length)*100}%`;
 
@@ -302,10 +351,12 @@ function drawCurrentQuestion(){
     });
     fiftyBtn.disabled=false;
   } else {
-    answerInput.value="";
-    answerInput.focus();
-    submitAnswerBtn.onclick=()=>checkTextAnswer(answerInput.value.trim(), correct);
-    answerInput.onkeydown=(e)=>{ if(e.key==="Enter") checkTextAnswer(answerInput.value.trim(), correct); };
+    feedback.textContent='';
+    feedback.className='';
+    answerInput.value='';
+    focusInputSoon();
+    // Enter также отправляет
+    answerInput.onkeydown=(e)=>{ if(e.key==="Enter"){ e.preventDefault(); submitFromButton(); } };
   }
 }
 
@@ -321,27 +372,29 @@ function checkAnswer(btn, correct){
 }
 
 function checkTextAnswer(userAnswer, correct){
-  if(!userAnswer) return;
+  if(!userAnswer){
+    // показываем напоминание, но не закрываем клавиатуру
+    feedback.textContent='Введите ответ';
+    feedback.className='err';
+    focusInputSoon();
+    return;
+  }
+
   if(userAnswer.toLowerCase()===correct.toLowerCase()){
     correct_answers++;
-    answerInput.style.borderColor="green";
-    setTimeout(()=>{
-      answerInput.style.borderColor="";
-      loadNextWord();
-      answerInput.focus();   // << держим клавиатуру активной
-    },700);
+    feedback.textContent='Верно!';
+    feedback.className='ok';
+    // быстро следующий
+    setTimeout(()=>{ loadNextWord(); }, 500);
   } else {
     wrong_answers++;
-    answerInput.style.borderColor="red";
-    setTimeout(()=>{
-      alert("Правильный ответ: "+correct);
-      answerInput.style.borderColor="";
-      loadNextWord();
-      answerInput.focus();   // << возвращаем фокус
-    },1500);
+    feedback.textContent='Правильный ответ: ' + correct;
+    feedback.className='err';
+    // показываем 1.2с и идём дальше
+    setTimeout(()=>{ loadNextWord(); }, 1200);
   }
+  focusInputSoon();
 }
-
 
 function useFifty(){
   const correct=reverse?currentWord.word:currentWord.trans;
@@ -373,9 +426,10 @@ function loadAllLists(){
       const option=document.createElement('option');
       option.value=key; option.textContent=key;
       listSelect.appendChild(option);
-      wordDiv.textContent = "Сначала выберите список слов";
-      wordDiv.classList.add("placeholder");
     }
+    // До выбора списка — красная подсказка
+    wordDiv.textContent = "Сначала выберите список слов";
+    wordDiv.classList.add("placeholder");
   });
 }
 loadAllLists();
@@ -389,7 +443,7 @@ listSelect.onchange=()=>{
     allWords=[...new Map(words.map(w=>[`${w.word};${w.trans}`,w])).values()];
     remainingWords=shuffleArray([...allWords]);
     index=0; correct_answers=0; wrong_answers=0; currentWord=null;
-     wordDiv.classList.remove("placeholder"); // убираем красный цвет
+    wordDiv.classList.remove("placeholder");
     loadNextWord();
   });
 };
@@ -408,6 +462,7 @@ addListBtn.onclick=()=>{
   }).catch(err=>console.error(err));
 };
 
+// Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
 let lastTouchEnd=0;
 document.addEventListener('touchend', e=>{
@@ -419,5 +474,3 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
-
-
