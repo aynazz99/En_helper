@@ -187,12 +187,12 @@ header > div {
 #feedback {
   width: 95%;
   max-width: 600px;
-  min-height: 1.2em;
-  margin-top: 8px;
-  text-align: left;
-  font-size: 1rem;
+  text-align: center;
+  margin: 20px 0 10px 0;     /* отступ сверху и снизу */
+  min-height: 2em;  
+  font-size: 1.5rem;
 }
-#feedback.ok { color: #C8E6C9; }
+#feedback.ok { color: #ff0000; }
 #feedback.err { color: #FFCDD2; }
 
 /* кнопка ответа снизу */
@@ -265,8 +265,8 @@ header > div {
 
 <!-- режим ввода -->
 <div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
-  <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
   <div id="feedback"></div>
+  <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
 </div>
 
 <div id="progressBar"><div id="progressFill"></div></div>
@@ -463,8 +463,8 @@ if(!userAnswer){
     wrong_answers++;
     feedback.textContent='Правильный ответ: ' + correct;
     feedback.className='err';
-    // показываем 1.2с и идём дальше
-    setTimeout(()=>{ loadNextWord(); }, 1200);
+    // показываем 2с и идём дальше
+    setTimeout(()=>{ loadNextWord(); }, 2000);
   }
   focusInputSoon();
 }
@@ -555,6 +555,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
