@@ -75,6 +75,30 @@ header > div {
   text-overflow: ellipsis;
 }
 
+header button {
+  background-color: #f2f2f2; /* светло-серый фон */
+  border: 1px solid #ccc;    /* тонкая серая рамка */
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;               /* тёмно-серый текст */
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+header button:hover {
+  background-color: #e6e6e6;
+  transform: scale(1.05);
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;  /* равный отступ между кнопками */
+}
+
 #listSelect {
   padding: 8px 12px;
   border-radius: 12px;
@@ -91,47 +115,6 @@ header > div {
 
 #listSelect::-ms-expand { display: none; }
 
-/* Кнопка "+" */
-#addListToggle {
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-weight: bold;
-  background-color: #2196F3;
-  color: white;
-  cursor: pointer;
-  flex-shrink: 0; /* не сжимается */
-}
-
-
-#switchBtn, #modeBtn, #fiftyBtn {
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-#switchBtn {
-  font-size: 1.2rem;
-  background-color: #4CAF50; /* зелёный фон */
-  color: white;              /* белый текст/иконка */
-  border: none;
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-weight: bold;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-#switchBtn:hover {
-  background-color: #45a049; /* темнее при наведении */
-  transform: scale(1.05);
-}
-
-#modeBtn { background-color:#FF9800; color:white; border:none; }
-#modeBtn:hover { background-color:#F57C00; }
-#fiftyBtn { background-color:#2196F3; color:white; }
-#fiftyBtn:hover { background-color:#1976D2; }
 
 #word {
   font-size:calc(20px + 4vw);
