@@ -91,12 +91,15 @@ header > div {
 
 #listSelect::-ms-expand { display: none; }
 
+/* Кнопка "+" */
 #addListToggle {
-  border: none;
-  background: transparent;
-  font-size: 1.6rem;  /* делаем побольше */
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-weight: bold;
+  background-color: #2196F3;
+  color: white;
   cursor: pointer;
-  line-height: 1;
+  flex-shrink: 0; /* не сжимается */
 }
 
 
@@ -160,7 +163,7 @@ header > div {
 }
 
 #welcome {
-  font-size: 10rem;
+  font-size: 5rem;
   font-weight: bold;
   text-align: center;
   color: #ffffff;
@@ -225,7 +228,7 @@ header > div {
     <select id="listSelect">
       <option disabled selected>Выберите список</option>
     </select>
-    <button id="addListToggle">🆕</button>
+    <button id="addListToggle">+</button>
   </div>
   <div>
     <button id="switchBtn">🌐</button>
@@ -495,6 +498,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
