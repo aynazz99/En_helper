@@ -132,8 +132,31 @@ button {
 <div id="progress"></div>
 
 <script src="main.js"></script>
+  <script>
+  // Блокируем pinch-to-zoom
+  document.addEventListener('gesturestart', e => e.preventDefault());
+
+  // Блокируем двойной тап для зума
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', e => {
+    const now = new Date().getTime();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, false);
+
+  // Блокируем двойной тап по ссылкам и кнопкам
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+</script>
+
 </body>
 </html>
+
 
 
 
