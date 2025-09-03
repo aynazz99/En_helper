@@ -250,12 +250,15 @@ header > div {
 
 <header>
   <span id="title"></span>
-  <div style="display:flex; gap:10px; align-items:center;">
+<div style="display:flex; gap:10px; align-items:center;">
+  <div id="listContainer" style="display:flex; align-items:center; gap:5px;">
     <select id="listSelect">
       <option disabled selected>Выберите список</option>
     </select>
-    <button id="addListToggle">+</button>
+    <button id="deleteListBtn" style="display:none;">❌</button>
   </div>
+  <button id="addListToggle">+</button>
+</div>
   <div>
     <button id="switchBtn">🌐</button>
     <button id="modeBtn">✍️</button>
