@@ -490,7 +490,7 @@ if (userAnswer.toLowerCase() === correct.toLowerCase()) {
     // Убираем подсветку через 1 секунду
     setTimeout(() => {
         answerInput.classList.remove('success');
-    }, 1000);
+    }, 500);
 
     // Быстрый переход к следующему слову
     setTimeout(() => { loadNextWord(); }, 500);
@@ -590,6 +590,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
