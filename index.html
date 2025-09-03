@@ -49,7 +49,7 @@ button { padding:8px 4vw; font-weight:bold; border:none; border-radius:12px; cur
 
 #addListForm { display:none; flex-direction:column; gap:5px; margin:10px 0; width:95%; max-width:600px; }
 #welcome {
-  font-size: 5rem;           
+  font-size: 10rem;           
   font-weight: bold;            
   text-align: center;
   margin: 20px 0;
@@ -58,6 +58,20 @@ button { padding:8px 4vw; font-weight:bold; border:none; border-radius:12px; cur
   text-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
   transition: opacity 0.5s ease; 
 }
+#listSelect {
+  padding: 8px 12px;          /* внутренние отступы, чтобы текст помещался */
+  border-radius: 12px;        /* скруглённые углы */
+  border: 1px solid #ccc;     /* лёгкая рамка */
+  font-size: 1rem;            /* размер шрифта */
+  background: white;           /* фон */
+  cursor: pointer;
+  min-width: 150px;           /* минимальная ширина, чтобы текст помещался */
+  box-sizing: border-box;
+}
+
+/* Если надо, чтобы стрелка выпадающего списка тоже была красивой */
+#listSelect::-ms-expand { display: none; } /* для IE/Edge */
+
 
 @media (max-width:480px){ header{padding:10px;} #title{font-size:1rem;} button{font-size:0.9rem; padding:6px 10px;} #word{font-size:calc(18px + 4vw);} #progress{font-size:0.9rem;} }
 </style>
@@ -240,6 +254,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
