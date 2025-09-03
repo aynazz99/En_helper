@@ -455,10 +455,10 @@ if (!userAnswer) {
     }, 100);
   }, 100);
 
-  // Убираем класс через 1 секунду
+  // Убираем класс через 0.5 секунду
   setTimeout(() => {
     answerInput.classList.remove('error');
-  }, 1000);
+  }, 500);
 
   focusInputSoon();
   return;
@@ -566,4 +566,5 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
