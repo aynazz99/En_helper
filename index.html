@@ -314,7 +314,11 @@ function checkTextAnswer(userAnswer, correct){
   if(userAnswer.toLowerCase()===correct.toLowerCase()){
     correct_answers++;
     answerInput.style.borderColor="green";
-    setTimeout(()=>{ answerInput.style.borderColor=""; loadNextWord(); },700);
+    setTimeout(()=>{
+      answerInput.style.borderColor="";
+      loadNextWord();
+      answerInput.focus();   // << держим клавиатуру активной
+    },700);
   } else {
     wrong_answers++;
     answerInput.style.borderColor="red";
@@ -322,9 +326,11 @@ function checkTextAnswer(userAnswer, correct){
       alert("Правильный ответ: "+correct);
       answerInput.style.borderColor="";
       loadNextWord();
+      answerInput.focus();   // << возвращаем фокус
     },1500);
   }
 }
+
 
 function useFifty(){
   const correct=reverse?currentWord.word:currentWord.trans;
@@ -399,3 +405,4 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
