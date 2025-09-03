@@ -301,6 +301,7 @@ const submitAnswerBtn=document.getElementById('submitAnswerBtn');
 const submitWrapper=document.getElementById('submitWrapper');
 const progressDiv=document.getElementById('progress');
 const progressFill=document.getElementById('progressFill');
+const progressBar = document.getElementById('progressBar');
 // Скрываем прогресс при загрузке страницы
 progressDiv.style.display = 'none';
 progressFill.style.display = 'none';
@@ -308,7 +309,7 @@ progressFill.style.display = 'none';
 switchBtn.style.display = 'none';
 fiftyBtn.style.display = 'none';
 modeBtn.style.display = 'none';
-
+progressBar.style.display = 'none';
 
 function focusInputSoon() {
   if (!inputMode) return;
@@ -500,7 +501,7 @@ function loadAllLists(){
       listSelect.appendChild(option);
     }
     // До выбора списка — красная подсказка
-    wordDiv.textContent = "Сначала выберите список слов";
+    wordDiv.textContent = "Выберите список слов";
     wordDiv.classList.add("placeholder");
   });
 }
@@ -523,6 +524,7 @@ listSelect.onchange=()=>{
     switchBtn.style.display = 'inline-block';
     fiftyBtn.style.display = 'inline-block';
     modeBtn.style.display = 'inline-block';
+    progressBar.style.display = 'block';
     loadNextWord();
   });
 };
@@ -553,6 +555,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
