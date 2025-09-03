@@ -182,6 +182,11 @@ header > div {
   background: #fff;
   color: #000;
 }
+#answerInput.error {
+  border: 2px solid red !important;
+  box-shadow: 0 0 10px red;
+}
+
 
 /* фидбек над полем ввода */
 #feedback {
@@ -436,23 +441,28 @@ function checkAnswer(btn, correct){
 
 
 function checkTextAnswer(userAnswer, correct){
-if(!userAnswer){
-  // подсвечиваем и подпрыгиваем поле
-  answerInput.style.borderColor = 'red';
+if (!userAnswer) {
+  // Добавляем класс для красного эффекта
+  answerInput.classList.add('error');
+
+  // Подпрыгивание
   answerInput.style.transition = 'transform 0.2s';
   answerInput.style.transform = 'translateY(-5px)';
-  setTimeout(()=>{
+  setTimeout(() => {
     answerInput.style.transform = 'translateY(5px)';
-    setTimeout(()=>{
+    setTimeout(() => {
       answerInput.style.transform = 'translateY(0)';
-      answerInput.style.borderColor = '#ccc'; // возвращаем цвет рамки
     }, 100);
   }, 100);
 
-  focusInputSoon(); // держим фокус
+  // Убираем класс через 1 секунду
+  setTimeout(() => {
+    answerInput.classList.remove('error');
+  }, 1000);
+
+  focusInputSoon();
   return;
 }
-
 
   if(userAnswer.toLowerCase()===correct.toLowerCase()){
     correct_answers++;
@@ -556,3 +566,4 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
