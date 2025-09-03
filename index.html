@@ -407,13 +407,23 @@ function checkAnswer(btn, correct){
 }
 
 function checkTextAnswer(userAnswer, correct){
-  if(!userAnswer){
-    // показываем напоминание, но не закрываем клавиатуру
-    feedback.textContent='Введите ответ';
-    feedback.className='err';
-    focusInputSoon();
-    return;
-  }
+if(!userAnswer){
+  // подсвечиваем и подпрыгиваем поле
+  answerInput.style.borderColor = 'red';
+  answerInput.style.transition = 'transform 0.2s';
+  answerInput.style.transform = 'translateY(-5px)';
+  setTimeout(()=>{
+    answerInput.style.transform = 'translateY(5px)';
+    setTimeout(()=>{
+      answerInput.style.transform = 'translateY(0)';
+      answerInput.style.borderColor = '#ccc'; // возвращаем цвет рамки
+    }, 100);
+  }, 100);
+
+  focusInputSoon(); // держим фокус
+  return;
+}
+
 
   if(userAnswer.toLowerCase()===correct.toLowerCase()){
     correct_answers++;
@@ -509,6 +519,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
