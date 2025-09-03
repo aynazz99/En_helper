@@ -211,6 +211,17 @@ header > div {
 }
 #submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
 
+#submitWrapper {
+  position: sticky; /* или fixed, если хочешь фиксировать внизу экрана */
+  bottom: calc(10px + env(safe-area-inset-bottom)); /* отступ от нижнего края + безопасная зона */
+  text-align: center;
+  width: 95%;
+  max-width: 600px;
+  margin: 0 auto;
+  z-index: 100; /* чтобы кнопка была поверх других элементов */
+}
+
+
 @media (max-width:480px){
   #title { font-size: 1rem; }
   #listSelect { font-size: 0.8rem; min-width: 80px; }
@@ -498,6 +509,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
