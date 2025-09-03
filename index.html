@@ -599,30 +599,31 @@ function loadAllLists(){
 }
 loadAllLists();
 
-listSelect.onchange=()=>{
-  const selected=listSelect.value;
-  if(!selected) return;
+listSelect.onchange = () => {
+  const selected = listSelect.value;
+  if (!selected) return;
 
-  // Если нет интернета — пробуем загрузить офлайн-версию
-  if (!navigator.onLine) {
-    if (!loadOfflineList(selected)) {
-      alert("Список недоступен офлайн 😢");
-    }
-    return;
-  }
+  // Пробуем загрузить онлайн
+  database.ref('lists/' + selected).once('value').then(snapshot => {
+    const data = snapshot.val();
+    if (!data) throw new Error("Нет данных онлайн");
 
-  // Если интернет есть — загружаем из Firebase
-  database.ref('lists/'+selected).once('value').then(snapshot=>{
-    const data=snapshot.val();
-    words=Object.values(data);
-    allWords=[...new Map(words.map(w=>[`${w.word};${w.trans}`,w])).values()];
-    remainingWords=shuffleArray([...allWords]);
+    words = Object.values(data);
+    allWords = [...new Map(words.map(w => [`${w.word};${w.trans}`, w])).values()];
+    remainingWords = shuffleArray([...allWords]);
 
     // Сохраняем офлайн
     try {
       localStorage.setItem("list_" + selected, JSON.stringify(allWords));
     } catch(e) {
       console.warn("Не удалось сохранить список офлайн", e);
+    }
+
+    startQuiz();
+  }).catch(err => {
+    console.warn("Нет интернета, загружаю офлайн", err);
+    if (!loadOfflineList(selected)) {
+      alert("Список недоступен офлайн 😢");
     }
 
     index=0; correct_answers=0; wrong_answers=0; currentWord=null;
