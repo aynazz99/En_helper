@@ -423,6 +423,27 @@ function drawCurrentQuestion(){
     answerInput.onkeydown=(e)=>{ if(e.key==="Enter"){ e.preventDefault(); submitFromButton(); } };
   }
 }
+  
+function loadOfflineList(listName) {
+  const saved = localStorage.getItem("list_" + listName);
+  if (!saved) return false;
+  allWords = JSON.parse(saved);
+  remainingWords = shuffleArray([...allWords]);
+  index = 0; correct_answers = 0; wrong_answers = 0; currentWord = null;
+  wordDiv.classList.remove("placeholder");
+
+  // Показываем кнопки и прогресс
+  answersDiv.style.display = 'grid';
+  progressDiv.style.display = 'block';
+  progressFill.style.display = 'block';
+  switchBtn.style.display = 'inline-block';
+  fiftyBtn.style.display = 'inline-block';
+  modeBtn.style.display = 'inline-block';
+  progressBar.style.display = 'block';
+
+  loadNextWord();
+  return true;
+}
 
 function checkAnswer(btn, correct){
   if(!currentWord){ 
@@ -581,14 +602,33 @@ loadAllLists();
 listSelect.onchange=()=>{
   const selected=listSelect.value;
   if(!selected) return;
+
+  // Если нет интернета — пробуем загрузить офлайн-версию
+  if (!navigator.onLine) {
+    if (!loadOfflineList(selected)) {
+      alert("Список недоступен офлайн 😢");
+    }
+    return;
+  }
+
+  // Если интернет есть — загружаем из Firebase
   database.ref('lists/'+selected).once('value').then(snapshot=>{
     const data=snapshot.val();
     words=Object.values(data);
     allWords=[...new Map(words.map(w=>[`${w.word};${w.trans}`,w])).values()];
     remainingWords=shuffleArray([...allWords]);
+
+    // Сохраняем офлайн
+    try {
+      localStorage.setItem("list_" + selected, JSON.stringify(allWords));
+    } catch(e) {
+      console.warn("Не удалось сохранить список офлайн", e);
+    }
+
     index=0; correct_answers=0; wrong_answers=0; currentWord=null;
     wordDiv.classList.remove("placeholder");
-// Показываем кнопки и прогресс после выбора списка
+
+    // Показываем кнопки и прогресс
     answersDiv.style.display = 'grid';
     progressDiv.style.display = 'block';
     progressFill.style.display = 'block';
@@ -596,9 +636,11 @@ listSelect.onchange=()=>{
     fiftyBtn.style.display = 'inline-block';
     modeBtn.style.display = 'inline-block';
     progressBar.style.display = 'block';
+
     loadNextWord();
   });
 };
+
 
 addListToggle.onclick=()=>{ addListForm.style.display=addListForm.style.display==='none'?'flex':'none'; };
 addListBtn.onclick=()=>{
