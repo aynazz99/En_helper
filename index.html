@@ -210,8 +210,8 @@ header > div {
     <button id="addListToggle">+</button>
   </div>
   <div>
-    <button id="switchBtn">🔄</button>
-    <button id="modeBtn">⌨️</button>
+    <button id="switchBtn">🌐</button>
+    <button id="modeBtn">✍️</button>
     <button id="fiftyBtn">50/50</button>
   </div>
 </header>
@@ -302,14 +302,14 @@ modeBtn.addEventListener('click', ()=>{
     inputModeDiv.style.display='block';
     submitWrapper.style.display='block';
     fiftyBtn.style.display='none';
-    modeBtn.textContent='🎲';
+    modeBtn.textContent='🎛️';
     focusInputSoon();
   } else {
     answersDiv.style.display='grid';
     inputModeDiv.style.display='none';
     submitWrapper.style.display='none';
     fiftyBtn.style.display='inline-block';
-    modeBtn.textContent='⌨️';
+    modeBtn.textContent='✍️';
   }
   if(currentWord) drawCurrentQuestion();
 });
@@ -474,3 +474,4 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
