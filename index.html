@@ -187,6 +187,15 @@ header > div {
   box-shadow: 0 0 10px red;
 }
 
+#answerInput.success {
+  border: 2px solid #00a550 !important;
+  box-shadow: 0 0 10px #00a550;
+}
+
+#answerInput {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
 
 /* фидбек над полем ввода */
 #feedback {
@@ -464,12 +473,27 @@ if (!userAnswer) {
   return;
 }
 
-  if(userAnswer.toLowerCase()===correct.toLowerCase()){
+if (userAnswer.toLowerCase() === correct.toLowerCase()) {
     correct_answers++;
-    feedback.textContent='Верно!';
-    feedback.className='ok';
-    // быстро следующий
-    setTimeout(()=>{ loadNextWord(); }, 500);
+    // Добавляем зелёную подсветку
+    answerInput.classList.add('success');
+    // Подпрыгивание, как при ошибке
+    answerInput.style.transition = 'transform 0.2s';
+    answerInput.style.transform = 'translateY(-5px)';
+    setTimeout(() => {
+        answerInput.style.transform = 'translateY(5px)';
+        setTimeout(() => {
+            answerInput.style.transform = 'translateY(0)';
+        }, 100);
+    }, 100);
+
+    // Убираем подсветку через 1 секунду
+    setTimeout(() => {
+        answerInput.classList.remove('success');
+    }, 1000);
+
+    // Быстрый переход к следующему слову
+    setTimeout(() => { loadNextWord(); }, 500);
   } else {
     wrong_answers++;
     feedback.textContent= correct;
@@ -566,5 +590,6 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
