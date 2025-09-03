@@ -311,6 +311,29 @@ switchBtn.style.display = 'none';
 fiftyBtn.style.display = 'none';
 modeBtn.style.display = 'none';
 progressBar.style.display = 'none';
+// Контейнер для неверных ответов в две колонки
+const wrongAnswersContainer = document.createElement('div');
+wrongAnswersContainer.id = 'wrongAnswersContainer';
+wrongAnswersContainer.style.display = 'grid';
+wrongAnswersContainer.style.gridTemplateColumns = '1fr 1fr';
+wrongAnswersContainer.style.columnGap = '20px';
+wrongAnswersContainer.style.width = '95%';
+wrongAnswersContainer.style.maxWidth = '600px';
+wrongAnswersContainer.style.margin = '20px 0';
+wrongAnswersContainer.style.fontSize = '1rem';
+wrongAnswersContainer.style.color = 'white';
+
+// Добавляем внутрь две колонки
+const col1 = document.createElement('div');
+const col2 = document.createElement('div');
+wrongAnswersContainer.appendChild(col1);
+wrongAnswersContainer.appendChild(col2);
+
+// Добавляем контейнер в конец body
+document.body.appendChild(wrongAnswersContainer);
+
+let wrongIndex = 0; // индекс для чередования колонок
+
 
 function focusInputSoon() {
   if (!inputMode) return;
@@ -430,6 +453,8 @@ function checkAnswer(btn, correct){
     b.disabled = true;
     if(b.textContent === correct) b.classList.add('correct');
     else if(b === btn) b.classList.add('wrong');
+    addWrongAnswer(currentWord.word, currentWord.trans);
+
   });
   setTimeout(()=>loadNextWord(), btn.textContent === correct ? 500 : 2000);
 }
@@ -466,6 +491,8 @@ if(!userAnswer){
     feedback.className='err';
     // показываем 3с и идём дальше
     setTimeout(()=>{ loadNextWord(); }, 3000);
+    addWrongAnswer(currentWord.word, currentWord.trans);
+
   }
   focusInputSoon();
 }
@@ -543,6 +570,20 @@ addListBtn.onclick=()=>{
     alert('Список добавлен!'); newListName.value=''; newListText.value=''; addListForm.style.display='none'; loadAllLists();
   }).catch(err=>console.error(err));
 };
+  
+function addWrongAnswer(word, trans) {
+  const wrongItem = document.createElement('div');
+  wrongItem.textContent = `❌ ${word} — ${trans}`;
+  wrongItem.style.marginBottom = '5px';
+
+  if (wrongIndex % 2 === 0) {
+    col1.appendChild(wrongItem);
+  } else {
+    col2.appendChild(wrongItem);
+  }
+
+  wrongIndex++;
+}
 
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
@@ -554,8 +595,20 @@ document.addEventListener('touchend', e=>{
 }, false);
 document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
 </script>
+<div id="wrongAnswersContainer" style="
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  width: 95%;
+  max-width: 600px;
+  margin: 20px 0;
+  font-size: 1rem;
+  color: white;
+"></div>
+
 </body>
 </html>
+
 
 
 
