@@ -292,6 +292,8 @@ const modeBtn=document.getElementById('modeBtn');
 const fiftyBtn=document.getElementById('fiftyBtn');
 const wordDiv=document.getElementById('word');
 const answersDiv=document.getElementById('answers');
+// Скрываем кнопки при загрузке страницы
+answersDiv.style.display = 'none';
 const inputModeDiv=document.getElementById('inputModeDiv');
 const answerInput=document.getElementById('answerInput');
 const feedback=document.getElementById('feedback');
@@ -506,6 +508,7 @@ listSelect.onchange=()=>{
     remainingWords=shuffleArray([...allWords]);
     index=0; correct_answers=0; wrong_answers=0; currentWord=null;
     wordDiv.classList.remove("placeholder");
+    answersDiv.style.display = 'grid'; // показываем кнопки
     loadNextWord();
   });
 };
@@ -536,6 +539,7 @@ document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDef
 </script>
 </body>
 </html>
+
 
 
 
