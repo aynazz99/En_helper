@@ -241,13 +241,12 @@ background: rgba(255, 255, 255, 0.9); /* можно прозрачный фон 
 
 
 #submitWrapper {
-  border-radius: 12px;             /* закругление углов */
   position: sticky;       /* чтобы кнопка "прилипала" к низу экрана */
   bottom: 0;              /* указывает, что прилипает к низу */
   width: 100%;
   text-align: center;
   padding-bottom: env(safe-area-inset-bottom, 20px); /* учитываем нижнюю "чёлку" или клавиатуру */
-  background: rgba(255, 255, 255, 0.9); /* можно прозрачный фон */
+  background: rgba(255, 255, 255, 0); /* можно прозрачный фон */
 }
 
 #submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
