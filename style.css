@@ -87,6 +87,14 @@ header button:hover {
   cursor: pointer;
 }
 
+#fiftyBtn {
+  width: auto;
+  min-width: 50px; /* чтобы не сжималась слишком сильно */
+  padding: 0 8px;  /* горизонтальный отступ */
+  font-size: 0.8rem;
+}
+
+
 #listSelect::-ms-expand { display: none; }
 
 /* === Основное содержимое === */
