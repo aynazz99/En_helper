@@ -55,7 +55,7 @@ const database = firebase.database();
   <button id="addListBtn">Добавить список</button>
 </div>
 
-<div id="word" class="placeholder">Выберите список слов</div>
+<div id="word" class="placeholder"></div>
 
 <div class="answers" id="answers">
   <button class="answerBtn"></button>
@@ -359,7 +359,7 @@ function loadAllLists(){
       listSelect.appendChild(option);
     }
     // До выбора списка — красная подсказка
-    wordDiv.textContent = "Выберите список слов";
+    wordDiv.textContent = "";
     wordDiv.classList.add("placeholder");
   });
 }
