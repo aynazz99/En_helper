@@ -239,14 +239,15 @@ padding-bottom: env(safe-area-inset-bottom, 20px); /* учитываем ниж�
 background: rgba(255, 255, 255, 0.9); /* можно прозрачный фон */
 }
 
-#submitAnswerBtn {
+
+#submitWrapper {
   border-radius: 12px;             /* закругление углов */
-  background-color: #007bff;       /* твой цвет фона кнопки */
-  color: #fff;                     /* цвет текста */
-  border: none;
-  padding: 10px 20px;
-  overflow: hidden;                /* обрезает все выступающие слои */
-  background-clip: padding-box;    /* фон обрезается по границам padding */
+  position: sticky;       /* чтобы кнопка "прилипала" к низу экрана */
+  bottom: 0;              /* указывает, что прилипает к низу */
+  width: 100%;
+  text-align: center;
+  padding-bottom: env(safe-area-inset-bottom, 20px); /* учитываем нижнюю "чёлку" или клавиатуру */
+  background: rgba(255, 255, 255, 0.9); /* можно прозрачный фон */
 }
 
 #submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
