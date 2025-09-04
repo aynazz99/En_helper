@@ -88,10 +88,13 @@ header button:hover {
 }
 
 #fiftyBtn {
-  width: auto;
-  min-width: 50px; /* чтобы не сжималась слишком сильно */
-  padding: 0 8px;  /* горизонтальный отступ */
-  font-size: 0.8rem;
+  width: auto !important;         /* автоширина принудительно */
+  min-width: 60px !important;     /* фиксируем минимальную ширину */
+  height: 32px;                   /* как у остальных */
+  padding: 0 10px;                /* добавляем немного воздуха */
+  font-size: 0.8rem;              /* текст влезает даже в PWA */
+  box-sizing: border-box;         /* чтобы padding учитывался в ширине */
+  white-space: nowrap;            /* запрет переноса */
 }
 
 
