@@ -360,27 +360,43 @@ deleteListBtn.addEventListener('click', () => {
 });
 
 
-listSelect.onchange=()=>{
-  const selected=listSelect.value;
-  if(!selected) return;
-  database.ref('lists/'+selected).once('value').then(snapshot=>{
-    const data=snapshot.val();
-    words=Object.values(data);
-    allWords=[...new Map(words.map(w=>[`${w.word};${w.trans}`,w])).values()];
-    remainingWords=shuffleArray([...allWords]);
-    index=0; correct_answers=0; wrong_answers=0; currentWord=null;
-    wordDiv.classList.remove("placeholder");
-// Показываем кнопки и прогресс после выбора списка
-    answersDiv.style.display = 'grid';
-    progressDiv.style.display = 'block';
-    progressFill.style.display = 'block';
-    switchBtn.style.display = 'inline-block';
-    fiftyBtn.style.display = 'inline-block';
-    modeBtn.style.display = 'inline-block';
-    progressBar.style.display = 'block';
-    loadNextWord();
-  });
+listSelect.onchange = async () => {
+  const selected = listSelect.value;
+  if (!selected) return;
+
+  let listData;
+
+  try {
+    // Онлайн
+    const snapshot = await database.ref('lists/' + selected).once('value');
+    listData = snapshot.val() || [];
+  } catch(err) {
+    // Оффлайн
+    const allLists = await loadListsFromDB();
+    listData = allLists[selected] || [];
+  }
+
+  words = listData;
+  allWords = [...new Map(words.map(w => [`${w.word};${w.trans}`, w])).values()];
+  remainingWords = shuffleArray([...allWords]);
+  index = 0;
+  correct_answers = 0;
+  wrong_answers = 0;
+  currentWord = null;
+
+  wordDiv.classList.remove("placeholder");
+
+  answersDiv.style.display = 'grid';
+  progressDiv.style.display = 'block';
+  progressFill.style.display = 'block';
+  switchBtn.style.display = 'inline-block';
+  fiftyBtn.style.display = 'inline-block';
+  modeBtn.style.display = 'inline-block';
+  progressBar.style.display = 'block';
+
+  loadNextWord();
 };
+
 
 addListToggle.onclick=()=>{ addListForm.style.display=addListForm.style.display==='none'?'flex':'none'; };
 addListBtn.onclick=()=>{
@@ -392,7 +408,7 @@ addListBtn.onclick=()=>{
     return {word,trans};
   }).filter(x=>x.word&&x.trans);
   database.ref('lists/'+name).set(newWords).then(()=>{
-    alert('Список добавлен!'); newListName.value=''; newListText.value=''; addListForm.style.display='none'; loadAllLists();
+    alert('Список добавлен!'); newListName.value=''; newListText.value=''; addListForm.style.display='none';
   }).catch(err=>console.error(err));
 };
 
