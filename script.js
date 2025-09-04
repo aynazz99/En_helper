@@ -250,6 +250,44 @@ const listContainer = document.getElementById('listContainer');
 const deleteListBtn = document.getElementById('deleteListBtn');
 const ADMIN_CODE = "89991627939"; // код для удаления списка
 
+// Кнопка загрузки файлов
+const saveListBtn = document.getElementById('saveListBtn');
+
+saveListBtn.addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fileName = file.name.replace(/\.txt$/i, ''); // имя файла без .txt
+    const text = await file.text(); // читаем содержимое
+    const newWords = text.split('\n').map(line => {
+      const [word, trans] = line.split(';').map(x => x.trim());
+      return word && trans ? { word, trans } : null;
+    }).filter(x => x);
+
+    if (newWords.length === 0) {
+      alert('Файл пустой или формат неправильный. Используйте "слово;перевод" на каждой строке.');
+      return;
+    }
+
+    // Сохраняем в Firebase
+    database.ref('lists/' + fileName).set(newWords)
+      .then(() => {
+        alert(`Список "${fileName}" добавлен!`);
+        loadAllLists(); // обновляем список в select
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Ошибка при добавлении списка');
+      });
+  };
+  input.click(); // открываем диалог выбора файла
+});
+
+
 // Показ кнопки удаления при выборе списка
 listSelect.addEventListener('change', () => {
   deleteListBtn.style.display = listSelect.value ? 'inline-block' : 'none';
