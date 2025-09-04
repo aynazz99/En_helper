@@ -1,10 +1,13 @@
-html, body { 
-  width:100%; 
-  height:100%; 
-  margin:0; 
-  padding:0; 
-  overflow:hidden; 
-  touch-action:manipulation; 
+/* === Базовые стили для полноэкранного PWA === */
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  touch-action: manipulation;
+  overscroll-behavior: none;
 }
 
 body {
@@ -12,7 +15,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height:100vh;
   font-family: Arial, sans-serif;
   background-image: url('mountains.jpg');
   background-size: cover;
@@ -26,11 +28,12 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: calc(8px + env(safe-area-inset-top)) 12px 8px 12px;
+  width: 100%;
   box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  width: 100%;
   gap: 10px;
+  background: rgba(0,0,0,0.2);
 }
 
 #title {
@@ -42,7 +45,7 @@ header {
   max-width: 120px;
 }
 
-#leftControls, 
+#leftControls,
 #rightControls {
   display: flex;
   align-items: center;
@@ -87,81 +90,92 @@ header button:hover {
   cursor: pointer;
 }
 
-#fiftyBtn {
-  width: auto !important;         /* автоширина принудительно */
-  min-width: 60px !important;     /* фиксируем минимальную ширину */
-  height: 32px;                   /* как у остальных */
-  padding: 0 10px;                /* добавляем немного воздуха */
-  font-size: 0.8rem;              /* текст влезает даже в PWA */
-  box-sizing: border-box;         /* чтобы padding учитывался в ширине */
-  white-space: nowrap;            /* запрет переноса */
-}
-
-
 #listSelect::-ms-expand { display: none; }
+
+#fiftyBtn {
+  width: auto !important;
+  min-width: 60px !important;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
 
 /* === Основное содержимое === */
 #word {
-  font-size:calc(20px + 4vw);
-  text-align:center;
-  margin:20px 0;
-  word-wrap:break-word;
-  font-weight:bold;
-}
-#word.placeholder { color: #ff4d4f; }
-
-.answers { 
-  display:grid; 
-  grid-template-columns:1fr 1fr; 
-  gap:15px; 
-  width:95%; 
-  max-width:600px; 
-}
-.answerBtn { 
-  background-color:#f2f2f2; 
-  border:1px solid #ccc; 
-  border-radius:12px; 
-  font-size:1.2rem; 
-  padding:10px; 
-  min-height:50px; 
-  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; 
-  cursor:pointer; 
-  font-weight:bold; 
-  word-wrap:break-word; 
-  white-space:normal; 
-}
-.answerBtn:hover { background-color:#e6e6e6; transform:scale(1.02); box-shadow:0 2px 5px rgba(0,0,0,0.2); }
-.answerBtn.correct { background-color:#4CAF50; color:white; }
-.answerBtn.wrong { background-color:#F44336; color:white; }
-.answerBtn.disabled { background-color:#ddd; color:#666; }
-
-#progressBar { 
-  width:95%; 
-  max-width:600px; 
-  height:20px; 
-  background:#eee; 
-  border-radius:10px; 
-  margin:15px 0; 
-}
-#progressFill { 
-  width:0%; 
-  height:100%; 
-  background:#4CAF50; 
-  border-radius:10px; 
-  transition:width 0.3s; 
-}
-#progress { 
-  font-size:1rem; 
-  text-align:center; 
+  font-size: calc(20px + 4vw);
+  text-align: center;
+  margin: 20px 0;
+  word-wrap: break-word;
+  font-weight: bold;
 }
 
-#addListForm { 
-  display:none; 
-  flex-direction:column; 
-  gap:5px; 
-  margin:10px 0; 
-  width:95%; 
-  max-width:600px; 
+#word.placeholder {
+  color: #ff4d4f;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 95%;
+  max-width: 600px;
+}
+
+.answerBtn {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  padding: 10px;
+  min-height: 50px;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  cursor: pointer;
+  font-weight: bold;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.answerBtn:hover {
+  background-color: #e6e6e6;
+  transform: scale(1.02);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.answerBtn.correct { background-color: #4CAF50; color: white; }
+.answerBtn.wrong { background-color: #F44336; color: white; }
+.answerBtn.disabled { background-color: #ddd; color: #666; }
+
+#progressBar {
+  width: 95%;
+  max-width: 600px;
+  height: 20px;
+  background: #eee;
+  border-radius: 10px;
+  margin: 15px 0;
+}
+
+#progressFill {
+  width: 0%;
+  height: 100%;
+  background: #4CAF50;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+#progress {
+  font-size: 1rem;
+  text-align: center;
+}
+
+#addListForm {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  margin: 10px 0;
+  width: 95%;
+  max-width: 600px;
 }
 
 #welcomeWrapper {
@@ -207,17 +221,27 @@ header button:hover {
   max-width: 600px;
   text-align: center;
   margin: 20px 0 10px 0;
-  min-height: 2em;  
+  min-height: 2em;
   font-size: 2rem;
   font-weight: bold;
 }
 #feedback.ok { color: #00a550; }
 #feedback.err { color: #ff0000; }
 
-/* Кнопка ответа */
+/* Кнопка ответа (фиксированная) */
+#submitWrapper {
+  position: fixed;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 600px;
+  text-align: center;
+  z-index: 100;
+}
+
 #submitAnswerBtn {
   width: 100%;
-  max-width: 600px;
   font-size: 1.4rem;
   padding: 16px;
   border-radius: 16px;
@@ -229,16 +253,6 @@ header button:hover {
   transition: background 0.2s, transform 0.1s;
 }
 #submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
-
-#submitWrapper {
-  position: sticky;
-  bottom: calc(10px + env(safe-area-inset-bottom));
-  text-align: center;
-  width: 95%;
-  max-width: 600px;
-  margin: 0 auto;
-  z-index: 100;
-}
 
 /* Кнопка удаления списка */
 #deleteWrapper {
@@ -257,14 +271,12 @@ header button:hover {
   font-weight: bold;
   cursor: pointer;
 }
-#deleteListBtn:hover {
-  background: rgba(255,0,0,0.2);
-}
+#deleteListBtn:hover { background: rgba(255,0,0,0.2); }
 
 /* === Адаптив под айфон === */
 @media (max-width:480px){
   header {
-    padding: 6px 8px;
+    padding: calc(6px + env(safe-area-inset-top)) 8px 6px 8px;
     gap: 6px;
   }
 
