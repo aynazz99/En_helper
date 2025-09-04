@@ -259,7 +259,7 @@ header button:hover {
   width: 100%;
   font-size: 1.4rem;
   padding: 16px;
-  border-radius: 16px;
+  border-radius: 12px;
   font-weight: bold;
   background-color: #4CAF50;
   color: white;
