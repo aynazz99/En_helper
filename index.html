@@ -227,6 +227,25 @@ header > div {
   z-index: 100; /* чтобы кнопка была поверх других элементов */
 }
 
+#deleteWrapper {
+  margin-top: auto; /* прижимаем к низу */
+  width: 100%;
+  text-align: center;
+}
+
+#deleteListBtn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: rgba(255,255,255,0.1); /* почти прозрачный фон */
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+#deleteListBtn:hover {
+  background: rgba(255,0,0,0.2);
+}
 
 @media (max-width:480px){
   #title { font-size: 1rem; }
@@ -247,7 +266,6 @@ header > div {
       <select id="listSelect">
         <option disabled selected>Выберите список</option>
       </select>
-      <button id="deleteListBtn" style="display:none;">❌</button>
     </div>
   </div>
   <div>
@@ -291,6 +309,10 @@ header > div {
   <div id="welcome">Добро пожаловать</div>
 </div>
 
+<!-- кнопка удаления списка -->
+<div id="deleteWrapper">
+  <button id="deleteListBtn" style="display:none;">Удалить данный список</button>
+</div>
 
 <script>
 let words=[], allWords=[], index=0, correct_answers=0, wrong_answers=0;
