@@ -31,10 +31,17 @@ header {
   padding: calc(8px + env(safe-area-inset-top)) 12px 8px 12px;
   width: 100%;
   box-sizing: border-box;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   gap: 10px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.25); /* чуть более прозрачный для «мягкости» */
+  backdrop-filter: saturate(180%) blur(10px); /* размытый фон как в Safari */
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* чуть сильнее тень */
+  border-bottom: 1px solid rgba(255,255,255,0.1); /* тонкая граница */
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
+
 
 #title {
   font-weight: bold;
