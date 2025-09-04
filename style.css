@@ -237,7 +237,7 @@ header button:hover {
 
 /* Кнопка ответа (фиксированная) */
 #submitWrapper {
-  position: sticky;
+  position: fixed;
   bottom: calc(10px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
