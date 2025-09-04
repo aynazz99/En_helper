@@ -635,10 +635,6 @@ document.addEventListener('touchend', e=>{
   lastTouchEnd=now;
 }, false);
 document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
-<!-- кнопка удаления списка -->
-<div id="deleteWrapper">
-  <button id="deleteListBtn" style="display:none;">Удалить данный список</button>
-</div>
 </script>
 </body>
 </html>
