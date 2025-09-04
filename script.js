@@ -102,6 +102,17 @@ const newListText = document.getElementById('newListText');
 const deleteListBtn = document.getElementById('deleteListBtn');
 const ADMIN_CODE = "89991627939";
 
+function renderLists(lists) {
+  listSelect.innerHTML = '<option value="">Выберите список</option>';
+  for (const name in lists) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    listSelect.appendChild(option);
+  }
+}
+
+
 // --- Функции --- 
 function focusInputSoon() {
   if (!inputMode) return;
