@@ -1,4 +1,4 @@
-/* === Базовые стили для полноэкранного PWA === */
+ /* === Базовые стили для полноэкранного PWA === */
 html, body {
   width: 100%;
   height: 100%;
@@ -237,7 +237,7 @@ header button:hover {
 
 /* Кнопка ответа (фиксированная) */
 #submitWrapper {
-  position: sticky;       /* чтобы кнопка "прилипала" к низу экрана */
+  position: sticky;
   bottom: calc(10px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
@@ -245,7 +245,14 @@ header button:hover {
   max-width: 600px;
   text-align: center;
   z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+  
+  background: rgba(255, 255, 255, 0.9); /* почти прозрачный фон */
+  border-radius: 12px;                  /* закругляем углы контейнера */
+  overflow: hidden;                      /* обрезаем фон по углам */
+  background-clip: padding-box;          /* фон не вылезает за рамки */
 }
+
 
 
 #submitAnswerBtn {
