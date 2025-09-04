@@ -239,7 +239,7 @@ header button:hover {
 #submitWrapper {
   position: fixed;
   bottom: calc(10px + env(safe-area-inset-bottom));
-  transform: translateX(-50%);
+  left: 50%;
   width: 95%;
   max-width: 600px;
   text-align: center;
