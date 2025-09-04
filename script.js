@@ -16,6 +16,66 @@ let words=[], allWords=[], index=0, correct_answers=0, wrong_answers=0;
 let reverse=false, currentWord=null, remainingWords=[];
 let inputMode=false;
 
+const saveListBtn = document.getElementById('saveListBtn');
+
+// Сохраняем списки в LocalStorage
+function saveListsOffline(data) {
+  localStorage.setItem("wordQuizLists", JSON.stringify(data));
+}
+
+// Загружаем списки из LocalStorage
+function loadListsFromCache() {
+  const saved = localStorage.getItem("wordQuizLists");
+  if (saved) {
+    const data = JSON.parse(saved);
+    renderLists(data);
+    return true;
+  }
+  return false;
+}
+
+// Подтягиваем из Firebase и сохраняем в кэш (по кнопке 💾)
+function updateCacheFromFirebase() {
+  database.ref('lists').once('value')
+    .then(snapshot => {
+      const data = snapshot.val() || {};
+      saveListsOffline(data);
+      renderLists(data);
+      alert("Списки обновлены и сохранены для офлайн-доступа 💾✅");
+    })
+    .catch(err => {
+      console.error("Ошибка при загрузке из Firebase:", err);
+      alert("Не удалось обновить списки с сервера 😢");
+    });
+}
+
+// Рисуем в select
+function renderLists(data) {
+  listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
+  for (let key in data) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = key;
+    listSelect.appendChild(option);
+  }
+  wordDiv.textContent = "";
+  wordDiv.classList.add("placeholder");
+}
+
+// --- ЛОГИКА ЗАГРУЗКИ ПРИ СТАРТЕ ---
+
+window.addEventListener("load", () => {
+  // Пытаемся загрузить из кэша
+  if (!loadListsFromCache()) {
+    wordDiv.textContent = "Нет сохранённых списков. Нажмите 💾 при наличии интернета.";
+    wordDiv.classList.remove("placeholder");
+  }
+});
+
+// --- КНОПКА 💾 ---
+saveListBtn.addEventListener("click", updateCacheFromFirebase);
+
+
 const switchBtn=document.getElementById('switchBtn');
 const modeBtn=document.getElementById('modeBtn');
 const fiftyBtn=document.getElementById('fiftyBtn');
