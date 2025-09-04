@@ -427,34 +427,6 @@ window.addEventListener('resize', () => {
     }
 });
 
-// --- Создаём пустую прозрачную таблицу с видимыми границами ---
-const table = document.createElement('table');
-table.style.width = '95%';
-table.style.maxWidth = '600px';
-table.style.margin = '20px auto';
-table.style.borderCollapse = 'collapse';
-table.style.backgroundColor = 'transparent';
-
-// Количество строк (можно изменить)
-const rowsCount = 10;
-
-// Создаём строки и ячейки
-for (let i = 0; i < rowsCount; i++) {
-  const tr = document.createElement('tr');
-  for (let j = 0; j < 2; j++) {  // 2 столбца
-    const td = document.createElement('td');
-    td.style.border = '1px solid #000';
-    td.style.height = '30px';
-    tr.appendChild(td);
-  }
-  table.appendChild(tr);
-}
-
-// Вставляем таблицу перед кнопкой "Удалить список"
-const deleteWrapper = document.getElementById('deleteWrapper');
-deleteWrapper.parentNode.insertBefore(table, deleteWrapper);
-
-
 </script>
 </body>
 </html>
