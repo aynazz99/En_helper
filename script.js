@@ -18,38 +18,12 @@ let inputMode=false;
 
 const saveListBtn = document.getElementById('saveListBtn');
 
-// Сохраняем списки в LocalStorage
+// Сохраняем списки в LocalStorage для оффлайна
 function saveListsOffline(data) {
   localStorage.setItem("wordQuizLists", JSON.stringify(data));
 }
 
-// Загружаем списки из LocalStorage
-function loadListsFromCache() {
-  const saved = localStorage.getItem("wordQuizLists");
-  if (saved) {
-    const data = JSON.parse(saved);
-    renderLists(data);
-    return true;
-  }
-  return false;
-}
-
-// Подтягиваем из Firebase и сохраняем в кэш (по кнопке 💾)
-function updateCacheFromFirebase() {
-  database.ref('lists').once('value')
-    .then(snapshot => {
-      const data = snapshot.val() || {};
-      saveListsOffline(data);
-      renderLists(data);
-      alert("Списки обновлены и сохранены для офлайн-доступа 💾✅");
-    })
-    .catch(err => {
-      console.error("Ошибка при загрузке из Firebase:", err);
-      alert("Не удалось обновить списки с сервера 😢");
-    });
-}
-
-// Рисуем в select
+// Загружаем списки в select
 function renderLists(data) {
   listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
   for (let key in data) {
@@ -62,18 +36,43 @@ function renderLists(data) {
   wordDiv.classList.add("placeholder");
 }
 
-// --- ЛОГИКА ЗАГРУЗКИ ПРИ СТАРТЕ ---
-
+// --- Загрузка при старте ---
 window.addEventListener("load", () => {
-  // Пытаемся загрузить из кэша
-  if (!loadListsFromCache()) {
-    wordDiv.textContent = "Нет сохранённых списков. Нажмите 💾 при наличии интернета.";
-    wordDiv.classList.remove("placeholder");
-  }
+  // Пытаемся сразу онлайн
+  database.ref('lists').once('value')
+    .then(snapshot => {
+      const data = snapshot.val() || {};
+      renderLists(data);           // показываем списки
+      console.log("Списки загружены с Firebase ✅");
+    })
+    .catch(err => {
+      console.warn("Firebase недоступен, пытаемся оффлайн:", err);
+      // fallback на кэш
+      const saved = localStorage.getItem("wordQuizLists");
+      if (saved) {
+        const data = JSON.parse(saved);
+        renderLists(data);
+        console.log("Списки загружены из кэша ✅");
+      } else {
+        wordDiv.textContent = "Нет сохранённых списков. Сначала нажмите 💾 при онлайн-доступе.";
+        wordDiv.classList.remove("placeholder");
+      }
+    });
 });
 
-// --- КНОПКА 💾 ---
-saveListBtn.addEventListener("click", updateCacheFromFirebase);
+// --- Кнопка 💾 обновляет кэш ---
+saveListBtn.addEventListener("click", () => {
+  database.ref('lists').once('value')
+    .then(snapshot => {
+      const data = snapshot.val() || {};
+      saveListsOffline(data);
+      alert("Списки сохранены для оффлайн-доступа 💾✅");
+    })
+    .catch(err => {
+      console.error("Не удалось сохранить кэш:", err);
+      alert("Не удалось сохранить списки для оффлайна 😢");
+    });
+});
 
 
 const switchBtn=document.getElementById('switchBtn');
