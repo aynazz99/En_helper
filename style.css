@@ -32,7 +32,7 @@ header {
   width: 100%;
   box-sizing: border-box;
   gap: 10px;
-  background: rgba(0,0,0,0.25); /* чуть более прозрачный для «мягкости» */
+  background: rgba(0,0,0,0.0); /* чуть более прозрачный для «мягкости» */
   backdrop-filter: saturate(180%) blur(10px); /* размытый фон как в Safari */
   -webkit-backdrop-filter: saturate(180%) blur(10px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* чуть сильнее тень */
