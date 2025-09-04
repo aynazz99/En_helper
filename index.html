@@ -228,23 +228,26 @@ header > div {
 }
 
 #deleteWrapper {
-  margin-top: auto; /* прижимаем к низу */
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
   text-align: center;
+  z-index: 200; /* поверх всего */
 }
 
 #deleteListBtn {
   width: 100%;
   padding: 14px;
   border: none;
-  background: rgba(255,255,255,0.1); /* почти прозрачный фон */
+  background: rgba(255,255,255,0.05); /* почти прозрачный */
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
 }
 #deleteListBtn:hover {
-  background: rgba(255,0,0,0.2);
+  background: rgba(255,0,0,0.15);
 }
 
 @media (max-width:480px){
@@ -307,11 +310,6 @@ header > div {
 
 <div id="welcomeWrapper">
   <div id="welcome">Добро пожаловать</div>
-</div>
-
-<!-- кнопка удаления списка -->
-<div id="deleteWrapper">
-  <button id="deleteListBtn" style="display:none;">Удалить данный список</button>
 </div>
 
 <script>
@@ -638,5 +636,9 @@ document.addEventListener('touchend', e=>{
 }, false);
 document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
 </script>
+<!-- кнопка удаления списка -->
+<div id="deleteWrapper">
+  <button id="deleteListBtn" style="display:none;">Удалить данный список</button>
+</div>
 </body>
 </html>
