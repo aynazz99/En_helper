@@ -21,81 +21,75 @@ body {
   color: white;
 }
 
+/* === Шапка === */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
+  padding: 8px 12px;
   box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  flex-wrap: nowrap;
   width: 100%;
-}
-
-header > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
+  gap: 10px;
 }
 
 #title {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+#leftControls, 
+#rightControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 header button {
-  background-color: #f2f2f2; /* светло-серый фон */
-  border: 1px solid #ccc;    /* тонкая серая рамка */
+  background-color: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 10px;
-  padding: 8px 14px;
-  font-size: 0.95rem;
-  min-width: 42px;           /* одинаковая ширина */
-  height: 42px;              /* одинаковая высота */
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #333;               /* тёмно-серый текст */
+  color: #fff;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
-  flex-shrink: 0;
-  padding: 0;                /* убираем разный padding */
+  padding: 0;
 }
 
 header button:hover {
-  background-color: #e6e6e6;
+  background-color: rgba(255,255,255,0.25);
   transform: scale(1.05);
 }
 
-
-header > div {
-  display: flex;
-  align-items: center;
-  gap: 10px;  /* равный отступ между кнопками */
-}
-
 #listSelect {
-  padding: 8px 12px;
-  border-radius: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   min-width: 100px;
-  flex-shrink: 1; 
+  max-width: 140px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   background: white;
+  color: #000;
   cursor: pointer;
 }
 
 #listSelect::-ms-expand { display: none; }
 
-
+/* === Основное содержимое === */
 #word {
   font-size:calc(20px + 4vw);
   text-align:center;
@@ -103,26 +97,67 @@ header > div {
   word-wrap:break-word;
   font-weight:bold;
 }
-#word.placeholder { color: #ff4d4f; } /* красная надпись до выбора списка */
+#word.placeholder { color: #ff4d4f; }
 
-.answers { display:grid; grid-template-columns:1fr 1fr; gap:15px; width:95%; max-width:600px; }
-.answerBtn { background-color:#f2f2f2; border:1px solid #ccc; border-radius:12px; font-size:1.2rem; padding:10px; min-height:50px; transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; cursor:pointer; font-weight:bold; word-wrap:break-word; white-space:normal; }
+.answers { 
+  display:grid; 
+  grid-template-columns:1fr 1fr; 
+  gap:15px; 
+  width:95%; 
+  max-width:600px; 
+}
+.answerBtn { 
+  background-color:#f2f2f2; 
+  border:1px solid #ccc; 
+  border-radius:12px; 
+  font-size:1.2rem; 
+  padding:10px; 
+  min-height:50px; 
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s; 
+  cursor:pointer; 
+  font-weight:bold; 
+  word-wrap:break-word; 
+  white-space:normal; 
+}
 .answerBtn:hover { background-color:#e6e6e6; transform:scale(1.02); box-shadow:0 2px 5px rgba(0,0,0,0.2); }
 .answerBtn.correct { background-color:#4CAF50; color:white; }
 .answerBtn.wrong { background-color:#F44336; color:white; }
 .answerBtn.disabled { background-color:#ddd; color:#666; }
 
-#progressBar { width:95%; max-width:600px; height:20px; background:#eee; border-radius:10px; margin:15px 0; }
-#progressFill { width:0%; height:100%; background:#4CAF50; border-radius:10px; transition:width 0.3s; }
-#progress { font-size:1rem; text-align:center; }
+#progressBar { 
+  width:95%; 
+  max-width:600px; 
+  height:20px; 
+  background:#eee; 
+  border-radius:10px; 
+  margin:15px 0; 
+}
+#progressFill { 
+  width:0%; 
+  height:100%; 
+  background:#4CAF50; 
+  border-radius:10px; 
+  transition:width 0.3s; 
+}
+#progress { 
+  font-size:1rem; 
+  text-align:center; 
+}
 
-#addListForm { display:none; flex-direction:column; gap:5px; margin:10px 0; width:95%; max-width:600px; }
+#addListForm { 
+  display:none; 
+  flex-direction:column; 
+  gap:5px; 
+  margin:10px 0; 
+  width:95%; 
+  max-width:600px; 
+}
 
 #welcomeWrapper {
-  flex-grow: 1;              /* занимает всё свободное место */
+  flex-grow: 1;
   display: flex;
-  align-items: center;       /* по вертикали по центру */
-  justify-content: center;   /* по горизонтали по центру */
+  align-items: center;
+  justify-content: center;
 }
 
 #welcome {
@@ -133,7 +168,7 @@ header > div {
   text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
-/* поле ввода */
+/* Поле ввода */
 #answerInput {
   width: 100%;
   font-size: 1.3rem;
@@ -144,36 +179,31 @@ header > div {
   margin-top: 10px;
   background: #fff;
   color: #000;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 #answerInput.error {
   border: 2px solid red !important;
   box-shadow: 0 0 10px red;
 }
-
 #answerInput.success {
   border: 2px solid #00a550 !important;
   box-shadow: 0 0 10px #00a550;
 }
 
-#answerInput {
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-
-/* фидбек над полем ввода */
+/* Фидбек */
 #feedback {
   width: 95%;
   max-width: 600px;
   text-align: center;
-  margin: 20px 0 10px 0;     /* отступ сверху и снизу */
+  margin: 20px 0 10px 0;
   min-height: 2em;  
   font-size: 2rem;
-  fontWeight = 'bold';
+  font-weight: bold;
 }
 #feedback.ok { color: #00a550; }
 #feedback.err { color: #ff0000; }
 
-/* кнопка ответа снизу */
+/* Кнопка ответа */
 #submitAnswerBtn {
   width: 100%;
   max-width: 600px;
@@ -190,17 +220,18 @@ header > div {
 #submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
 
 #submitWrapper {
-  position: sticky; /* или fixed, если хочешь фиксировать внизу экрана */
-  bottom: calc(10px + env(safe-area-inset-bottom)); /* отступ от нижнего края + безопасная зона */
+  position: sticky;
+  bottom: calc(10px + env(safe-area-inset-bottom));
   text-align: center;
   width: 95%;
   max-width: 600px;
   margin: 0 auto;
-  z-index: 100; /* чтобы кнопка была поверх других элементов */
+  z-index: 100;
 }
 
+/* Кнопка удаления списка */
 #deleteWrapper {
-  margin-top: auto; /* прижимаем к низу */
+  margin-top: auto;
   width: 100%;
   text-align: center;
 }
@@ -209,7 +240,7 @@ header > div {
   width: 100%;
   padding: 14px;
   border: none;
-  background: rgba(255,255,255,0.1); /* почти прозрачный фон */
+  background: rgba(255,255,255,0.1);
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
@@ -219,10 +250,30 @@ header > div {
   background: rgba(255,0,0,0.2);
 }
 
+/* === Адаптив под айфон === */
 @media (max-width:480px){
-  #title { font-size: 1rem; }
-  #listSelect { font-size: 0.8rem; min-width: 80px; }
-  #addListToggle, #switchBtn, #modeBtn, #fiftyBtn { padding: 4px 8px; font-size: 0.8rem; }
+  header {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  #title { 
+    font-size: 0.85rem; 
+    max-width: 90px;
+  }
+
+  header button {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  #listSelect { 
+    font-size: 0.75rem; 
+    min-width: 70px; 
+    max-width: 100px; 
+  }
+
   #word { font-size: calc(18px + 4vw); }
   #progress { font-size: 0.9rem; }
 }
