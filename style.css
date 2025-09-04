@@ -290,7 +290,7 @@ header button:hover {
 /* === Адаптив под айфон === */
 @media (max-width:480px){
   header {
-    padding: calc(6px + env(safe-area-inset-top)) 8px 6px 8px;
+    padding:env(safe-area-inset-top)) 8px 6px 8px;
     gap: 6px;
   }
 
@@ -307,8 +307,8 @@ header button:hover {
 
   #listSelect { 
     font-size: 0.75rem; 
-    min-width: 70px; 
-    max-width: 100px; 
+    min-width: 100px; 
+    max-width: 130px; 
   }
 
   #word { font-size: calc(18px + 4vw); }
