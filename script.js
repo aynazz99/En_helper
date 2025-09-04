@@ -11,6 +11,51 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+// Открываем базу
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("WordQuizDB", 1);
+    request.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("lists")) {
+        db.createObjectStore("lists", { keyPath: "name" }); // name = название списка
+      }
+    };
+    request.onsuccess = e => resolve(e.target.result);
+    request.onerror = e => reject(e.target.error);
+  });
+}
+
+async function saveListsToDB(data) {
+  const db = await openDB();
+  const tx = db.transaction("lists", "readwrite");
+  const store = tx.objectStore("lists");
+
+  // очищаем старые данные
+  store.clear();
+
+  for (let listName in data) {
+    store.put({ name: listName, words: data[listName] });
+  }
+
+  return tx.complete;
+}
+
+async function loadListsFromDB() {
+  const db = await openDB();
+  const tx = db.transaction("lists", "readonly");
+  const store = tx.objectStore("lists");
+
+  const allLists = await store.getAll(); // получаем все объекты
+  const result = {};
+  allLists.forEach(item => {
+    result[item.name] = item.words;
+  });
+
+  return result;
+}
+
+
 // Твой код дальше ↓↓↓
 let words=[], allWords=[], index=0, correct_answers=0, wrong_answers=0;
 let reverse=false, currentWord=null, remainingWords=[];
@@ -18,60 +63,37 @@ let inputMode=false;
 
 const saveListBtn = document.getElementById('saveListBtn');
 
-// Сохраняем списки в LocalStorage для оффлайна
-function saveListsOffline(data) {
-  localStorage.setItem("wordQuizLists", JSON.stringify(data));
-}
-
-// Загружаем списки в select
-function renderLists(data) {
-  listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
-  for (let key in data) {
-    const option = document.createElement('option');
-    option.value = key;
-    option.textContent = key;
-    listSelect.appendChild(option);
-  }
-  wordDiv.textContent = "";
-  wordDiv.classList.add("placeholder");
-}
-
-// --- Загрузка при старте ---
-window.addEventListener("load", () => {
-  // Пытаемся сразу онлайн
+saveListBtn.addEventListener("click", () => {
   database.ref('lists').once('value')
-    .then(snapshot => {
+    .then(async snapshot => {
       const data = snapshot.val() || {};
-      renderLists(data);           // показываем списки
-      console.log("Списки загружены с Firebase ✅");
+      await saveListsToDB(data); // сохраняем в IndexedDB
+      alert("Списки и слова сохранены для оффлайн ✅");
     })
     .catch(err => {
-      console.warn("Firebase недоступен, пытаемся оффлайн:", err);
-      // fallback на кэш
-      const saved = localStorage.getItem("wordQuizLists");
-      if (saved) {
-        const data = JSON.parse(saved);
-        renderLists(data);
-        console.log("Списки загружены из кэша ✅");
-      } else {
-        wordDiv.textContent = "Нет сохранённых списков. Сначала нажмите 💾 при онлайн-доступе.";
-        wordDiv.classList.remove("placeholder");
-      }
+      console.error("Ошибка при сохранении:", err);
+      alert("Не удалось сохранить списки для оффлайна 😢");
     });
 });
 
-// --- Кнопка 💾 обновляет кэш ---
-saveListBtn.addEventListener("click", () => {
-  database.ref('lists').once('value')
-    .then(snapshot => {
-      const data = snapshot.val() || {};
-      saveListsOffline(data);
-      alert("Списки сохранены для оффлайн-доступа 💾✅");
-    })
-    .catch(err => {
-      console.error("Не удалось сохранить кэш:", err);
-      alert("Не удалось сохранить списки для оффлайна 😢");
-    });
+window.addEventListener("load", async () => {
+  try {
+    // пытаемся онлайн
+    const snapshot = await database.ref('lists').once('value');
+    const data = snapshot.val() || {};
+    renderLists(data); // показываем в select
+    console.log("Списки загружены с Firebase ✅");
+  } catch(err) {
+    console.warn("Firebase недоступен, пробуем оффлайн:", err);
+    const data = await loadListsFromDB();
+    if (Object.keys(data).length > 0) {
+      renderLists(data);
+      console.log("Списки загружены из IndexedDB ✅");
+    } else {
+      wordDiv.textContent = "Нет сохранённых списков. Сначала нажмите 💾 при онлайн-доступе.";
+      wordDiv.classList.remove("placeholder");
+    }
+  }
 });
 
 
@@ -337,22 +359,6 @@ deleteListBtn.addEventListener('click', () => {
     .catch(err => console.error(err));
 });
 
-
-function loadAllLists(){
-  database.ref('lists').once('value').then(snapshot=>{
-    const data=snapshot.val()||{};
-    listSelect.innerHTML='<option disabled selected>Выберите список</option>';
-    for(let key in data){
-      const option=document.createElement('option');
-      option.value=key; option.textContent=key;
-      listSelect.appendChild(option);
-    }
-    // До выбора списка — красная подсказка
-    wordDiv.textContent = "";
-    wordDiv.classList.add("placeholder");
-  });
-}
-loadAllLists();
 
 listSelect.onchange=()=>{
   const selected=listSelect.value;
