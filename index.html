@@ -32,20 +32,19 @@ const database = firebase.database();
 
 <header>
   <span id="title"></span>
-  <div style="display:flex; gap:10px; align-items:center;">
+  <div id="leftControls">
     <button id="addListToggle">+</button>
-    <div id="listContainer" style="display:flex; align-items:center; gap:5px;">
-      <select id="listSelect">
-        <option disabled selected>Выберите список</option>
-      </select>
-    </div>
+    <select id="listSelect">
+      <option disabled selected>Выберите список</option>
+    </select>
   </div>
-  <div>
+  <div id="rightControls">
     <button id="switchBtn">🌐</button>
     <button id="modeBtn">✍️</button>
     <button id="fiftyBtn">50/50</button>
   </div>
 </header>
+
 
 
 <div id="addListForm">
