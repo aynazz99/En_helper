@@ -79,6 +79,8 @@ header button {
   background-color: #f2f2f2; /* светло-серый фон */
   border: 1px solid #ccc;    /* тонкая серая рамка */
   border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
   min-width: 42px;           /* одинаковая ширина */
   height: 42px;              /* одинаковая высота */
   display: flex;
@@ -225,28 +227,6 @@ header > div {
   z-index: 100; /* чтобы кнопка была поверх других элементов */
 }
 
-#deleteListBtn {
-  position: fixed;      /* всегда внизу */
-  bottom: 0;
-  left: 0;
-  width: 100%;          /* на всю ширину */
-  background-color: rgba(255, 0, 0, 0.1); /* красный, почти прозрачный */
-  border: none;
-  border-top: 1px solid #ccc;
-  padding: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #900;          /* тёмно-красный текст */
-  text-align: center;
-  cursor: pointer;
-  z-index: 999;         /* поверх всего */
-}
-
-#deleteListBtn:hover {
-  background-color: rgba(255, 0, 0, 0.2);
-}
-
-
 
 @media (max-width:480px){
   #title { font-size: 1rem; }
@@ -267,6 +247,7 @@ header > div {
       <select id="listSelect">
         <option disabled selected>Выберите список</option>
       </select>
+      <button id="deleteListBtn" style="display:none;">❌</button>
     </div>
   </div>
   <div>
@@ -635,6 +616,5 @@ document.addEventListener('touchend', e=>{
 }, false);
 document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
 </script>
-<button id="deleteListBtn" style="display:none;">Удалить данный список слов</button>
 </body>
 </html>
