@@ -240,17 +240,15 @@ background: rgba(255, 255, 255, 0.9); /* можно прозрачный фон 
 }
 
 #submitAnswerBtn {
-  width: 100%;
-  font-size: 1.4rem;
-  padding: 16px;
-  border-radius: 16px;
-  font-weight: bold;
-  background-color: #4CAF50;
-  color: white;
+  border-radius: 12px;             /* закругление углов */
+  background-color: #007bff;       /* твой цвет фона кнопки */
+  color: #fff;                     /* цвет текста */
   border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  padding: 10px 20px;
+  overflow: hidden;                /* обрезает все выступающие слои */
+  background-clip: padding-box;    /* фон обрезается по границам padding */
 }
+
 #submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
 
 /* Кнопка удаления списка */
