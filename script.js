@@ -446,6 +446,11 @@ otherButtons.forEach(btn => {
   });
 });
 
+const listSelect = document.getElementById('listSelect');
+listSelect.addEventListener('click', () => {
+  addListForm.style.display = 'none';
+});
+
 
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
