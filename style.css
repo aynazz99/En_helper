@@ -236,8 +236,10 @@ header button:hover {
 }
 
 .shake-select {
+  border: 2px solid red;
+  box-shadow: 0 0 5px red;
   animation: bounce 0.6s;
-  border: 2px solid red !important;
+  border: 2px solid rgb(232, 0, 0) !important;
 }
 
 

@@ -468,5 +468,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("levelBtn").addEventListener("click", function() {
   // Переход на новую страницу (чистый лист)
-  window.location.href = "cleanPage.html"; // Путь к новому файлу
+  window.location.href = "level_check_Page.html"; // Путь к новому файлу
 });
+

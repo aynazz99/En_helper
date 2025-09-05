@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level Check</title>
+  <link rel="stylesheet" href="style_2.css">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <div style="flex:1;"></div> <!-- пустое место слева -->
+      <button id="addProfileBtn">+</button>
+  <select id="listSelect">
+    <option disabled selected>Выберите профиль</option>
+  </select>
+
+  <div style="flex:1; display:flex; justify-content:flex-end;">
+
+  </div>
+</header>
+
+<div id="welcomeWrapper">
+  <div id="welcome">Проверьте количество слов, которые вы знаете</div>
+  <div id="welcomeButtons">
+    <button id="testBtn">Test</button>
+    <button id="levelBtn">Level Check</button>
+  </div>
+</div>
+
+<script src="script_2.js"></script>
+</body>
+</html>
