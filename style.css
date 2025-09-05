@@ -306,7 +306,7 @@ header button:hover {
   }
 
   #listSelect { 
-    font-size: 0.75rem; 
+    font-size: 1rem; 
     min-width: 100px; 
     max-width: 130px; 
   }
