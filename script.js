@@ -273,9 +273,9 @@ saveListBtn.addEventListener('click', () => {
       return;
     }
 
+
     // ⚡ Новый выбор действия
     const action = confirm('Нажмите ОК, чтобы ДОБАВИТЬ как новый список.\nНажмите Отмена, чтобы ПРОСТО ОТКРЫТЬ.');
-    const action = confirm('Нажмите ОК, чтобы ДОБАВИТЬ как новый список.\nНажмите Отменить, чтобы ПРОСТО ОТКРЫТЬ.');
 
     if (action) {
       // ✅ Добавляем в Firebase
@@ -309,6 +309,7 @@ saveListBtn.addEventListener('click', () => {
   };
   input.click(); // открываем диалог выбора файла
 });
+
 
 // Показ кнопки удаления при выборе списка
 listSelect.addEventListener('change', () => {
@@ -352,34 +353,6 @@ function loadAllLists(){
     wordDiv.textContent = "";
     wordDiv.classList.add("placeholder");
   });
-  database.ref('lists').once('value')
-    .then(snapshot => {
-      const data = snapshot.val();
-      if (!data) {
-        // ⚡ Если Firebase пустой или не загрузилось
-        wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
-        wordDiv.classList.remove("placeholder");
-        listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
-        return;
-      }
-
-      // ✅ Если списки загрузились
-      listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
-      for (let key in data) {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = key;
-        listSelect.appendChild(option);
-      }
-      wordDiv.textContent = "";
-      wordDiv.classList.add("placeholder");
-    })
-    .catch(err => {
-      console.error("Ошибка загрузки списков:", err);
-      wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
-      wordDiv.classList.remove("placeholder");
-      listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
-    });
 }
 loadAllLists();
 
@@ -419,7 +392,6 @@ addListBtn.onclick=()=>{
   }).catch(err=>console.error(err));
 };
 
-
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
 let lastTouchEnd=0;
@@ -445,4 +417,3 @@ window.addEventListener('resize', () => {
         submitWrapper.style.bottom = 'auto';
     }
 });
-
