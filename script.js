@@ -427,3 +427,26 @@ window.addEventListener('resize', () => {
         submitWrapper.style.bottom = 'auto';
     }
 });
+
+// === Логика кнопок Test и Level Check ===
+document.addEventListener("DOMContentLoaded", () => {
+  const testBtn = document.getElementById("testBtn");
+  const levelBtn = document.getElementById("levelBtn");
+  const listSelect = document.getElementById("listSelect");
+
+  if (testBtn) {
+    testBtn.addEventListener("click", () => {
+      listSelect.classList.add("shake-select");
+      setTimeout(() => {
+        listSelect.classList.remove("shake-select");
+      }, 600); // убираем эффект через 0.6 сек
+    });
+  }
+
+  if (levelBtn) {
+    levelBtn.addEventListener("click", () => {
+      console.log("👉 Логика Level Check будет добавлена здесь");
+    });
+  }
+});
+
