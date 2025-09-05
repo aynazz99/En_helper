@@ -189,41 +189,16 @@ header button:hover {
 #welcomeWrapper {
   flex-grow: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;  /* вертикальный стэк */
+  align-items: center;     /* центр по горизонтали */
+  justify-content: center; /* центр по вертикали */
 }
 
-#welcome {
-  font-size: 3rem;
-  font-weight: bold;
-  text-align: center;
-  color: #ffffff;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-}
-
-/* Кнопки под приветствием */
 #welcomeButtons {
   margin-top: 20px;
-  display: flex;
+  display: flex;           /* кнопки в одну строку */
   justify-content: center;
   gap: 15px;
-}
-
-#welcomeButtons button {
-  background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s, border 0.2s;
-}
-
-#welcomeButtons button:hover {
-  background: rgba(255,255,255,0.25);
-  transform: scale(1.05);
 }
 
 /* Анимация подпрыгивания */
