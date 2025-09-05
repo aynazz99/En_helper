@@ -343,31 +343,49 @@ function loadAllLists(){
     .then(snapshot => {
       const data = snapshot.val();
       if (!data) {
-        // ⚡ Если Firebase пустой или не загрузилось
-        wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
-        wordDiv.classList.remove("placeholder");
-        listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
+        // ⚡ Нет данных из Firebase — пробуем кэш
+        const cached = localStorage.getItem("cachedLists");
+        if (cached) {
+          renderLists(JSON.parse(cached));
+        } else {
+          showNoListsMessage();
+        }
         return;
       }
 
-      // ✅ Если списки загрузились
-      listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
-      for (let key in data) {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = key;
-        listSelect.appendChild(option);
-      }
-      wordDiv.textContent = "";
-      wordDiv.classList.add("placeholder");
+      // ✅ Успешная загрузка, сохраняем в кэш
+      localStorage.setItem("cachedLists", JSON.stringify(data));
+      renderLists(data);
     })
     .catch(err => {
       console.error("Ошибка загрузки списков:", err);
-      wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
-      wordDiv.classList.remove("placeholder");
-      listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
+      const cached = localStorage.getItem("cachedLists");
+      if (cached) {
+        renderLists(JSON.parse(cached));
+      } else {
+        showNoListsMessage();
+      }
     });
 }
+
+function renderLists(data){
+  listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
+  for (let key in data) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = key;
+    listSelect.appendChild(option);
+  }
+  wordDiv.textContent = "";
+  wordDiv.classList.add("placeholder");
+}
+
+function showNoListsMessage(){
+  listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
+  wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
+  wordDiv.classList.remove("placeholder");
+}
+
 loadAllLists();
 
 listSelect.onchange=()=>{
