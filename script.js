@@ -356,17 +356,31 @@ function loadAllLists(){
 }
 loadAllLists();
 
-listSelect.onchange=()=>{
-  const selected=listSelect.value;
-  if(!selected) return;
-  database.ref('lists/'+selected).once('value').then(snapshot=>{
-    const data=snapshot.val();
-    words=Object.values(data);
-    allWords=[...new Map(words.map(w=>[`${w.word};${w.trans}`,w])).values()];
-    remainingWords=shuffleArray([...allWords]);
-    index=0; correct_answers=0; wrong_answers=0; currentWord=null;
+listSelect.onchange = () => {
+  const selected = listSelect.value;
+  if (!selected) return;
+
+  // Прячем элементы ввода и кнопки
+  inputMode = false;
+  answersDiv.style.display = 'grid';
+  inputModeDiv.style.display = 'none';
+  submitWrapper.style.display = 'none';
+  fiftyBtn.style.display = 'inline-block';
+  modeBtn.textContent = '✍️'; // возвращаем текст кнопки в исходное состояние
+  feedback.textContent = ''; // очищаем обратную связь
+  answerInput.value = ''; // очищаем поле ввода
+
+  // Загружаем новый список из Firebase
+  database.ref('lists/' + selected).once('value').then(snapshot => {
+    const data = snapshot.val();
+    words = Object.values(data);
+    allWords = [...new Map(words.map(w => [`${w.word};${w.trans}`, w])).values()];
+    remainingWords = shuffleArray([...allWords]);
+    index = 0; correct_answers = 0; wrong_answers = 0; currentWord = null;
+    
     wordDiv.classList.remove("placeholder");
-// Показываем кнопки и прогресс после выбора списка
+
+    // Показываем кнопки и прогресс после выбора списка
     answersDiv.style.display = 'grid';
     progressDiv.style.display = 'block';
     progressFill.style.display = 'block';
@@ -374,9 +388,11 @@ listSelect.onchange=()=>{
     fiftyBtn.style.display = 'inline-block';
     modeBtn.style.display = 'inline-block';
     progressBar.style.display = 'block';
+
     loadNextWord();
   });
 };
+
 
 addListToggle.onclick=()=>{ addListForm.style.display=addListForm.style.display==='none'?'flex':'none'; };
 addListBtn.onclick=()=>{
@@ -450,3 +466,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+document.getElementById("levelBtn").addEventListener("click", function() {
+  // Переход на новую страницу (чистый лист)
+  window.location.href = "cleanPage.html"; // Путь к новому файлу
+});

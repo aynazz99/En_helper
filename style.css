@@ -330,7 +330,7 @@ header button:hover {
 /* === Адаптив под айфон === */
 @media (max-width:480px){
   header {
-    padding:env(safe-area-inset-top)) 8px 6px 8px;
+    padding:env(safe-area-inset-top) 8px 6px 8px;
     gap: 6px;
   }
 
@@ -352,5 +352,4 @@ header button:hover {
   }
 
   #word { font-size: calc(18px + 4vw); }
-  #progress { font-size: 0.9rem; }
-}
+  #progress { font-size: 0.9rem; }}
