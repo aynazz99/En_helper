@@ -330,7 +330,7 @@ header button:hover {
 /* === Адаптив под айфон === */
 @media (max-width:480px){
   header {
-    padding:env(safe-area-inset-top) 8px 6px 8px;
+    padding: calc(env(safe-area-inset-top) + 10px) 8px 6px 8px;
     gap: 6px;
   }
 
