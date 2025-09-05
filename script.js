@@ -444,6 +444,12 @@ otherButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     addListForm.style.display = 'none';
   });
+
+const listSelect = document.getElementById('listSelect');
+
+// При фокусе на селекте прячем форму
+listSelect.addEventListener('focus', () => {
+  addListForm.style.display = 'none';
 });
 
 
