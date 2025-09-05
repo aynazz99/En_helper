@@ -445,15 +445,6 @@ otherButtons.forEach(btn => {
     addListForm.style.display = 'none';
   });
 
-const listSelect = document.getElementById('listSelect');
-
-listSelect.addEventListener('change', () => {
-  // форма скрывается только после выбора нового списка
-  addListForm.style.display = 'none';
-});
-
-
-
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
 let lastTouchEnd=0;
