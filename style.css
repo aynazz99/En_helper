@@ -230,11 +230,11 @@ header button:hover {
   text-align: center;
   margin: 20px 0 10px 0;
   min-height: 2em;
-  font-size: 2rem;
+  font-size: 4rem;
   font-weight: bold;
 }
 #feedback.ok { color: #00a550; }
-#feedback.err { color: #ff0000; }
+#feedback.err { color: #990000; }
 
 /* Кнопка ответа (фиксированная) */
 #submitWrapper {
