@@ -438,6 +438,15 @@ addListBtn.onclick=()=>{
   }).catch(err=>console.error(err));
 };
 
+// скрываем форму при клике на другие кнопки
+const otherButtons = document.querySelectorAll('button:not(#addListToggle)');
+otherButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    addListForm.style.display = 'none';
+  });
+});
+
+
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
 let lastTouchEnd=0;
