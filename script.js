@@ -466,4 +466,3 @@ window.addEventListener('resize', () => {
         submitWrapper.style.bottom = 'auto';
     }
 });
-~
