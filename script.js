@@ -400,6 +400,8 @@ addListBtn.onclick=()=>{
   });
 });
 
+
+
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
 let lastTouchEnd=0;
