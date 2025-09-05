@@ -273,20 +273,41 @@ saveListBtn.addEventListener('click', () => {
       return;
     }
 
-    // Сохраняем в Firebase
-    database.ref('lists/' + fileName).set(newWords)
-      .then(() => {
-        alert(`Список "${fileName}" добавлен!`);
-        loadAllLists(); // обновляем список в select
-      })
-      .catch(err => {
-        console.error(err);
-        alert('Ошибка при добавлении списка');
-      });
+    // ⚡ Новый выбор действия
+    const action = confirm('Нажмите ОК, чтобы ДОБАВИТЬ как новый список.\nНажмите Отмена, чтобы ПРОСТО ОТКРЫТЬ.');
+
+    if (action) {
+      // ✅ Добавляем в Firebase
+      database.ref('lists/' + fileName).set(newWords)
+        .then(() => {
+          alert(`Список "${fileName}" добавлен!`);
+          loadAllLists(); // обновляем список в select
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Ошибка при добавлении списка');
+        });
+    } else {
+      // ✅ Просто открываем локально, без базы
+      words = newWords;
+      allWords = [...new Map(words.map(w => [`${w.word};${w.trans}`, w])).values()];
+      remainingWords = shuffleArray([...allWords]);
+      index = 0; correct_answers = 0; wrong_answers = 0; currentWord = null;
+
+      wordDiv.classList.remove("placeholder");
+      answersDiv.style.display = 'grid';
+      progressDiv.style.display = 'block';
+      progressFill.style.display = 'block';
+      switchBtn.style.display = 'inline-block';
+      fiftyBtn.style.display = 'inline-block';
+      modeBtn.style.display = 'inline-block';
+      progressBar.style.display = 'block';
+
+      loadNextWord();
+    }
   };
   input.click(); // открываем диалог выбора файла
 });
-
 
 // Показ кнопки удаления при выборе списка
 listSelect.addEventListener('change', () => {
