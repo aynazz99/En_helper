@@ -274,6 +274,7 @@ saveListBtn.addEventListener('click', () => {
     }
 
     // ⚡ Новый выбор действия
+    const action = confirm('Нажмите ОК, чтобы ДОБАВИТЬ как новый список.\nНажмите Отмена, чтобы ПРОСТО ОТКРЫТЬ.');
     const action = confirm('Нажмите ОК, чтобы ДОБАВИТЬ как новый список.\nНажмите Отменить, чтобы ПРОСТО ОТКРЫТЬ.');
 
     if (action) {
@@ -338,69 +339,49 @@ deleteListBtn.addEventListener('click', () => {
 });
 
 
-function loadAllLists() {
-  const firebasePromise = database.ref('lists').once('value');
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("timeout")), 5000)
-  );
-
-  Promise.race([firebasePromise, timeoutPromise])
-    .then(snapshot => {
-      const data = snapshot.val();
-      if (!data || !hasWords(data)) {
-        const cached = localStorage.getItem("cachedLists");
-        if (cached && hasWords(JSON.parse(cached))) {
-          renderLists(JSON.parse(cached));
-        } else {
-          showNoListsMessage();
-        }
-        return;
-      }
-      localStorage.setItem("cachedLists", JSON.stringify(data));
-      renderLists(data);
-    })
-    .catch(err => {
-      console.warn("Ошибка или таймаут загрузки списков:", err);
-      const cached = localStorage.getItem("cachedLists");
-      if (cached && hasWords(JSON.parse(cached))) {
-        renderLists(JSON.parse(cached));
-      } else {
-        showNoListsMessage();
-      }
-    });
-}
-
-// проверяем, что хотя бы один список содержит слова
-function hasWords(data) {
-  return Object.values(data).some(list => Array.isArray(list) && list.length > 0);
-}
-
-function renderLists(data) {
-  listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
-  for (let key in data) {
-    if (Array.isArray(data[key]) && data[key].length > 0) { 
-      const option = document.createElement('option');
-      option.value = key;
-      option.textContent = key;
+function loadAllLists(){
+  database.ref('lists').once('value').then(snapshot=>{
+    const data=snapshot.val()||{};
+    listSelect.innerHTML='<option disabled selected>Выберите список</option>';
+    for(let key in data){
+      const option=document.createElement('option');
+      option.value=key; option.textContent=key;
       listSelect.appendChild(option);
     }
-  }
-  if (listSelect.options.length === 1) { // нет доступных списков
-    showNoListsMessage();
-  } else {
+    // До выбора списка — красная подсказка
     wordDiv.textContent = "";
     wordDiv.classList.add("placeholder");
-  }
-}
+  });
+  database.ref('lists').once('value')
+    .then(snapshot => {
+      const data = snapshot.val();
+      if (!data) {
+        // ⚡ Если Firebase пустой или не загрузилось
+        wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
+        wordDiv.classList.remove("placeholder");
+        listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
+        return;
+      }
 
-function showNoListsMessage() {
-  listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
-  wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
-  wordDiv.classList.remove("placeholder");
+      // ✅ Если списки загрузились
+      listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
+      for (let key in data) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = key;
+        listSelect.appendChild(option);
+      }
+      wordDiv.textContent = "";
+      wordDiv.classList.add("placeholder");
+    })
+    .catch(err => {
+      console.error("Ошибка загрузки списков:", err);
+      wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
+      wordDiv.classList.remove("placeholder");
+      listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
+    });
 }
-
 loadAllLists();
-
 
 listSelect.onchange=()=>{
   const selected=listSelect.value;
@@ -438,8 +419,20 @@ addListBtn.onclick=()=>{
   }).catch(err=>console.error(err));
 };
 
+// скрываем форму при клике на другие кнопки
+const otherButtons = document.querySelectorAll('button:not(#addListToggle)');
+otherButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    addListForm.style.display = 'none';
+  });
 
+const listSelect = document.getElementById('listSelect');
 
+// При фокусе на селекте прячем форму
+listSelect.addEventListener('change', () => {
+  // форма скрывается только после выбора нового списка
+  addListForm.style.display = 'none';
+});
 
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
