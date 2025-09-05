@@ -338,20 +338,18 @@ deleteListBtn.addEventListener('click', () => {
 });
 
 
-function loadAllLists(){
-  // оборачиваем Firebase-запрос в Promise с таймаутом
+function loadAllLists() {
   const firebasePromise = database.ref('lists').once('value');
-
   const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("timeout")), 5000) // 5 секунд
+    setTimeout(() => reject(new Error("timeout")), 5000)
   );
 
   Promise.race([firebasePromise, timeoutPromise])
     .then(snapshot => {
       const data = snapshot.val();
-      if (!data) {
+      if (!data || !hasWords(data)) {
         const cached = localStorage.getItem("cachedLists");
-        if (cached) {
+        if (cached && hasWords(JSON.parse(cached))) {
           renderLists(JSON.parse(cached));
         } else {
           showNoListsMessage();
@@ -364,7 +362,7 @@ function loadAllLists(){
     .catch(err => {
       console.warn("Ошибка или таймаут загрузки списков:", err);
       const cached = localStorage.getItem("cachedLists");
-      if (cached) {
+      if (cached && hasWords(JSON.parse(cached))) {
         renderLists(JSON.parse(cached));
       } else {
         showNoListsMessage();
@@ -372,24 +370,37 @@ function loadAllLists(){
     });
 }
 
-function renderLists(data){
-  listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
-  for (let key in data) {
-    const option = document.createElement('option');
-    option.value = key;
-    option.textContent = key;
-    listSelect.appendChild(option);
-  }
-  wordDiv.textContent = "";
-  wordDiv.classList.add("placeholder");
+// проверяем, что хотя бы один список содержит слова
+function hasWords(data) {
+  return Object.values(data).some(list => Array.isArray(list) && list.length > 0);
 }
 
-function showNoListsMessage(){
+function renderLists(data) {
+  listSelect.innerHTML = '<option disabled selected>Выберите список</option>';
+  for (let key in data) {
+    if (Array.isArray(data[key]) && data[key].length > 0) { 
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = key;
+      listSelect.appendChild(option);
+    }
+  }
+  if (listSelect.options.length === 1) { // нет доступных списков
+    showNoListsMessage();
+  } else {
+    wordDiv.textContent = "";
+    wordDiv.classList.add("placeholder");
+  }
+}
+
+function showNoListsMessage() {
   listSelect.innerHTML = '<option disabled selected>Нет доступных списков</option>';
   wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
   wordDiv.classList.remove("placeholder");
 }
+
 loadAllLists();
+
 
 listSelect.onchange=()=>{
   const selected=listSelect.value;
