@@ -339,11 +339,17 @@ deleteListBtn.addEventListener('click', () => {
 
 
 function loadAllLists(){
-  database.ref('lists').once('value')
+  // оборачиваем Firebase-запрос в Promise с таймаутом
+  const firebasePromise = database.ref('lists').once('value');
+
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("timeout")), 5000) // 5 секунд
+  );
+
+  Promise.race([firebasePromise, timeoutPromise])
     .then(snapshot => {
       const data = snapshot.val();
       if (!data) {
-        // ⚡ Нет данных из Firebase — пробуем кэш
         const cached = localStorage.getItem("cachedLists");
         if (cached) {
           renderLists(JSON.parse(cached));
@@ -352,13 +358,11 @@ function loadAllLists(){
         }
         return;
       }
-
-      // ✅ Успешная загрузка, сохраняем в кэш
       localStorage.setItem("cachedLists", JSON.stringify(data));
       renderLists(data);
     })
     .catch(err => {
-      console.error("Ошибка загрузки списков:", err);
+      console.warn("Ошибка или таймаут загрузки списков:", err);
       const cached = localStorage.getItem("cachedLists");
       if (cached) {
         renderLists(JSON.parse(cached));
@@ -385,7 +389,6 @@ function showNoListsMessage(){
   wordDiv.textContent = "Не получилось загрузить списки ⚠️\nПроверьте подключение к интернету 📶\nили отключите VPN 🕵️";
   wordDiv.classList.remove("placeholder");
 }
-
 loadAllLists();
 
 listSelect.onchange=()=>{
