@@ -201,6 +201,46 @@ header button:hover {
   text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
+/* Кнопки под приветствием */
+#welcomeButtons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+#welcomeButtons button {
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, border 0.2s;
+}
+
+#welcomeButtons button:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
+}
+
+/* Анимация подпрыгивания */
+@keyframes bounce {
+  0%   { transform: translateY(0); }
+  25%  { transform: translateY(-12px); }
+  50%  { transform: translateY(0); }
+  75%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+.shake-select {
+  animation: bounce 0.6s;
+  border: 2px solid red !important;
+}
+
+
 /* Поле ввода */
 #answerInput {
   width: 100%;
