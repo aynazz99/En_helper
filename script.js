@@ -400,6 +400,14 @@ addListBtn.onclick=()=>{
   });
 });
 
+// форма скрывается только после выбора нового списка
+  const listSelect = document.getElementById('listSelect');
+  listSelect.addEventListener('change', () => {
+    addListForm.style.display = 'none';
+  });
+
+
+
 // Отключение масштабирования
 document.addEventListener('gesturestart', e=>e.preventDefault());
 let lastTouchEnd=0;
