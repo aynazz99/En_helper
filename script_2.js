@@ -36,11 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // При выборе профиля из списка сохраняем текущий профиль
-  listSelect.addEventListener("change", () => {
-    currentProfileId = listSelect.value;
-    console.log("Выбран профиль:", currentProfileId);
-  });
+listSelect.addEventListener("change", () => {
+  currentProfileId = listSelect.value;
+  console.log("Выбран профиль:", currentProfileId);
+
+  if (listSelect.value && listSelect.value !== "") {
+    showQuizUI(); // показываем интерфейс
+  }
+});
+
 
   // Изначальная загрузка всех профилей при старте
   loadProfiles();
@@ -75,7 +79,7 @@ if (levelBtn) {
 
 
     } else {
-      // реальный профиль выбран — ничего не трогаем
+      showQuizUI();
       console.log("Профиль выбран:", listSelect.value);
     }
   });
@@ -286,8 +290,6 @@ deletePopup.addEventListener("touchstart", (e) => {
 });
 
 
-
-
   // удалить все профили
   deleteAllBtn.addEventListener("click", async () => {
   // Проверяем, есть ли профили
@@ -325,3 +327,15 @@ deletePopup.addEventListener("touchstart", (e) => {
 });
 
 });
+
+function showQuizUI() {
+  const inputModeDiv = document.getElementById("inputModeDiv");
+  const submitWrapper = document.getElementById("submitWrapper");
+  const welcome = document.getElementById("welcome");
+  const levelBtn = document.getElementById("levelBtn"); // добавили кнопку
+
+  if (welcome) welcome.style.display = "none"; // прячем приветствие
+  if (inputModeDiv) inputModeDiv.style.display = "block"; // показываем поле
+  if (submitWrapper) submitWrapper.style.display = "block"; // показываем кнопку
+  if (levelBtn) levelBtn.style.display = "none"; // прячем levelBtn
+}

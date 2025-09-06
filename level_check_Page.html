@@ -39,6 +39,19 @@
   </div>
 </header>
 
+<!-- режим ввода -->
+<div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
+  <div id="feedback"></div>
+  <input type="text" id="answerInput" placeholder="Введите слово на английском" autocomplete="off" autocapitalize="none" spellcheck="false">
+</div>
+
+<!-- кнопка ответа вынесена вниз -->
+<div id="submitWrapper" style="display:none; text-align:center; margin:20px 0; width:95%; max-width:600px;">
+  <button id="submitAnswerBtn" type="button" tabindex="-1">Добавить</button>
+</div>
+
+
+
 <div id="welcomeWrapper">
   <div id="welcome">Проверьте количество слов, которые вы знаете</div>
   <div id="welcomeButtons">

@@ -210,6 +210,56 @@ button.red-border {
   border: 2px solid rgb(232, 0, 0) !important;
 }
 
+/* Поле ввода */
+#answerInput {
+  width: 100%;
+  font-size: 1.3rem;
+  padding: 14px;
+  border-radius: 14px;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 10px;
+  background: #fff;
+  color: #000;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+#answerInput.error {
+  border: 2px solid red !important;
+  box-shadow: 0 0 10px red;
+}
+#answerInput.success {
+  border: 2px solid #00a550 !important;
+  box-shadow: 0 0 10px #00a550;
+}
+
+
+#submitAnswerBtn {
+  width: 100%;
+  font-size: 1.4rem;
+  padding: 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  color: white;
+  background: rgba(255, 255, 255, 0.1); /* полупрозрачная */
+  backdrop-filter: blur(10px); /* размытие фона за кнопкой */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* мягкая тень */
+  transition: all 0.3s ease;
+}
+
+#submitAnswerBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#submitAnswerBtn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
 
 
 /* === Попап === */
