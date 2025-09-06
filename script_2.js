@@ -52,19 +52,40 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Level Check — базовая анимация select
-  if (levelBtn) {
-    levelBtn.addEventListener("click", () => {
-      if (!listSelect) return;
+// Level Check — надёжная проверка, выбран ли реальный профиль
+if (levelBtn) {
+  levelBtn.addEventListener("click", () => {
+    if (!listSelect) return;
 
-      listSelect.classList.add("bounce");
-      listSelect.classList.add("red-border");
+    const selIndex = listSelect.selectedIndex; // индекс выбранной опции
+    const selectedOption = listSelect.options[selIndex] || null;
 
+    // true — если выбрана заглушка / ничего не выбрано
+    const isPlaceholder = selIndex <= 0 || (selectedOption && selectedOption.disabled) || listSelect.value === "";
+
+    if (isPlaceholder) {
+      // анимация только когда НЕ выбран реальный профиль
+      listSelect.classList.add("bounce", "red-border");
       setTimeout(() => listSelect.classList.remove("bounce"), 600);
       setTimeout(() => listSelect.classList.remove("red-border"), 800);
-    });
-  }
+      
+      addProfileBtn.classList.add("bounce", "red-border");
+      setTimeout(() => addProfileBtn.classList.remove("bounce"), 600);
+      setTimeout(() => addProfileBtn.classList.remove("red-border"), 800);
 
+
+    } else {
+      // реальный профиль выбран — ничего не трогаем
+      console.log("Профиль выбран:", listSelect.value);
+    }
+  });
+}
+
+
+
+
+
+  
   // Регистрация Service Worker
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js")
@@ -99,6 +120,19 @@ function closePopup() {
 }
 profileCancelBtn.addEventListener("click", closePopup);
 
+// закрытие по клику/тапу вне окна
+popup.addEventListener("click", (e) => {
+  if (e.target === popup) {
+    closePopup();
+  }
+});
+popup.addEventListener("touchstart", (e) => {
+  if (e.target === popup) {
+    closePopup();
+  }
+});
+
+
 
 // создать профиль
 profileAddBtn.addEventListener("click", async () => {
@@ -123,8 +157,8 @@ profileAddBtn.addEventListener("click", async () => {
     listSelect.value = profileId;
     currentProfileId = profileId;
 
-    // закрываем попап через 0.8 секунды, чтобы увидеть сообщение
-    setTimeout(closePopup, 800);
+    // закрываем попап через 1.5 секунды, чтобы увидеть сообщение
+    setTimeout(closePopup, 1500);
 
   } else {
     profileMessage.style.color = "orange";
@@ -185,9 +219,17 @@ document.addEventListener("DOMContentLoaded", () => {
     deleteProfileNameInput.focus();
   });
 
-  // закрыть попап
-  deleteCancelBtn.addEventListener("click", () => deletePopup.classList.remove("show"));
-
+  // закрытие попапа удаления по клику/тапу вне окна
+deletePopup.addEventListener("click", (e) => {
+  if (e.target === deletePopup) {
+    deletePopup.classList.remove("show");
+  }
+});
+deletePopup.addEventListener("touchstart", (e) => {
+  if (e.target === deletePopup) {
+    deletePopup.classList.remove("show");
+  }
+});
 
   deleteCurrentBtn.addEventListener("click", async () => {
   const profileId = listSelect.value;
@@ -279,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => deleteMessage.textContent = "", 1000);
 
   await updateProfileSelect(); // обновляем селект
-  setTimeout(() => deletePopup.classList.remove("show"), 800);
+  setTimeout(() => deletePopup.classList.remove("show"), 1500);
 });
 
 });
