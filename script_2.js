@@ -376,6 +376,11 @@ function showQuizUI() {
 
 
 
+// функция проверки: только английские буквы, пробел, дефис и апостроф
+function isValidWord(word) {
+  return /^[a-zA-Z\s'-]+$/.test(word);
+}
+
 submitAnswerBtn.addEventListener("click", async () => {
   const newWord = answerInput.value.trim();
 
@@ -389,8 +394,8 @@ submitAnswerBtn.addEventListener("click", async () => {
     return;
   }
 
-  if (!/^[\p{L}\s'-]+$/u.test(newWord)) {
-    showFeedbackInsideInput("Недопустимые символы!", true);
+  if (!isValidWord(newWord)) {
+    showFeedbackInsideInput("Только английские буквы и слова", true);
     return;
   }
 
@@ -407,6 +412,7 @@ submitAnswerBtn.addEventListener("click", async () => {
   }
 });
 
+
 // функция для подсказки внутри input с подпрыгиванием
 function showFeedbackInsideInput(message, isError) {
   const originalPlaceholder = "Введите слово на английском";
@@ -419,10 +425,12 @@ function showFeedbackInsideInput(message, isError) {
 
   setTimeout(() => {
     // возвращаем всё в исходное состояние
+    answerInput.focus();
     answerInput.classList.remove("bounce");
     answerInput.placeholder = originalPlaceholder;
     answerInput.style.borderColor = "";
   }, 1500); // подсказка 1.5 секунды
+  
 }
 
 
