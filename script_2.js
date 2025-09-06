@@ -92,3 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Регистрация Service Worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js")
+    .then(() => console.log("✅ Service Worker зарегистрирован"))
+    .catch(err => console.error("❌ Ошибка Service Worker:", err));
+}
+
+
