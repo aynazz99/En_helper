@@ -44,7 +44,7 @@ header {
   justify-content: flex-start; /* Кнопка слева */
 }
 
-#listSelect {
+#ProfileSelect {
   padding: 10px 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -54,7 +54,7 @@ header {
   cursor: pointer;
 }
 
-#listSelect::-ms-expand { display: none; }
+#ProfileSelect:-ms-expand { display: none; }
 
 #title {
   font-weight: bold;
@@ -115,8 +115,8 @@ header button:hover {
 #welcome {
   font-size: 2rem;
   font-weight: bold;
-  color: #fff;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  color: #ffffff;
+  text-shadow: 2px 2px 3px rgba(0, 183, 255, 0.3);
 }
 
 
@@ -191,3 +191,216 @@ select.red-border {
 }
 
 
+
+/* === Попап === */
+.popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
+}
+
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 16px;
+  min-width: 320px;
+  max-width: 90%;
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.popup.show .popup-content {
+  transform: scale(1);
+}
+
+.popup-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Поля ввода */
+.popup input[type="text"] {
+  width: 100%;               /* чтобы вписывалось в ширину попапа */
+  max-width: 100%;           /* не вылазило за пределы попапа */
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Состояние фокуса */
+.popup input[type="text"]:focus {
+  border-color: #00b7ff;
+  box-shadow: 0 0 8px rgba(0,183,255,0.25);
+}
+
+
+/* === Сообщения === */
+.popup-message {
+  min-height: 24px;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* === Попап === */
+.popup {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
+}
+
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.popup.show .popup-content {
+  transform: scale(1);
+}
+
+.popup h3,
+.popup-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* === Поля ввода === */
+.popup input[type="text"] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 15px;
+}
+
+.popup input[type="text"]:focus {
+  border-color: #00b7ff;
+  box-shadow: 0 0 8px rgba(0,183,255,0.25);
+}
+
+/* Отключаем автозаполнение браузера для поля добавления профиля */
+#profileNameInput::-webkit-autofill,
+#profileNameInput:-webkit-autofill,
+#profileNameInput:-internal-autofill-selected {
+  background-color: #fff !important;
+  color: #222 !important;
+}
+
+
+/* Сообщения */
+.popup-message,
+#profileMessage {
+  min-height: 24px;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* === Контейнер кнопок === */
+.popup-buttons,
+.popup-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Универсальные кнопки */
+.popup-buttons button,
+.popup-section button {
+  flex: 1 1 120px; /* растягиваются одинаково */
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.85);
+  color: #222;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.popup-buttons button:hover,
+.popup-section button:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+.popup-buttons button:active,
+.popup-section button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Красная кнопка Закрыть */
+#deleteCancelBtn {
+  background: #ff6b6b; /* мягкий красный */
+  color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  min-width: 120px;
+  border-radius: 12px;
+  padding: 10px 18px;
+  cursor: pointer;
+}
+
+#deleteCancelBtn:hover {
+  background: #ff4c4c; /* чуть ярче при наведении */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+#deleteCancelBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

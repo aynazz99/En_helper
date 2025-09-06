@@ -30,10 +30,10 @@
 <header>
   <div style="flex:1;"></div> <!-- пустое место слева -->
       <button id="addProfileBtn">+</button>
-  <select id="listSelect">
-    <option disabled selected>Выберите профиль</option>
+  <select id="ProfileSelect">
+    <option disabled selected value="">Выберите профиль</option>
   </select>
-
+      <button id="DeleteProfileBtn">🗑️</button>
   <div style="flex:1; display:flex; justify-content:flex-end;">
 
   </div>
@@ -42,8 +42,36 @@
 <div id="welcomeWrapper">
   <div id="welcome">Проверьте количество слов, которые вы знаете</div>
   <div id="welcomeButtons">
-    <button id="testBtn">Test</button>
-    <button id="levelBtn">Level Check</button>
+    <button id="testBtn">Назад к тесту</button>
+    <button id="levelBtn">Начать</button>
+  </div>
+</div>
+
+<div id="profilePopup" class="popup hidden">
+  <div class="popup-content">
+    <h3>Создать новый профиль</h3>
+    <input type="text" id="profileNameInput" placeholder="Введите имя профиля" autocomplete="off">
+    <div id="profileMessage" style="margin: 10px 0;"></div>
+    <div class="popup-buttons">
+      <button id="profileCancelBtn">Отмена</button>
+      <button id="profileAddBtn">Создать</button>
+    </div>
+  </div>
+</div>
+
+<div id="deletePopup" class="popup hidden">
+  <div class="popup-content">
+    <h3 class="popup-title">Удаление профилей</h3>
+    <!-- Удаление текущего профиля -->
+    <div class="popup-section">
+      <button id="deleteCurrentBtn" class="btn btn-danger">Удалить текущий профиль</button>
+    </div>
+    <!-- Удаление всех профилей -->
+    <div class="popup-section">
+      <button id="deleteAllBtn" class="btn btn-danger">Удалить все профили</button>
+    </div>
+    <div id="deleteMessage" class="popup-message"></div>
+    <button id="deleteCancelBtn" class="btn btn-secondary">Закрыть</button>
   </div>
 </div>
 
