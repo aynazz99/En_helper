@@ -148,11 +148,29 @@ header button:hover {
 
 
 /* === Адаптив под айфон === */
-@media (max-width:480px){
+@media (max-width: 480px) {
   header {
     padding: calc(env(safe-area-inset-top) + 10px) 8px 6px 8px;
     gap: 6px;
+    position: relative; /* нужно для ::before */
+    z-index: 1; /* чтобы контент был поверх псевдоэлемента */
   }
+
+  /* расширяем существующий фон вверх */
+  header::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * env(safe-area-inset-top)); /* выносим вверх */
+    left: 0;
+    width: 100%;
+    height: env(safe-area-inset-top);
+    background: inherit; /* берём фон header */
+    background-size: cover;
+    background-position: top center;
+    z-index: -1; /* чтобы не перекрывать контент */
+  }
+
+
 
   #title { 
     font-size: 0.85rem; 
