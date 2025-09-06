@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const testBtn = document.getElementById("testBtn");
   const levelBtn = document.getElementById("levelBtn");
 
-  let currentProfileId = null;
 
   // Функция для загрузки всех профилей из базы и заполнения select
   async function loadProfiles() {
@@ -36,14 +35,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-listSelect.addEventListener("change", () => {
-  currentProfileId = listSelect.value;
-  console.log("Выбран профиль:", currentProfileId);
+listSelect.addEventListener("change", async () => {
+  const profileId = listSelect.value;
+  if (!profileId) return;
 
-  if (listSelect.value && listSelect.value !== "") {
-    showQuizUI(); // показываем интерфейс
+  const profileRef = database.ref("profiles/" + profileId);
+  const snapshot = await profileRef.get();
+
+  if (!snapshot.exists()) return;
+
+  const profileData = snapshot.val();
+  const inputPassword = prompt("Введите пароль профиля");
+
+  if (inputPassword === profileData.password) {
+    currentProfileId = profileId;
+    console.log("Выбран профиль:", currentProfileId);
+    showQuizUI();
+  } else {
+    alert("Неверный пароль!");
+    listSelect.value = ""; // сброс выбора
   }
 });
+
 
 
   // Изначальная загрузка всех профилей при старте
@@ -138,7 +151,6 @@ popup.addEventListener("touchstart", (e) => {
 
 
 
-// создать профиль
 profileAddBtn.addEventListener("click", async () => {
   const name = profileInput.value.trim();
   if (!name) {
@@ -147,12 +159,19 @@ profileAddBtn.addEventListener("click", async () => {
     return;
   }
 
+  const password = prompt("Придумайте пароль для профиля");
+  if (!password) {
+    profileMessage.style.color = "red";
+    profileMessage.textContent = "Пароль обязателен!";
+    return;
+  }
+
   const profileId = name.replace(/\s+/g, "_");
   const profileRef = database.ref("profiles/" + profileId);
   const snapshot = await profileRef.get();
 
   if (!snapshot.exists()) {
-    await profileRef.set({ name: name, knownWords: [] });
+    await profileRef.set({ name: name, password: password, knownWords: [] });
 
     profileMessage.style.color = "green";
     profileMessage.textContent = `Создан новый профиль: ${name}`;
@@ -161,15 +180,17 @@ profileAddBtn.addEventListener("click", async () => {
     listSelect.value = profileId;
     currentProfileId = profileId;
 
-    // закрываем попап через 1.5 секунды, чтобы увидеть сообщение
+    // Закрываем попап через 1.5 секунды
     setTimeout(closePopup, 1500);
-
+        // Показываем интерфейс сразу
+    showQuizUI();
   } else {
     profileMessage.style.color = "orange";
     profileMessage.textContent = `Профиль уже существует: ${name}`;
     profileInput.focus();
   }
 });
+
 
 async function updateProfileSelect() {
   const snapshot = await database.ref("profiles").get();
@@ -223,17 +244,30 @@ document.addEventListener("DOMContentLoaded", () => {
     deleteProfileNameInput.focus();
   });
 
-  // закрытие попапа удаления по клику/тапу вне окна
+
+
+// Функция для закрытия попапа
+function closeDeletePopup() {
+  deletePopup.classList.remove("show");
+}
+
+// Закрытие по клику вне окна
 deletePopup.addEventListener("click", (e) => {
   if (e.target === deletePopup) {
-    deletePopup.classList.remove("show");
+    closeDeletePopup();
   }
 });
+
+// Закрытие по тач-событию вне окна
 deletePopup.addEventListener("touchstart", (e) => {
   if (e.target === deletePopup) {
-    deletePopup.classList.remove("show");
+    closeDeletePopup();
   }
 });
+
+// Закрытие по кнопке "Отмена"
+deleteCancelBtn.addEventListener("click", closeDeletePopup);
+
 
   deleteCurrentBtn.addEventListener("click", async () => {
   const profileId = listSelect.value;
@@ -339,3 +373,56 @@ function showQuizUI() {
   if (submitWrapper) submitWrapper.style.display = "block"; // показываем кнопку
   if (levelBtn) levelBtn.style.display = "none"; // прячем levelBtn
 }
+
+
+
+submitAnswerBtn.addEventListener("click", async () => {
+  const newWord = answerInput.value.trim();
+
+  if (!currentProfileId) {
+    showFeedbackInsideInput("Выберите профиль!", true);
+    return;
+  }
+
+  if (!newWord) {
+    showFeedbackInsideInput("Введите слово!", true);
+    return;
+  }
+
+  if (!/^[\p{L}\s'-]+$/u.test(newWord)) {
+    showFeedbackInsideInput("Недопустимые символы!", true);
+    return;
+  }
+
+  const profileRef = database.ref("profiles/" + currentProfileId + "/knownWords");
+  const snapshot = await profileRef.get();
+  const words = snapshot.val() || [];
+
+  if (words.includes(newWord)) {
+    showFeedbackInsideInput("Слово уже есть!", true);
+  } else {
+    words.push(newWord);
+    await profileRef.set(words);
+    showFeedbackInsideInput("Слово добавлено!", false);
+  }
+});
+
+// функция для подсказки внутри input с подпрыгиванием
+function showFeedbackInsideInput(message, isError) {
+  const originalPlaceholder = "Введите слово на английском";
+  answerInput.value = "";
+  answerInput.placeholder = message;
+
+  // добавляем анимацию и цвет рамки
+  answerInput.classList.add("bounce");
+  answerInput.style.borderColor = isError ? "red" : "green";
+
+  setTimeout(() => {
+    // возвращаем всё в исходное состояние
+    answerInput.classList.remove("bounce");
+    answerInput.placeholder = originalPlaceholder;
+    answerInput.style.borderColor = "";
+  }, 1500); // подсказка 1.5 секунды
+}
+
+
