@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
 <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-512x512.png">
 <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-192x192.png">
-<title>Word Quiz</title>
+<title>English Helper</title>
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -26,7 +26,7 @@
     <button id="addListToggle">+</button>
     <div id="listContainer" style="display:flex; align-items:center; gap:5px;">
       <select id="listSelect">
-        <option disabled selected>Выберите список</option>
+        <option disabled selected>Выберите тест</option>
       </select>
       <button id="saveListBtn">📥</button>
     </div>
@@ -41,7 +41,7 @@
 <div id="addListForm">
   <input type="text" id="newListName" placeholder="Имя нового списка">
   <textarea id="newListText" placeholder="Скопируйте сюда слова в формате слово;перевод" rows="5"></textarea>
-  <button id="addListBtn">Добавить список</button>
+  <button id="addListBtn">Добавить тест</button>
 </div>
 
 <div id="word" class="placeholder"></div>
@@ -55,7 +55,6 @@
 
 <!-- режим ввода -->
 <div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
-  <div id="feedback"></div>
   <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
 </div>
 
@@ -70,6 +69,10 @@
 <div id="welcomeWrapper">
   <div id="welcomeContainer">
     <div id="welcome">Добро пожаловать</div>
+    <div id="welcomeSubtext">
+      Здесь вы можете проходить существующие тесты или добавлять свои, 
+      а так же проверить количество слов на английском, которые вы знаете
+    </div>
     <div id="welcomeButtons">
       <button id="testBtn">Test</button>
       <button id="levelBtn">Level Check</button>

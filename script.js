@@ -24,7 +24,6 @@ const answersDiv=document.getElementById('answers');
 answersDiv.style.display = 'none';
 const inputModeDiv=document.getElementById('inputModeDiv');
 const answerInput=document.getElementById('answerInput');
-const feedback=document.getElementById('feedback');
 const submitAnswerBtn=document.getElementById('submitAnswerBtn');
 const submitWrapper=document.getElementById('submitWrapper');
 const progressDiv=document.getElementById('progress');
@@ -95,22 +94,44 @@ modeBtn.addEventListener('click', ()=>{
   if(currentWord) drawCurrentQuestion();
 });
 
-function loadNextWord(){
-  if(remainingWords.length===0){
-    // Без alert, чтобы не закрывать клавиатуру
-    wordDiv.textContent='Готово! Вы прошли все слова 🎉';
+function loadNextWord() {
+  if (remainingWords.length === 0) {
+    wordDiv.textContent = 'Готово! Вы прошли все слова 🎉';
     wordDiv.classList.remove('placeholder');
-    answersDiv.style.display='none';
-    inputModeDiv.style.display='none';
-    submitWrapper.style.display='none';
+    answersDiv.style.display = 'none';
+    inputModeDiv.style.display = 'none';
+    submitWrapper.style.display = 'none';
     return;
   }
-  currentWord=remainingWords.pop();
+
+  currentWord = remainingWords.pop();
   index++;
-  document.getElementById('welcome').style.display='none';
+
+  // Скрываем текст
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('welcomeSubtext').style.display = 'none';
+
+  // Делаем контейнер прозрачным
+  const container = document.getElementById('welcomeContainer');
+  container.style.background = 'transparent';
+  container.style.boxShadow = 'none';
+  container.style.backdropFilter = 'none';
+
   drawCurrentQuestion();
   focusInputSoon();
 }
+
+function showFeedbackInsideInput(message, isError = false) {
+  const input = document.getElementById("answerInput");
+  input.value = ""; // очищаем ввод
+  input.placeholder = message; // показываем сообщение
+  if (isError) {
+    input.classList.add("error");
+  } else {
+    input.classList.remove("error");
+  }
+}
+
 
 function drawCurrentQuestion(){
   const question=reverse?currentWord.trans:currentWord.word;
@@ -132,8 +153,6 @@ function drawCurrentQuestion(){
     });
     fiftyBtn.disabled=false;
   } else {
-    feedback.textContent='';
-    feedback.className='';
     answerInput.value='';
     focusInputSoon();
     // Enter также отправляет
@@ -195,32 +214,47 @@ if (!userAnswer) {
 
 if (userAnswer.toLowerCase() === correct.toLowerCase()) {
     correct_answers++;
-    // Добавляем зелёную подсветку
     answerInput.classList.add('success');
-    // Подпрыгивание, как при ошибке
+
+    // подпрыгивание для правильного ответа
     answerInput.style.transition = 'transform 0.2s';
     answerInput.style.transform = 'translateY(-5px)';
     setTimeout(() => {
-        answerInput.style.transform = 'translateY(5px)';
-        setTimeout(() => {
-            answerInput.style.transform = 'translateY(0)';
-        }, 100);
+      answerInput.style.transform = 'translateY(5px)';
+      setTimeout(() => {
+        answerInput.style.transform = 'translateY(0)';
+      }, 100);
     }, 100);
 
-    // Убираем подсветку через 1 секунду
     setTimeout(() => {
-        answerInput.classList.remove('success');
+      answerInput.classList.remove('success');
+      loadNextWord();
     }, 500);
 
-    // Быстрый переход к следующему слову
-    setTimeout(() => { loadNextWord(); }, 500);
   } else {
     wrong_answers++;
-    feedback.textContent= correct;
-    feedback.className='err';
-    // показываем 3с и идём дальше
-    setTimeout(()=>{ loadNextWord(); }, 3000);
+
+    // показываем правильный ответ красным
+    answerInput.value = correct;
+    answerInput.classList.add("error");
+
+    // подпрыгивание для ошибки
+    answerInput.style.transition = 'transform 0.2s';
+    answerInput.style.transform = 'translateY(-5px)';
+    setTimeout(() => {
+      answerInput.style.transform = 'translateY(5px)';
+      setTimeout(() => {
+        answerInput.style.transform = 'translateY(0)';
+      }, 100);
+    }, 100);
+
+    // убираем через 3 сек и идём дальше
+    setTimeout(() => {
+      answerInput.classList.remove("error");
+      loadNextWord();
+    }, 3000);
   }
+
   focusInputSoon();
 }
 
@@ -343,7 +377,7 @@ deleteListBtn.addEventListener('click', () => {
 function loadAllLists(){
   database.ref('lists').once('value').then(snapshot=>{
     const data=snapshot.val()||{};
-    listSelect.innerHTML='<option disabled selected>Выберите список</option>';
+    listSelect.innerHTML='<option disabled selected>Выберите тест</option>';
     for(let key in data){
       const option=document.createElement('option');
       option.value=key; option.textContent=key;
@@ -367,7 +401,6 @@ listSelect.onchange = () => {
   submitWrapper.style.display = 'none';
   fiftyBtn.style.display = 'inline-block';
   modeBtn.textContent = '✍️'; // возвращаем текст кнопки в исходное состояние
-  feedback.textContent = ''; // очищаем обратную связь
   answerInput.value = ''; // очищаем поле ввода
 
   // Загружаем новый список из Firebase

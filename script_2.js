@@ -136,7 +136,6 @@ async function updateKnownCounter() {
   numberElement.classList.add("bounce");
   setTimeout(() => numberElement.classList.remove("bounce"), 600);
 }
-
 }
 
 
