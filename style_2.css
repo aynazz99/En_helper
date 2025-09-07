@@ -534,9 +534,9 @@ button.red-border {
 /* Контейнер счётчика */
 /* Изначально скрыт */
 .known-counter {
-  display: none; /* скрываем */
+  display: none; /* изначально скрыт */
   justify-content: center;
-  margin: 5px 0;
+  margin: 3px 0; /* уменьшенный отступ сверху/снизу */
   width: 95%;
   max-width: 600px;
   text-align: center;
@@ -548,15 +548,14 @@ button.red-border {
   display: flex;
 }
 
-
-/* Сама "плашка" теперь прозрачная */
+/* Сама "плашка" прозрачная */
 .kc-badge {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  background: transparent; /* полностью прозрачная */
+  gap: 1px;        /* меньше расстояние между цифрой и подписью */
+  background: transparent;
   padding: 0;
   border: none;
   box-shadow: none;
@@ -567,28 +566,26 @@ button.red-border {
 .kc-number {
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   font-weight: 800;
-  font-size: clamp(14px, 4vw, 28px);
+  font-size: clamp(12px, 3.5vw, 22px); /* уменьшенный размер */
   background: rgb(255,255,255);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   display: block;
-
 }
 
 /* Подпись */
 .kc-label {
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  font-size: 14px;
+  font-size: 12px; /* меньше текст */
   font-weight: 500;
-  color: #ffffffcc; /* полупрозрачный белый текст */
-  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  color: #ffffffcc; 
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   white-space: nowrap;
 }
 
-
 /* Мобильная адаптация */
 @media (max-width: 420px) {
-  .kc-number { font-size: 20px; }
-  .kc-label { font-size: 11px; }
+  .kc-number { font-size: 18px; }
+  .kc-label { font-size: 10px; }
 }
