@@ -228,7 +228,19 @@ button.red-border {
   border: 2px solid rgb(232, 0, 0) !important;
 }
 
-/* Поле ввода */
+                                                              /* Поле ввода */
+#inputModeDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;           /* расстояние между input и feedback / другими элементами */
+  margin-top: 5px;
+  margin-bottom: 5px!important;
+  width: 95%;
+  max-width: 600px;
+  box-sizing: border-box;
+  text-align: center;  /* если нужно центрировать input и feedback */
+}
+
 #answerInput {
   width: 100%;
   font-size: 1.3rem;
@@ -236,7 +248,8 @@ button.red-border {
   border-radius: 14px;
   border: 2px solid #ccc;
   box-sizing: border-box;
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;  /* снизу */
   background: #fff;
   color: #000;
   transition: border-color 0.3s, box-shadow 0.3s;
@@ -252,6 +265,8 @@ button.red-border {
 
 
 #submitAnswerBtn {
+  margin-top: 5px !important;     /* сверху */
+  margin-bottom: 5px !important;  /* снизу */
   width: 100%;
   font-size: 1.4rem;
   padding: 16px;
@@ -280,7 +295,7 @@ button.red-border {
 
 
 
-/* === Попап === */
+                                                                /* === Попап === */
 .popup {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -469,7 +484,7 @@ button.red-border {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Красная кнопка Закрыть */
+                                                            /* Красная кнопка Закрыть */
 #deleteCancelBtn {
   background: #ff6b6b; /* мягкий красный */
   color: #fff;
@@ -495,7 +510,7 @@ button.red-border {
 
 
 
-/* подпрыгивание */
+                                                             /* подпрыгивание */
 @keyframes bounceAnim {
   0%   { transform: translateY(0); }
   30%  { transform: translateY(-10px); }
@@ -503,17 +518,77 @@ button.red-border {
   70%  { transform: translateY(-5px); }
   100% { transform: translateY(0); }
 }
-
 .bounce {
   animation: bounceAnim 0.6s;
 }
-
 /* зелёная граница */
 .green-border {
   border: 2px solid #4CAF50 !important;
 }
-
 /* красная граница */
 .red-border {
   border: 2px solid #f44336 !important;
+}
+
+                                                             /* Стили для счётчика */
+/* Контейнер счётчика */
+/* Изначально скрыт */
+.known-counter {
+  display: none; /* скрываем */
+  justify-content: center;
+  margin: 5px 0;
+  width: 95%;
+  max-width: 600px;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Появляется через JS — display:flex */
+.known-counter.show {
+  display: flex;
+}
+
+
+/* Сама "плашка" теперь прозрачная */
+.kc-badge {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: transparent; /* полностью прозрачная */
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  transition: none;
+}
+
+/* Цифра */
+.kc-number {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-weight: 800;
+  font-size: clamp(14px, 4vw, 28px);
+  background: rgb(255,255,255);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: block;
+
+}
+
+/* Подпись */
+.kc-label {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffffcc; /* полупрозрачный белый текст */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+
+
+/* Мобильная адаптация */
+@media (max-width: 420px) {
+  .kc-number { font-size: 20px; }
+  .kc-label { font-size: 11px; }
 }

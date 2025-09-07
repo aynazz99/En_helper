@@ -35,7 +35,12 @@
   </select>
       <button id="DeleteProfileBtn">🗑️</button>
   <div style="flex:1; display:flex; justify-content:flex-end;">
-
+    <section id="knownCounter" class="known-counter" role="status" aria-label="Количество выученных слов">
+      <div class="kc-badge">
+        <span class="kc-number">0</span>
+        <span class="kc-label">столько слов я уже знаю</span>
+      </div>
+    </section>
   </div>
 </header>
 
@@ -49,7 +54,6 @@
 <div id="submitWrapper" style="display:none; text-align:center; margin:20px 0; width:95%; max-width:600px;">
   <button id="submitAnswerBtn" type="button" tabindex="-1">Добавить</button>
 </div>
-
 
 
 <div id="welcomeWrapper">

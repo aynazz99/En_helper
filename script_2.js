@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadProfiles() {
     const snapshot = await database.ref("profiles").get();
     listSelect.innerHTML = '<option disabled selected>Выберите профиль</option>';
-
     if (snapshot.exists()) {
       const profiles = snapshot.val();
       for (const id in profiles) {
@@ -35,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Обработчик выбора профиля
 listSelect.addEventListener("change", async () => {
   const profileId = listSelect.value;
   if (!profileId) return;
@@ -51,6 +51,7 @@ listSelect.addEventListener("change", async () => {
     currentProfileId = profileId;
     console.log("Выбран профиль:", currentProfileId);
     showQuizUI();
+    updateKnownCounter(); // <-- обновляем счётчик
   } else {
     alert("Неверный пароль!");
     listSelect.value = ""; // сброс выбора
@@ -89,8 +90,6 @@ if (levelBtn) {
       addProfileBtn.classList.add("bounce", "red-border");
       setTimeout(() => addProfileBtn.classList.remove("bounce"), 600);
       setTimeout(() => addProfileBtn.classList.remove("red-border"), 800);
-
-
     } else {
       showQuizUI();
       console.log("Профиль выбран:", listSelect.value);
@@ -112,8 +111,7 @@ if (levelBtn) {
 });
 
 
-
-
+// Объявление переменных для элементов DOM и управления профилями
 const addProfileBtn = document.getElementById("addProfileBtn");
 const popup = document.getElementById("profilePopup");
 const profileInput = document.getElementById("profileNameInput");
@@ -122,6 +120,26 @@ const profileAddBtn = document.getElementById("profileAddBtn");
 const profileMessage = document.getElementById("profileMessage");
 const listSelect = document.getElementById("ProfileSelect");
 let currentProfileId = null;
+
+// функция для обновления счётчика knownWords текущего профиля
+async function updateKnownCounter() {
+  if (!currentProfileId) return;
+
+  const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
+  const words = snapshot.val() || [];
+  const uniqueWords = [...new Set(words)];
+
+  // находим элемент с цифрой
+  const numberElement = document.querySelector("#knownCounter .kc-number");
+ if (numberElement) {
+  numberElement.textContent = uniqueWords.length;
+  numberElement.classList.add("bounce");
+  setTimeout(() => numberElement.classList.remove("bounce"), 600);
+}
+
+}
+
+
 
 // открыть попап
 addProfileBtn.addEventListener("click", () => {
@@ -366,14 +384,15 @@ function showQuizUI() {
   const inputModeDiv = document.getElementById("inputModeDiv");
   const submitWrapper = document.getElementById("submitWrapper");
   const welcome = document.getElementById("welcome");
-  const levelBtn = document.getElementById("levelBtn"); // добавили кнопку
+  const levelBtn = document.getElementById("levelBtn"); 
+  const counter = document.getElementById("knownCounter"); // счётчик
 
   if (welcome) welcome.style.display = "none"; // прячем приветствие
   if (inputModeDiv) inputModeDiv.style.display = "block"; // показываем поле
   if (submitWrapper) submitWrapper.style.display = "block"; // показываем кнопку
   if (levelBtn) levelBtn.style.display = "none"; // прячем levelBtn
+  if (counter) counter.style.display = "flex"; // показываем счётчик
 }
-
 
 
 // функция проверки: только английские буквы, пробел, дефис и апостроф
@@ -409,6 +428,7 @@ submitAnswerBtn.addEventListener("click", async () => {
     words.push(newWord);
     await profileRef.set(words);
     showFeedbackInsideInput("Слово добавлено!", false);
+    updateKnownCounter(); // <-- обновляем счётчик
   }
 });
 
