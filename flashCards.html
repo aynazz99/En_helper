@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Helper</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="page3.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+
+
+  <!-- Подключаем manifest -->
+  <link rel="manifest" href="manifest.json">
+
+
+
+  <!-- iOS поддержка -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="English Helper">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+  <!-- Цвет статус-бара (Android Chrome) -->
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+
+<header>
+  <div style="flex:1;"></div> <!-- пустое место слева -->
+  <select id="CardSelect">
+    <option disabled selected value="">Выберите тему</option>
+  </select>
+  <div style="flex:1; display:flex; justify-content:flex-end;">
+  </div>
+    <div>
+    <button id="fiftyBtn">50/50</button>
+  </div>
+</header>
+
+<!-- Полупрозрачный контейнер с картинками -->
+<div class="image-container" id="imageContainer"></div>
+<input type="file" id="imageInput" accept="image/*" style="display:none">
+
+
+
+<div class="answers" id="answers">
+  <button class="answerBtn"></button>
+  <button class="answerBtn"></button>
+  <button class="answerBtn"></button>
+  <button class="answerBtn"></button>
+</div>
+
+<div id="welcomeWrapper">
+  <div id="welcomeButtons">
+    <button id="testBtn">Тест</button>
+    <button id="levelBtn">Level Check</button>
+    <button id="cardsBtn">Начать</button>
+  </div>
+</div>
+
+<script src="script_3.js"></script>
+
+
+</body>
+</html>

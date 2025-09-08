@@ -70,6 +70,12 @@ listSelect.addEventListener("change", async () => {
     });
   }
 
+  if (cardsBtn) {
+    cardsBtn.addEventListener("click", () => {
+      window.location.href = "flashCards.html"; // переход на flashCards.html
+    });
+  }
+
 // Level Check — надёжная проверка, выбран ли реальный профиль
 if (levelBtn) {
   levelBtn.addEventListener("click", () => {
@@ -136,6 +142,7 @@ async function updateKnownCounter() {
   numberElement.classList.add("bounce");
   setTimeout(() => numberElement.classList.remove("bounce"), 600);
 }
+
 }
 
 

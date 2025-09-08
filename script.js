@@ -8,6 +8,7 @@ const firebaseConfig = {
   messagingSenderId: "785560761880",
   appId: "1:785560761880:web:9455e5767af0e0b9b1f56d"
 };
+
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
@@ -29,12 +30,7 @@ const submitWrapper=document.getElementById('submitWrapper');
 const progressDiv=document.getElementById('progress');
 const progressFill=document.getElementById('progressFill');
 const progressBar = document.getElementById('progressBar');
-progressDiv.style.display = 'none';
-progressFill.style.display = 'none';
-switchBtn.style.display = 'none';
-fiftyBtn.style.display = 'none';
-modeBtn.style.display = 'none';
-progressBar.style.display = 'none';
+
 
 // Скрываем прогресс при загрузке страницы
 progressDiv.style.display = 'none';
@@ -291,12 +287,13 @@ saveListBtn.addEventListener('click', () => {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = '.txt';
+
   input.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const fileName = file.name.replace(/\.txt$/i, ''); // имя файла без .txt
-    const text = await file.text(); // читаем содержимое
+    const fileName = file.name.replace(/\.txt$/i, '');
+    const text = await file.text();
     const newWords = text.split('\n').map(line => {
       const [word, trans] = line.split(';').map(x => x.trim());
       return word && trans ? { word, trans } : null;
@@ -307,42 +304,42 @@ saveListBtn.addEventListener('click', () => {
       return;
     }
 
+    // Показываем кастомный попап вместо confirm
+    showCustomModal(
+      () => { // Добавить как новый список
+        database.ref('lists/' + fileName).set(newWords)
+          .then(() => {
+            alert(`Список "${fileName}" добавлен!`);
+            loadAllLists();
+          })
+          .catch(err => {
+            console.error(err);
+            alert('Ошибка при добавлении списка');
+          });
+      },
+      () => { // Просто открыть локально
+        words = newWords;
+        allWords = [...new Map(words.map(w => [`${w.word};${w.trans}`, w])).values()];
+        remainingWords = shuffleArray([...allWords]);
+        index = 0; correct_answers = 0; wrong_answers = 0; currentWord = null;
 
-    // ⚡ Новый выбор действия
-    const action = confirm('Нажмите ОК, чтобы ДОБАВИТЬ как новый список.\nНажмите Отмена, чтобы ПРОСТО ОТКРЫТЬ.');
+        wordDiv.classList.remove("placeholder");
+        answersDiv.style.display = 'grid';
+        progressDiv.style.display = 'block';
+        progressFill.style.display = 'block';
+        switchBtn.style.display = 'inline-block';
+        fiftyBtn.style.display = 'inline-block';
+        modeBtn.style.display = 'inline-block';
+        progressBar.style.display = 'block';
 
-    if (action) {
-      // ✅ Добавляем в Firebase
-      database.ref('lists/' + fileName).set(newWords)
-        .then(() => {
-          alert(`Список "${fileName}" добавлен!`);
-          loadAllLists(); // обновляем список в select
-        })
-        .catch(err => {
-          console.error(err);
-          alert('Ошибка при добавлении списка');
-        });
-    } else {
-      // ✅ Просто открываем локально, без базы
-      words = newWords;
-      allWords = [...new Map(words.map(w => [`${w.word};${w.trans}`, w])).values()];
-      remainingWords = shuffleArray([...allWords]);
-      index = 0; correct_answers = 0; wrong_answers = 0; currentWord = null;
-
-      wordDiv.classList.remove("placeholder");
-      answersDiv.style.display = 'grid';
-      progressDiv.style.display = 'block';
-      progressFill.style.display = 'block';
-      switchBtn.style.display = 'inline-block';
-      fiftyBtn.style.display = 'inline-block';
-      modeBtn.style.display = 'inline-block';
-      progressBar.style.display = 'block';
-
-      loadNextWord();
-    }
+        loadNextWord();
+      }
+    );
   };
-  input.click(); // открываем диалог выбора файла
+
+  input.click();
 });
+
 
 
 // Показ кнопки удаления при выборе списка
@@ -477,10 +474,11 @@ window.addEventListener('resize', () => {
     }
 });
 
-// === Логика кнопок Test и Level Check ===
+// === Логика кнопок Test, Level Check и Карточки ===
 document.addEventListener("DOMContentLoaded", () => {
   const testBtn = document.getElementById("testBtn");
   const levelBtn = document.getElementById("levelBtn");
+  const cardsBtn = document.getElementById("cardsBtn"); // новая кнопка
   const listSelect = document.getElementById("listSelect");
 
   if (testBtn) {
@@ -488,19 +486,62 @@ document.addEventListener("DOMContentLoaded", () => {
       listSelect.classList.add("shake-select");
       setTimeout(() => {
         listSelect.classList.remove("shake-select");
-      }, 600); // убираем эффект через 0.6 сек
+      }, 600);
     });
   }
 
   if (levelBtn) {
     levelBtn.addEventListener("click", () => {
       console.log("👉 Логика Level Check будет добавлена здесь");
+      window.location.href = "level_check_Page.html";
+    });
+  }
+
+  if (cardsBtn) {
+    cardsBtn.addEventListener("click", () => {
+      window.location.href = "flashCards.html"; // переход на flashCards.html
     });
   }
 });
 
-document.getElementById("levelBtn").addEventListener("click", function() {
-  // Переход на новую страницу (чистый лист)
-  window.location.href = "level_check_Page.html"; // Путь к новому файлу
+
+function showCustomModal(onAdd, onOpen) {
+  const modal = document.getElementById('customModal');
+  modal.style.display = 'flex';
+
+  const addBtn = document.getElementById('addBtn');
+  const openBtn = document.getElementById('openBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  function cleanup() {
+    modal.style.display = 'none';
+    addBtn.removeEventListener('click', addHandler);
+    openBtn.removeEventListener('click', openHandler);
+    cancelBtn.removeEventListener('click', cancelHandler);
+  }
+
+  function addHandler() { cleanup(); onAdd(); }
+  function openHandler() { cleanup(); onOpen(); }
+  function cancelHandler() { cleanup(); }
+
+  addBtn.addEventListener('click', addHandler);
+  openBtn.addEventListener('click', openHandler);
+  cancelBtn.addEventListener('click', cancelHandler);
+}
+
+const modal = document.getElementById('customModal');
+const modalContent = modal.querySelector('.modal-content');
+const cancelBtn = document.getElementById('cancelBtn');
+
+// Закрытие при клике на "Отмена"
+cancelBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+// Закрытие при клике за пределами попапа
+modal.addEventListener('click', (e) => {
+  if (!modalContent.contains(e.target)) {
+    modal.style.display = 'none';
+  }
 });
 

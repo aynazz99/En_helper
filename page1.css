@@ -1,0 +1,236 @@
+#listSelect {
+  padding: 10px 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  min-width: 200px;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: white;
+  color: #000;
+  cursor: pointer;
+}
+
+#listSelect::-ms-expand { display: none; }
+
+#fiftyBtn {
+  width: auto !important;
+  min-width: 60px !important;
+  height: 36px;
+  padding: 0;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* === Основное содержимое === */
+#word {
+  font-size: calc(20px + 4vw);
+  text-align: center;
+  margin: 20px 0;
+  word-wrap: break-word;
+  font-weight: bold;
+}
+
+#word.placeholder {
+  color: #ff4d4f;
+}
+
+
+#progressBar {
+  width: 95%;
+  max-width: 600px;
+  height: 20px;
+  background: #eee;
+  border-radius: 10px;
+  margin: 15px 0;
+}
+
+#progressFill {
+  width: 0%;
+  height: 100%;
+  background: #4CAF50;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+#progress { font-size: 1rem; text-align: center; }
+
+
+/* Кнопка ответа (фиксированная) */
+#submitWrapper {
+  position: sticky;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  width: 95%;
+  max-width: 600px;
+  text-align: center;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+  
+  background: rgba(255, 255, 255, 0.9); /* почти прозрачный фон */
+  border-radius: 12px;                  /* закругляем углы контейнера */
+  overflow: hidden;                      /* обрезаем фон по углам */
+  background-clip: padding-box;          /* фон не вылезает за рамки */
+}
+
+#submitAnswerBtn {
+  width: 100%;
+  font-size: 1.4rem;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+#submitAnswerBtn:hover { background-color: #45a049; transform: scale(1.02); }
+
+/* Форма добавления списка */
+#addListForm { display: none; flex-direction: column; gap: 5px; margin: 10px 0; width: 95%; max-width: 600px; }
+
+
+.shake-select {
+  border: 2px solid red;
+  box-shadow: 0 0 5px red;
+  animation: bounce 0.6s;
+  border: 2px solid rgb(232, 0, 0) !important;
+}
+
+
+/* Кнопка удаления списка */
+#deleteWrapper {
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+}
+
+#deleteListBtn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+#deleteListBtn:hover { background: rgba(255,0,0,0.2); }
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 95%;
+  max-width: 600px;
+}
+
+.answerBtn {
+  padding: 12px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: rgba(255, 255, 255, 0.85); /* почти белый фон, чуть прозрачный */
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.answerBtn.correct {
+  background-color: rgba(76, 175, 80, 0.9); /* насыщенный зелёный, слегка прозрачный */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.answerBtn.wrong {
+  background-color: rgba(244, 67, 54, 0.9); /* насыщенный красный, слегка прозрачный */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.answerBtn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* анимация подпрыгивания при выборе */
+.answerBtn.correct,
+.answerBtn.wrong {
+  animation: btnFeedback 0.4s forwards;
+}
+
+.answerBtn.disabled {
+  background-color: #555; /* темно-серый */
+  color: #ccc;            /* текст светло-серый, чтобы контраст был */
+  cursor: not-allowed;    /* курсор показывает, что кнопка недоступна */
+  opacity: 0.4;           /* можно добавить лёгкую прозрачность */
+}
+
+
+@keyframes btnFeedback {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.03); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.modal-content p {
+  color: #000;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.modal-buttons.top-buttons button {
+  flex: 1; /* обе кнопки по ширине одинаково */
+  padding: 10px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.modal-buttons.bottom-button {
+  margin-top: 15px;
+}
+.modal-buttons.bottom-button button {
+  width: 100%; /* Отмена на всю ширину */
+  padding: 10px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f44336;
+  color: white;
+}
+#addBtn { background-color: #4CAF50; color: white; }
+#openBtn { background-color: #2196F3; color: white; }

@@ -1,0 +1,371 @@
+
+
+#ProfileSelect {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  min-width: 200px;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: white;
+  color: #000;
+  cursor: pointer;
+}
+
+#ProfileSelect:-ms-expand { display: none; }
+
+#leftControls,
+#rightControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+select.bounce {
+  animation: bounce 0.6s ease;
+}
+
+select.red-border {
+  border: 2px solid red;
+  box-shadow: 0 0 5px red;
+  animation: bounce 0.6s;
+  border: 2px solid rgb(232, 0, 0) !important;
+}
+
+button.bounce {
+  animation: bounce 0.6s ease;
+}
+button.red-border {
+  border: 2px solid red;
+  box-shadow: 0 0 5px red;
+  animation: bounce 0.6s;
+  border: 2px solid rgb(232, 0, 0) !important;
+}
+
+                                                              /* Поле ввода */
+#inputModeDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;           /* расстояние между input и feedback / другими элементами */
+  margin-top: 5px;
+  margin-bottom: 5px!important;
+  width: 95%;
+  max-width: 600px;
+  box-sizing: border-box;
+  text-align: center;  /* если нужно центрировать input и feedback */
+}
+
+
+#submitAnswerBtn {
+  margin-top: 5px !important;     /* сверху */
+  margin-bottom: 5px !important;  /* снизу */
+  width: 100%;
+  font-size: 1.4rem;
+  padding: 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  color: white;
+  background: rgba(255, 255, 255, 0.1); /* полупрозрачная */
+  backdrop-filter: blur(10px); /* размытие фона за кнопкой */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* мягкая тень */
+  transition: all 0.3s ease;
+}
+
+#submitAnswerBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#submitAnswerBtn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+
+                                                                /* === Попап === */
+.popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
+}
+
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 16px;
+  min-width: 320px;
+  max-width: 90%;
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.popup.show .popup-content {
+  transform: scale(1);
+}
+
+.popup-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Поля ввода */
+.popup input[type="text"] {
+  width: 100%;               /* чтобы вписывалось в ширину попапа */
+  max-width: 100%;           /* не вылазило за пределы попапа */
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Состояние фокуса */
+.popup input[type="text"]:focus {
+  border-color: #00b7ff;
+  box-shadow: 0 0 8px rgba(0,183,255,0.25);
+}
+
+
+/* === Сообщения === */
+.popup-message {
+  min-height: 24px;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* === Попап === */
+.popup {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
+}
+
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+}
+
+.popup.show .popup-content {
+  transform: scale(1);
+}
+
+.popup h3,
+.popup-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* === Поля ввода === */
+.popup input[type="text"] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 15px;
+}
+
+.popup input[type="text"]:focus {
+  border-color: #00b7ff;
+  box-shadow: 0 0 8px rgba(0,183,255,0.25);
+}
+
+/* Отключаем автозаполнение браузера для поля добавления профиля */
+#profileNameInput::-webkit-autofill,
+#profileNameInput:-webkit-autofill,
+#profileNameInput:-internal-autofill-selected {
+  background-color: #fff !important;
+  color: #222 !important;
+}
+
+
+/* Сообщения */
+.popup-message,
+#profileMessage {
+  min-height: 24px;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* === Контейнер кнопок === */
+.popup-buttons,
+.popup-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Универсальные кнопки */
+.popup-buttons button,
+.popup-section button {
+  flex: 1 1 120px; /* растягиваются одинаково */
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.85);
+  color: #222;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.popup-buttons button:hover,
+.popup-section button:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+.popup-buttons button:active,
+.popup-section button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+                                                            /* Красная кнопка Закрыть */
+#deleteCancelBtn {
+  background: #ff6b6b; /* мягкий красный */
+  color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  min-width: 120px;
+  border-radius: 12px;
+  padding: 10px 18px;
+  cursor: pointer;
+}
+
+#deleteCancelBtn:hover {
+  background: #ff4c4c; /* чуть ярче при наведении */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+#deleteCancelBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+
+                                                             /* подпрыгивание */
+
+.bounce {
+  animation: bounce 0.6s;
+}
+/* зелёная граница */
+.green-border {
+  border: 2px solid #4CAF50 !important;
+}
+/* красная граница */
+.red-border {
+  border: 2px solid #f44336 !important;
+}
+
+                                                             /* Стили для счётчика */
+/* Контейнер счётчика */
+/* Изначально скрыт */
+.known-counter {
+  display: none; /* изначально скрыт */
+  justify-content: center;
+  margin: 3px 0; /* уменьшенный отступ сверху/снизу */
+  width: 95%;
+  max-width: 600px;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Появляется через JS — display:flex */
+.known-counter.show {
+  display: flex;
+}
+
+/* Сама "плашка" прозрачная */
+.kc-badge {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;        /* меньше расстояние между цифрой и подписью */
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  transition: none;
+}
+
+/* Цифра */
+.kc-number {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-weight: 800;
+  font-size: clamp(12px, 3.5vw, 22px); /* уменьшенный размер */
+  background: rgb(255,255,255);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: block;
+}
+
+
+/* Мобильная адаптация */
+@media (max-width: 420px) {
+  .kc-number { font-size: 18px; }
+  .kc-label { font-size: 10px; }
+}

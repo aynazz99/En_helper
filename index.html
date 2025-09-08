@@ -16,7 +16,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="page1.css">
 </head>
 <body>
 
@@ -66,6 +67,21 @@
   <button id="submitAnswerBtn" type="button" tabindex="-1">Ответить</button>
 </div>
 
+<!-- Модальный попап -->
+<div id="customModal" class="modal">
+  <div class="modal-content">
+    <p> Вы можете просто ОТКРЫТЬ, не сохраняя,<br>
+      Либо ДОБАВИТЬ на сайт</p>
+ <div class="modal-buttons top-buttons">
+      <button id="addBtn">Добавить</button>
+      <button id="openBtn">Открыть</button>
+    </div>
+    <div class="modal-buttons bottom-button">
+      <button id="cancelBtn">Отмена</button>
+    </div>
+  </div>
+</div>
+
 <div id="welcomeWrapper">
   <div id="welcomeContainer">
     <div id="welcome">Добро пожаловать</div>
@@ -74,11 +90,13 @@
       а так же проверить количество слов на английском, которые вы знаете
     </div>
     <div id="welcomeButtons">
-      <button id="testBtn">Test</button>
+      <button id="testBtn">Тест</button>
       <button id="levelBtn">Level Check</button>
+      <button id="cardsBtn">Карточки</button> <!-- Новая кнопка -->
     </div>
   </div>
 </div>
+
 
 
 <!-- кнопка удаления списка -->

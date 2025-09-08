@@ -1,0 +1,118 @@
+
+
+#CardSelect {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  min-width: 200px;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: white;
+  color: #000;
+  cursor: pointer;
+}
+
+#CardSelect:-ms-expand { display: none; }
+
+/* Сам контейнер */
+.image-container {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  margin: 20px auto;
+  width: 90%;               /* растягиваем почти на всю ширину */
+  max-width: 550px;         /* максимум по ширине */
+  height: 200px;            /* высота контейнера */
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  justify-content: center; /* по горизонтали */
+  align-items: center;      /* выравниваем картинки по центру */
+  overflow-x: auto;         /* если картинок много, появится горизонтальный скролл */
+}
+
+/* Стили для картинок внутри */
+.image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 15px;
+  object-fit: contain;     /* сохраняет пропорции */
+}
+
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 95%;
+  max-width: 600px;
+}
+
+.answerBtn {
+  padding: 12px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: rgba(255, 255, 255, 0.85); /* почти белый фон, чуть прозрачный */
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.answerBtn.correct {
+  background-color: rgba(76, 175, 80, 0.9); /* насыщенный зелёный, слегка прозрачный */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.answerBtn.wrong {
+  background-color: rgba(244, 67, 54, 0.9); /* насыщенный красный, слегка прозрачный */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.answerBtn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* анимация подпрыгивания при выборе */
+.answerBtn.correct,
+.answerBtn.wrong {
+  animation: btnFeedback 0.4s forwards;
+}
+
+.answerBtn.disabled {
+  background-color: #555; /* темно-серый */
+  color: #ccc;            /* текст светло-серый, чтобы контраст был */
+  cursor: not-allowed;    /* курсор показывает, что кнопка недоступна */
+  opacity: 0.4;           /* можно добавить лёгкую прозрачность */
+}
+
+@keyframes btnFeedback {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.03); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.red-border {
+  border: 2px solid #f44336 !important;
+}
+
+#fiftyBtn {
+  width: auto !important;
+  min-width: 60px !important;
+  height: 36px;
+  padding: 0;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
