@@ -233,4 +233,14 @@
   color: white;
 }
 #addBtn { background-color: #4CAF50; color: white; }
+
 #openBtn { background-color: #2196F3; color: white; }
+
+@media (max-width:480px) {
+  #listSelect {
+    min-width: 100px;   /* вместо 200px */
+    max-width: 30vw;    /* максимум 30% экрана */
+    font-size: 0.75rem; /* чуть меньше шрифт */
+    padding: 6px 4px;   /* компактнее */
+  }
+}
