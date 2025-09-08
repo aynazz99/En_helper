@@ -51,37 +51,6 @@
     { "file": "Whale.png", "name": "Whale" },
     { "file": "Wolf.png", "name": "Wolf" }
   ],
-  "celebration": [
-    { "file": "Balloon.png", "name": "Balloon" },
-    { "file": "Beer mug.png", "name": "Beer mug" },
-    { "file": "Birthday cake.png", "name": "Birthday cake" },
-    { "file": "Bunting.png", "name": "Bunting" },
-    { "file": "Candles.png", "name": "Candles" },
-    { "file": "Champagne.png", "name": "Champagne" },
-    { "file": "Cheers.png", "name": "Cheers" },
-    { "file": "Christmas tree.png", "name": "Christmas tree" },
-    { "file": "Clown.png", "name": "Clown" },
-    { "file": "Cocktail drink.png", "name": "Cocktail drink" },
-    { "file": "Confetti.png", "name": "Confetti" },
-    { "file": "Cranberry.png", "name": "Cranberry" },
-    { "file": "Crown.png", "name": "Crown" },
-    { "file": "Cupcake.png", "name": "Cupcake" },
-    { "file": "Disco ball.png", "name": "Disco ball" },
-    { "file": "Donut.png", "name": "Donut" },
-    { "file": "Fireworks.png", "name": "Fireworks" },
-    { "file": "Gift bag.png", "name": "Gift bag" },
-    { "file": "Gift box.png", "name": "Gift box" },
-    { "file": "Gift card.png", "name": "Gift card" },
-    { "file": "Ice cream.png", "name": "Ice cream" },
-    { "file": "Music.png", "name": "Music" },
-    { "file": "Party hat.png", "name": "Party hat" },
-    { "file": "Party mask.png", "name": "Party mask" },
-    { "file": "Party popper.png", "name": "Party popper" },
-    { "file": "Petard.png", "name": "Petard" },
-    { "file": "Stage.png", "name": "Stage" },
-    { "file": "Wine bottle.png", "name": "Wine bottle" },
-    { "file": "Wine glass.png", "name": "Wine glass" }
-  ],
   "Farming": [
     { "file": "Barn.png", "name": "Barn" },
     { "file": "Barrel.png", "name": "Barrel" },
@@ -239,7 +208,7 @@
     { "file": "Wc.png", "name": "Wc" },
     { "file": "Window cleaner.png", "name": "Window cleaner" }
   ],
-  "nature": [
+  "Nature": [
     { "file": "Beach.png", "name": "Beach" },
     { "file": "Bee.png", "name": "Bee" },
     { "file": "Beehive.png", "name": "Beehive" },
@@ -279,7 +248,7 @@
     { "file": "Waterfall.png", "name": "Waterfall" },
     { "file": "Wheat.png", "name": "Wheat" }
   ],
-  "travel-outdoor": [
+  "Travel-outdoor": [
     { "file": "Airplane.png", "name": "Airplane" },
     { "file": "Amusement park.png", "name": "Amusement park" },
     { "file": "Backpack.png", "name": "Backpack" },
@@ -328,7 +297,7 @@
     { "file": "Weather.png", "name": "Weather" },
     { "file": "Yacht.png", "name": "Yacht" }
   ],
-  "vegetables": [
+  "Vegetables": [
     { "file": "Almonds.png", "name": "Almonds" },
     { "file": "Artichoke.png", "name": "Artichoke" },
     { "file": "Arugula.png", "name": "Arugula" },
@@ -374,7 +343,7 @@
     { "file": "Radicchio.png", "name": "Radicchio" },
     { "file": "Radish.png", "name": "Radish" }
   ],
-  "weather": [
+  "Weather": [
     { "file": "Cloud.png", "name": "Cloud" },
     { "file": "Earth.png", "name": "Earth" },
     { "file": "Rain.png", "name": "Rain" },
@@ -383,5 +352,36 @@
     { "file": "Sun.png", "name": "Sun" },
     { "file": "Water.png", "name": "Water" },
     { "file": "Wind.png", "name": "Wind" }
+  ],
+  "Сelebration": [
+    { "file": "Balloon.png", "name": "Balloon" },
+    { "file": "Beer mug.png", "name": "Beer mug" },
+    { "file": "Birthday cake.png", "name": "Birthday cake" },
+    { "file": "Bunting.png", "name": "Bunting" },
+    { "file": "Candles.png", "name": "Candles" },
+    { "file": "Champagne.png", "name": "Champagne" },
+    { "file": "Cheers.png", "name": "Cheers" },
+    { "file": "Christmas tree.png", "name": "Christmas tree" },
+    { "file": "Clown.png", "name": "Clown" },
+    { "file": "Cocktail drink.png", "name": "Cocktail drink" },
+    { "file": "Confetti.png", "name": "Confetti" },
+    { "file": "Cranberry.png", "name": "Cranberry" },
+    { "file": "Crown.png", "name": "Crown" },
+    { "file": "Cupcake.png", "name": "Cupcake" },
+    { "file": "Disco ball.png", "name": "Disco ball" },
+    { "file": "Donut.png", "name": "Donut" },
+    { "file": "Fireworks.png", "name": "Fireworks" },
+    { "file": "Gift bag.png", "name": "Gift bag" },
+    { "file": "Gift box.png", "name": "Gift box" },
+    { "file": "Gift card.png", "name": "Gift card" },
+    { "file": "Ice cream.png", "name": "Ice cream" },
+    { "file": "Music.png", "name": "Music" },
+    { "file": "Party hat.png", "name": "Party hat" },
+    { "file": "Party mask.png", "name": "Party mask" },
+    { "file": "Party popper.png", "name": "Party popper" },
+    { "file": "Petard.png", "name": "Petard" },
+    { "file": "Stage.png", "name": "Stage" },
+    { "file": "Wine bottle.png", "name": "Wine bottle" },
+    { "file": "Wine glass.png", "name": "Wine glass" }
   ]
 }
