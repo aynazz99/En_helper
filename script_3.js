@@ -79,6 +79,8 @@ function checkAnswer(isCorrect, btn, correctBtn) {
       b.classList.remove('correct', 'wrong');
       b.disabled = false;
     });
+            // разблокируем кнопку 50/50 для новой карточки
+    if (fiftyBtn) fiftyBtn.disabled = false;
     currentIndex = (currentIndex + 1) % cards.length;
     showCard();
   }, isCorrect ? 500 : 2000);
@@ -179,3 +181,4 @@ function shuffleArray(arr) {
   }
   return arr;
 }
+
