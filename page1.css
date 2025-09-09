@@ -1,5 +1,5 @@
 #listSelect {
-  padding: 10px 8px;
+  padding: 10px 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
@@ -244,3 +244,4 @@
     padding: 6px 4px;   /* компактнее */
   }
 }
+
