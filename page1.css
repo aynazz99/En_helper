@@ -240,9 +240,10 @@
   #listSelect {
     min-width: 100px;   /* вместо 200px */
     max-width: 30vw;    /* максимум 30% экрана */
-    font-size: 0.75rem; /* чуть меньше шрифт */
+    font-size: 0.9rem; /* чуть меньше шрифт */
     padding: 6px 4px;   /* компактнее */
   }
 }
+
 
 
