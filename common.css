@@ -214,7 +214,7 @@ header button:hover {
   #welcomeContainer {
     padding: 15px 20px; 
     border-radius: 12px;
-    width: 80%;          /* уменьшаем ширину под маленький экран */
+    width: 95%;          /* уменьшаем ширину под маленький экран */
     max-width: 300px;    /* ограничение для iPhone SE и похожих */
     margin: 0 auto;      /* центрируем контейнер */
     box-sizing: border-box;
@@ -243,6 +243,7 @@ header button:hover {
     -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
   }
 }
+
 
 
 
