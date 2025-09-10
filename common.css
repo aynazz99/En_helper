@@ -22,6 +22,8 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   color: white;
+    /* чтобы фон заходил под статус-бар */
+  background-attachment: fixed; 
 }
 
 /* === Шапка === */
@@ -235,3 +237,4 @@ header button:hover {
     -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
   }
 }
+
