@@ -401,6 +401,9 @@ function showQuizUI() {
   if (levelBtn) levelBtn.style.display = "none"; // прячем levelBtn
   if (counter) counter.style.display = "flex"; // показываем счётчик
   if(imageContainer) imageContainer.style.display = 'flex' // показываем контейнер 
+  const container = document.getElementById('welcomeContainer');
+  // Удаляем пустой контейнер
+  container.remove();
 }
 
 
