@@ -212,6 +212,20 @@ header button:hover {
     margin-bottom: 15px;
   }
 
+  #welcomeButtons {
+    margin-top: 15px;
+    gap: 10px;               /* чуть меньше расстояние между кнопками */
+    flex-wrap: wrap;          /* если кнопки не влезают, переход на новую строку */
+  }
+
+  #welcomeButtons button {
+    font-size: 1rem;          /* чуть меньше шрифт на iPhone */
+    padding: 12px 18px;       /* фиксируем отступы */
+    height: 44px;             /* фиксированная высота для всех кнопок */
+    min-width: 80px;          /* минимальная ширина кнопки */
+    box-sizing: border-box;   /* padding и border учитываются в высоте */
+  }
+
    /* Запрет выделения текста на iPhone */
   * {
     -webkit-user-select: none;   /* Safari, iOS */
@@ -221,4 +235,3 @@ header button:hover {
     -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
   }
 }
-
