@@ -79,7 +79,7 @@ function checkAnswer(isCorrect, btn, correctBtn) {
       b.classList.remove('correct', 'wrong');
       b.disabled = false;
     });
-            // разблокируем кнопку 50/50 для новой карточки
+        // разблокируем кнопку 50/50 для новой карточки
     if (fiftyBtn) fiftyBtn.disabled = false;
     currentIndex = (currentIndex + 1) % cards.length;
     showCard();
@@ -94,13 +94,30 @@ function showCard() {
 
   const card = cards[currentIndex];
 
-  // Картинка
+  // Очистка контейнера
   imageContainer.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = card.url;
-  img.style.width = '250px';
-  img.style.borderRadius = '12px';
-  imageContainer.appendChild(img);
+
+  // Создаём flip-карточку
+  const flipCard = document.createElement('div');
+  flipCard.className = 'flip-card';
+
+  flipCard.innerHTML = `
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="${card.url}" alt="Картинка" style="width:100%; height:100%; border-radius:12px;">
+      </div>
+      <div class="flip-card-back">
+        <p>${card.name}</p>
+      </div>
+    </div>
+  `;
+
+  // Клик для переворота
+  flipCard.addEventListener('click', () => {
+    flipCard.classList.toggle('flipped');
+  });
+
+  imageContainer.appendChild(flipCard);
 
   // Варианты ответов
   const answers = [card.name];
@@ -122,6 +139,7 @@ function showCard() {
     answersContainer.appendChild(btn);
   });
 }
+
 
 
   // Test — возврат на страницу теста
@@ -159,6 +177,8 @@ if (cardsBtn) {
   });
 }
 
+
+
 function useFifty() {
   const card = cards[currentIndex];
   const correct = card.name; // правильный ответ
@@ -181,4 +201,3 @@ function shuffleArray(arr) {
   }
   return arr;
 }
-
