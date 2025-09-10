@@ -93,7 +93,6 @@ header button:hover {
   align-items: center;
 }
 
-
 #welcomeWrapper {
   flex-grow: 1;
   display: flex;
@@ -113,7 +112,7 @@ header button:hover {
 }
 
 #welcomeSubtext {
-  font-size: 1rem; /* меньше, чем основной заголовок */
+  font-size: 1.5rem; /* меньше, чем основной заголовок */
   color: white;    /* тот же цвет */
   text-align: center;
   line-height: 1.4; /* делаем строки читабельными */
@@ -189,27 +188,6 @@ header button:hover {
 
 
 /* === Адаптив под айфон === */
-@media (max-width:480px){
-  header {
-    padding: calc(env(safe-area-inset-top) + 10px) 8px 6px 8px;
-    gap: 6px;
-  }
-
-  #title { 
-    font-size: 0.85rem; 
-    max-width: 90px;
-  }
-
-  header button {
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
-  }
-
-  
-  #word { font-size: calc(18px + 4vw); }
-  #progress { font-size: 0.9rem; }
- 
 @media (max-width: 480px) {
   #welcomeContainer {
     padding: 15px 20px; 
@@ -243,8 +221,3 @@ header button:hover {
     -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
   }
 }
-
-
-
-
-
