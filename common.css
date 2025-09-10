@@ -209,4 +209,23 @@ header button:hover {
   
   #word { font-size: calc(18px + 4vw); }
   #progress { font-size: 0.9rem; }
+ 
+  #welcomeContainer {
+    padding: 15px 20px; /* уменьшаем внутренние отступы */
+    border-radius: 12px; /* чуть меньше закругление */
+  }
+
+  #welcomeWrapper {
+    gap: 15px; /* уменьшаем расстояние между элементами */
+  }
+  #welcome {
+    font-size: 2rem; /* уменьшаем основной заголовок */
+  }
+
+  #welcomeSubtext {
+    font-size: 0.9rem; /* чуть меньше подзаголовка */
+    max-width: 90%;    /* чтобы было на всю ширину экрана с отступом */
+    margin-bottom: 15px;
+  }
 }
+
