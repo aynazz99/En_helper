@@ -207,7 +207,7 @@ header button:hover {
   }
 
   #welcomeSubtext {
-    font-size: 0.9rem;   /* чуть меньше подзаголовок */
+    font-size: 1.2rem;   /* чуть меньше подзаголовок */
     max-width: 100%;     /* подстраиваем под контейнер */
     margin-bottom: 15px;
   }
@@ -221,3 +221,4 @@ header button:hover {
     -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
   }
 }
+
