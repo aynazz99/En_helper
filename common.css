@@ -210,23 +210,29 @@ header button:hover {
   #word { font-size: calc(18px + 4vw); }
   #progress { font-size: 0.9rem; }
  
+@media (max-width: 480px) {
   #welcomeContainer {
-    padding: 15px 20px; /* уменьшаем внутренние отступы */
-    border-radius: 12px; /* чуть меньше закругление */
+    padding: 15px 20px; 
+    border-radius: 12px;
+    width: 85%;        /* уменьшаем ширину контейнера */
+    max-width: 350px;  /* не даём сильно растягиваться на больших айфонах */
+    margin: 0 auto;    /* центрируем контейнер */
   }
 
   #welcomeWrapper {
-    gap: 15px; /* уменьшаем расстояние между элементами */
+    gap: 15px;
   }
+
   #welcome {
-    font-size: 2rem; /* уменьшаем основной заголовок */
+    font-size: 2rem;
   }
 
   #welcomeSubtext {
-    font-size: 0.9rem; /* чуть меньше подзаголовка */
-    max-width: 90%;    /* чтобы было на всю ширину экрана с отступом */
+    font-size: 0.9rem;
+    max-width: 100%;    /* теперь текст подстраивается под контейнер */
     margin-bottom: 15px;
   }
+
    /* Запрет выделения текста на iPhone */
   * {
     -webkit-user-select: none;   /* Safari, iOS */
@@ -236,5 +242,6 @@ header button:hover {
     -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
   }
 }
+
 
 
