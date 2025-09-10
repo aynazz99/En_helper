@@ -109,11 +109,15 @@ function loadNextWord() {
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('welcomeSubtext').style.display = 'none';
 
-  // Делаем контейнер прозрачным
-  const container = document.getElementById('welcomeContainer');
-  container.style.background = 'transparent';
-  container.style.boxShadow = 'none';
-  container.style.backdropFilter = 'none';
+
+const container = document.getElementById('welcomeContainer');
+// Переносим всех детей контейнера в родителя контейнера
+while (container.firstChild) {
+  container.parentNode.insertBefore(container.firstChild, container);
+}
+
+// Удаляем пустой контейнер
+container.remove();
 
   drawCurrentQuestion();
   focusInputSoon();
