@@ -227,5 +227,14 @@ header button:hover {
     max-width: 90%;    /* чтобы было на всю ширину экрана с отступом */
     margin-bottom: 15px;
   }
+   /* Запрет выделения текста на iPhone */
+  * {
+    -webkit-user-select: none;   /* Safari, iOS */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* IE/Edge */
+    user-select: none;           /* Современные браузеры */
+    -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
+  }
 }
+
 
