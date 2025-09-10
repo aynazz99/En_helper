@@ -127,7 +127,7 @@ const profileMessage = document.getElementById("profileMessage");
 const listSelect = document.getElementById("ProfileSelect");
 let currentProfileId = null;
 const imageContainer = document.getElementById('imageContainer');
-imageContainer.style.display = 'none';
+imageContainer.style.display = 'flex';
 
 // функция для обновления счётчика knownWords текущего профиля
 async function updateKnownCounter() {
@@ -400,7 +400,6 @@ function showQuizUI() {
   if (submitWrapper) submitWrapper.style.display = "block"; // показываем кнопку
   if (levelBtn) levelBtn.style.display = "none"; // прячем levelBtn
   if (counter) counter.style.display = "flex"; // показываем счётчик
-  if(imageContainer) imageContainer.style.display = 'flex' // показываем контейнер 
 }
 
 
