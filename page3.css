@@ -90,6 +90,18 @@
   white-space: nowrap;
 }
 
+/* Прозрачный контейнер */
+.transparent-container {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  margin: 20px auto;
+  width: 90%;               /* растягиваем почти на всю ширину */
+  max-width: 550px;         /* максимум по ширине */
+  height: 150px;            /* высота контейнера */
+  background: rgba(255, 255, 255, 0);
+
+}
 
 
 /* Сам контейнер */
@@ -107,19 +119,23 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   justify-content: center; /* по горизонтали */
   align-items: center;      /* выравниваем картинки по центру */
-  overflow-x: auto;         /* если картинок много, появится горизонтальный скролл */
+  overflow-x: hidden;         /* если картинок много, появится горизонтальный скролл */
   overflow-y: hidden;       /* вертикальная прокрутка не нужна */
   scroll-behavior: smooth;  /* плавный скролл */
   padding-bottom: 10px;     /* чтобы скролл не обрезал картинки */
+  position: relative; /* нужно для абсолютного позиционирования кнопки */
 }
+
 
 /* Flip-карточка */
 .flip-card {
-  width: 150px;             /* фиксированная ширина карточки */
+  width: 350px;             /* фиксированная ширина карточки */
   height: 150px;            /* фиксированная высота карточки */
   perspective: 1000px;
   flex-shrink: 0;           /* чтобы карточка не сжималась */
   cursor: pointer;
+  max-width: 100%;  /* чтобы не выходила за контейнер */
+  box-sizing: border-box; /* учитываем паддинг */
 }
 
  
@@ -170,8 +186,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
+  font-size: 50px;
   text-align: center;
   padding: 10px;
   border-radius: 15px;
+}
+
+
+.star-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 2px solid rgba(255, 215, 0, 0.6); /* золотистые границы */
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  color: rgb(0, 0, 0);
+  line-height: 28px;
+  text-align: center;
+  padding: 0;
+}
+
+.star-btn.active {
+  border-color: transparent; /* убираем границу */
+  background: transparent;
+  color: gold;
 }
