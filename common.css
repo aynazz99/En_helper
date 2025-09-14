@@ -6,7 +6,7 @@ html, body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: auto;             /* прокрутка включена */
+  overflow: hidden;            /* прокрутка отключена */
   touch-action: auto;         /* касания работают нормально */
   overscroll-behavior: auto;  /* эффект отскока на iOS */
 }
@@ -338,3 +338,4 @@ footer {
 }
   
 }
+
