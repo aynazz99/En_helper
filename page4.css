@@ -1,0 +1,163 @@
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 95%;
+  max-width: 600px;
+  padding: 15px;
+}
+
+.answerBtn {
+  padding: 12px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: rgba(255, 255, 255, 0.85); /* почти белый фон, чуть прозрачный */
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.answerBtn.correct {
+  background-color: rgba(76, 175, 80, 0.9); /* насыщенный зелёный, слегка прозрачный */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.answerBtn.wrong {
+  background-color: rgba(244, 67, 54, 0.9); /* насыщенный красный, слегка прозрачный */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.answerBtn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* анимация подпрыгивания при выборе */
+.answerBtn.correct,
+.answerBtn.wrong {
+  animation: btnFeedback 0.4s forwards;
+}
+
+.answerBtn.disabled {
+  background-color: #555; /* темно-серый */
+  color: #ccc;            /* текст светло-серый, чтобы контраст был */
+  cursor: not-allowed;    /* курсор показывает, что кнопка недоступна */
+  opacity: 0.4;           /* можно добавить лёгкую прозрачность */
+}
+
+@keyframes btnFeedback {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.03); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+#fiftyBtn {
+  width: auto !important;
+  min-width: 60px !important;
+  height: 36px;
+  padding: 0;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+
+.dialog-container {
+  position: relative;
+  width: 100%;
+  height: 300px; /* подбирается под размер картинок */
+  background-color: rgba(0,0,0,0); /* прозрачный */
+}
+
+/* Персонажи */
+.character {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.character img {
+  width: 100px;
+  height: auto;
+  z-index: 1; /* персонаж под облаком */
+}
+
+/* Мобильные: до 767px */
+@media (max-width: 767px) {
+.character.left {
+  bottom: 57%;    /* вертикаль относительно контейнера */
+  left: 0%;      /* горизонталь относительно ширины */
+}
+
+.character.right {
+  bottom: 0%;
+  right: 0%;
+}
+}
+
+/* Планшеты: 768px — 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .character.left {
+    bottom: 150px; 
+    left: 200px; /* чуть ближе к центру */
+  }
+
+  .character.right {
+    bottom: 0px; 
+    right: 200px; /* чуть ближе к центру */
+  }
+}
+
+/* ПК: от 1025px */
+@media (min-width: 1025px) {
+  .character.left {
+    bottom: 150px; /* левый выше */
+    left: 500px;
+  }
+
+  .character.right {
+    bottom: 0px; /* правый ниже */
+    right: 500px;
+  }
+}
+
+
+/* Облака */
+.speech-bubble {
+  position: absolute;
+  width: 200px; /* фиксированная ширина облака */
+  padding: 12px 15px; /* чуть больше отступов */
+  border-radius: 15px;
+  background: #fff;
+  border: 2px solid #333;
+  font-size: 14px;
+  color: #000;;
+  z-index: 2; /* облако поверх персонажа */
+}
+
+/* Левое облако: на уровне персонажа, смещено вправо */
+.left-bubble {
+  bottom: 10%;
+  left: 95%; 
+}
+
+/* Правое облако: на уровне персонажа, смещено влево */
+.right-bubble {
+  bottom: 30%; 
+  right: 95%; 
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

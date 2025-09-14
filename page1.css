@@ -1,19 +1,3 @@
-#listSelect {
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-  min-width: 200px;
-  max-width: 300px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  background: white;
-  color: #000;
-  cursor: pointer;
-}
-
-#listSelect::-ms-expand { display: none; }
 
 #fiftyBtn {
   width: auto !important;
@@ -91,15 +75,6 @@
 
 /* Форма добавления списка */
 #addListForm { display: none; flex-direction: column; gap: 5px; margin: 10px 0; width: 95%; max-width: 600px; }
-
-
-.shake-select {
-  border: 2px solid red;
-  box-shadow: 0 0 5px red;
-  animation: bounce 0.6s;
-  border: 2px solid rgb(232, 0, 0) !important;
-}
-
 
 /* Кнопка удаления списка */
 #deleteWrapper {
@@ -233,7 +208,6 @@
   color: white;
 }
 #addBtn { background-color: #4CAF50; color: white; }
-
 #openBtn { background-color: #2196F3; color: white; }
 
 @media (max-width:480px) {
@@ -253,7 +227,7 @@
   margin: 20px auto;
   width: 90%;               /* растягиваем почти на всю ширину */
   max-width: 550px;         /* максимум по ширине */
-  height: 200px;            /* высота контейнера */
+  height: 300px;            /* высота контейнера */
   background: rgba(255, 255, 255, 0);
 
   border-radius: 20px;
@@ -270,7 +244,3 @@
   border-radius: 15px;
   object-fit: contain;     /* сохраняет пропорции */
 }
-
-
-
-

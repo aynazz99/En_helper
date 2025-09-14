@@ -3,24 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>English Helper</title>
   <!-- Название для PWA на iOS -->
   <meta name="apple-mobile-web-app-title" content="English Helper">
+  <title>English Helper</title>
   <!-- Стили -->
   <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="page3.css">
+  <link rel="stylesheet" href="page4.css">
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-
-
   <!-- Подключаем manifest -->
   <link rel="manifest" href="manifest.json">
-
-
 
   <!-- iOS поддержка -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,26 +32,32 @@
 
 <header>
   <div style="flex:1;"></div> <!-- пустое место слева -->
-  <select id="CardSelect">
-    <option disabled selected value="">Выберите тему</option>
+  <select id="DialogSelect">
+    <option disabled selected value="">Выберите диалог</option>
   </select>
   <div style="flex:1; display:flex; justify-content:flex-end;">
   </div>
     <div>
-    <button id="fiftyBtn">50/50</button>
-  </div>
 </header>
 
-<!-- Прозрачный контейнер -->
-<div class="transparent-container" id="transparentContainer"></div>
+<div class="dialog-container">
+  <!-- Персонаж слева -->
+  <div class="character left">
+    <img src="person_left.png" alt="Левый персонаж">
+    <div class="speech-bubble left-bubble">
+    </div>
+  </div>
 
-<!-- Полупрозрачный контейнер с картинками -->
-<div class="image-container" id="imageContainer">
+  <!-- Персонаж справа -->
+  <div class="character right">
+    <img src="person_right.png" alt="Правый персонаж">
+    <div class="speech-bubble right-bubble">
+    </div>
+  </div>
 </div>
 
+
 <div class="answers" id="answers">
-  <button class="answerBtn"></button>
-  <button class="answerBtn"></button>
   <button class="answerBtn"></button>
   <button class="answerBtn"></button>
 </div>
@@ -69,7 +71,7 @@
   </div>
 </footer>
 
-<script src="script_3.js"></script>
+<script src="script_4.js"></script>
 <script src="footerBtnWork.js"></script>
 
 </body>

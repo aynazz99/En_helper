@@ -113,7 +113,6 @@ cardSelect.addEventListener('change', () => {
   if (!folder || !folders[folder]) return;
 
   answersContainer.style.display = "grid"; 
-  if (cardsBtn) cardsBtn.style.display = "none";
   if (fiftyBtn) fiftyBtn.style.display = "inline-block";
 
   // Подготавливаем колоду
@@ -210,9 +209,6 @@ function showCard() {
 }
 
 
-
-
-
 // проверка ответа
 function checkAnswer(isCorrect, btn, correctBtn) {
   const buttons = answersContainer.querySelectorAll('.answerBtn');
@@ -231,43 +227,6 @@ function checkAnswer(isCorrect, btn, correctBtn) {
     showCard(); // следующая карточка
   }, isCorrect ? 500 : 1500);
 }
-
-
-  // Test — возврат на страницу теста
-  if (testBtn) {
-    testBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
-  }
-
-    // Test — возврат на страницу теста
-  if (levelBtn) {
-    levelBtn.addEventListener("click", () => {
-      window.location.href = "level_check_Page.html";
-    });
-  }
-
-if (cardsBtn) {
-  cardsBtn.addEventListener("click", () => {
-    if (!cardSelect) return;
-
-    const selIndex = cardSelect.selectedIndex; // индекс выбранной опции
-    const selectedOption = cardSelect.options[selIndex] || null;
-
-    const isPlaceholder = selIndex <= 0 || (selectedOption && selectedOption.disabled) || cardSelect.value === "";
-
-    if (isPlaceholder) {
-      // прыжок, как в script_2.js
-      cardSelect.classList.add("bounce", "red-border");
-      setTimeout(() => cardSelect.classList.remove("bounce"), 600);
-      setTimeout(() => cardSelect.classList.remove("red-border"), 800);
-    } else {
-      showQuizUI();
-      console.log("Папка выбрана:", cardSelect.value);
-    }
-  });
-}
-
 
 
 // 50/50

@@ -280,7 +280,6 @@ const newListName=document.getElementById('newListName');
 const newListText=document.getElementById('newListText');
 
 const listContainer = document.getElementById('listContainer');
-const deleteListBtn = document.getElementById('deleteListBtn');
 const ADMIN_CODE = "89991627939"; // код для удаления списка
 
 // Кнопка загрузки файлов
@@ -344,36 +343,6 @@ saveListBtn.addEventListener('click', () => {
 });
 
 
-
-// Показ кнопки удаления при выборе списка
-listSelect.addEventListener('change', () => {
-  deleteListBtn.style.display = listSelect.value ? 'inline-block' : 'none';
-});
-
-// Удаление списка
-deleteListBtn.addEventListener('click', () => {
-  const code = prompt("Введите код для удаления списка:");
-  if(code !== ADMIN_CODE){
-    alert("Неверный код!");
-    return;
-  }
-  const selected = listSelect.value;
-  if(!selected) return;
-
-  // Удаляем из Firebase
-  database.ref('lists/'+selected).remove()
-    .then(() => {
-      alert(`Список "${selected}" удалён`);
-      // Удаляем из выпадающего списка
-      const option = listSelect.querySelector(`option[value="${selected}"]`);
-      if(option) option.remove();
-      listSelect.value = ""; // сброс выбора
-      deleteListBtn.style.display = 'none';
-    })
-    .catch(err => console.error(err));
-});
-
-
 function loadAllLists(){
   database.ref('lists').once('value').then(snapshot=>{
     const data=snapshot.val()||{};
@@ -399,7 +368,6 @@ listSelect.onchange = () => {
   answersDiv.style.display = 'grid';
   inputModeDiv.style.display = 'none';
   submitWrapper.style.display = 'none';
-  fiftyBtn.style.display = 'inline-block';
   modeBtn.textContent = '✍️'; // возвращаем текст кнопки в исходное состояние
   answerInput.value = ''; // очищаем поле ввода
 
@@ -414,6 +382,8 @@ listSelect.onchange = () => {
     wordDiv.classList.remove("placeholder");
 
     // Показываем кнопки и прогресс после выбора списка
+    answersDiv.style.display = 'grid';
+    fiftyBtn.style.display = 'inline-block';
     answersDiv.style.display = 'grid';
     progressDiv.style.display = 'block';
     progressFill.style.display = 'block';
@@ -475,36 +445,6 @@ window.addEventListener('resize', () => {
         submitWrapper.style.position = 'static';
         submitWrapper.style.bottom = 'auto';
     }
-});
-
-// === Логика кнопок Test, Level Check и Карточки ===
-document.addEventListener("DOMContentLoaded", () => {
-  const testBtn = document.getElementById("testBtn");
-  const levelBtn = document.getElementById("levelBtn");
-  const cardsBtn = document.getElementById("cardsBtn"); // новая кнопка
-  const listSelect = document.getElementById("listSelect");
-
-  if (testBtn) {
-    testBtn.addEventListener("click", () => {
-      listSelect.classList.add("shake-select");
-      setTimeout(() => {
-        listSelect.classList.remove("shake-select");
-      }, 600);
-    });
-  }
-
-  if (levelBtn) {
-    levelBtn.addEventListener("click", () => {
-      console.log("👉 Логика Level Check будет добавлена здесь");
-      window.location.href = "level_check_Page.html";
-    });
-  }
-
-  if (cardsBtn) {
-    cardsBtn.addEventListener("click", () => {
-      window.location.href = "flashCards.html"; // переход на flashCards.html
-    });
-  }
 });
 
 

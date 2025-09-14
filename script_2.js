@@ -13,11 +13,7 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 document.addEventListener("DOMContentLoaded", () => {
-  const addProfileBtn = document.getElementById("addProfileBtn");
   const listSelect = document.getElementById("ProfileSelect");
-  const testBtn = document.getElementById("testBtn");
-  const levelBtn = document.getElementById("levelBtn");
-
 
   // Функция для загрузки всех профилей из базы и заполнения select
   async function loadProfiles() {
@@ -62,51 +58,6 @@ listSelect.addEventListener("change", async () => {
 
   // Изначальная загрузка всех профилей при старте
   loadProfiles();
-
-  // Test — возврат на страницу теста
-  if (testBtn) {
-    testBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
-  }
-
-  if (cardsBtn) {
-    cardsBtn.addEventListener("click", () => {
-      window.location.href = "flashCards.html"; // переход на flashCards.html
-    });
-  }
-
-// Level Check — надёжная проверка, выбран ли реальный профиль
-if (levelBtn) {
-  levelBtn.addEventListener("click", () => {
-    if (!listSelect) return;
-
-    const selIndex = listSelect.selectedIndex; // индекс выбранной опции
-    const selectedOption = listSelect.options[selIndex] || null;
-
-    // true — если выбрана заглушка / ничего не выбрано
-    const isPlaceholder = selIndex <= 0 || (selectedOption && selectedOption.disabled) || listSelect.value === "";
-
-    if (isPlaceholder) {
-      // анимация только когда НЕ выбран реальный профиль
-      listSelect.classList.add("bounce", "red-border");
-      setTimeout(() => listSelect.classList.remove("bounce"), 600);
-      setTimeout(() => listSelect.classList.remove("red-border"), 800);
-      
-      addProfileBtn.classList.add("bounce", "red-border");
-      setTimeout(() => addProfileBtn.classList.remove("bounce"), 600);
-      setTimeout(() => addProfileBtn.classList.remove("red-border"), 800);
-    } else {
-      showQuizUI();
-      console.log("Профиль выбран:", listSelect.value);
-    }
-  });
-}
-
-
-
-
-
   
   // Регистрация Service Worker
   if ("serviceWorker" in navigator) {
@@ -398,7 +349,6 @@ function showQuizUI() {
   if (welcome) welcome.style.display = "none"; // прячем приветствие
   if (inputModeDiv) inputModeDiv.style.display = "block"; // показываем поле
   if (submitWrapper) submitWrapper.style.display = "block"; // показываем кнопку
-  if (levelBtn) levelBtn.style.display = "none"; // прячем levelBtn
   if (counter) counter.style.display = "flex"; // показываем счётчик
   if(imageContainer) imageContainer.style.display = 'flex' // показываем контейнер 
   const container = document.getElementById('welcomeContainer');

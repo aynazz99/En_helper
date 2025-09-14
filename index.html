@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Название для PWA на iOS -->
+<meta name="apple-mobile-web-app-title" content="English Helper">
+
   <!-- iOS иконки -->
 <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
 <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-512x512.png">
@@ -89,25 +93,25 @@
   <div id="welcomeContainer">
     <div id="welcome">Добро пожаловать</div>
     <div id="welcomeSubtext">
-Здесь вы можете проходить готовые тесты или создавать свои,
+     Здесь вы можете проходить готовые тесты или создавать свои,
       проверить, сколько английских слов вы знаете, 
-      и учить новые слова по карточкам.
+     и учить новые слова по карточкам.
     </div>
   </div>
-  <div id="welcomeButtons">
-    <button id="testBtn">Тест</button>
-    <button id="levelBtn">Level Check</button>
-    <button id="cardsBtn">Карточки</button> <!-- Новая кнопка -->
+</div>
+
+<footer>
+  <div id="footerButtons">
+    <button id="testBtn">Test</button>
+    <button id="levelBtn">Lvl Check</button>
+    <button id="cardsBtn">Cards</button> 
+    <button id="DialogBtn">Dialogs</button>
   </div>
-</div>
-
-
-<!-- кнопка удаления списка -->
-<div id="deleteWrapper">
-  <button id="deleteListBtn" style="display:none;">Удалить данный список</button>
-</div>
+</footer>
 
 <!-- Подключаем наш JS -->
 <script src="script.js"></script>
+<script src="footerBtnWork.js"></script>
+
 </body>
 </html>
