@@ -1,170 +1,214 @@
 {
   "Airport": {
-    "start": "n1",
+    "start": "1",
     "nodes": {
-      "n1": {
-        "speaker": "left",
-        "text": "Добрый день, предъявите паспорт.",
-        "answers": [
-          {
-            "next": "n2"
-          }
-        ]
+      "end": {
+        "speaker": "system",
+        "text": "Диалог завершён."
       },
-      "n2": {
+      "1": {
+        "speaker": "left",
+        "text": "Good afternoon! May I see your passport, please?",
+        "answers": [
+          { "text": "Here is my passport", "next": "1.a" },
+          { "text": "I’m looking for my passport", "next": "1.b" },
+          { "text": "I don’t have a passport", "next": "1.c" }
+        ],
+        "location": "checkin.jpg"
+      },
+      "1.a": {
         "speaker": "right",
-        "text": "Вот мой паспорт.",
-        "answers": [
-          {
-            "next": "n3"
-          }
-        ]
+        "text": "Here is my passport.",
+        "next": "1.a.1",
+        "location": "here_is_passport.png"
       },
-      "n3": {
-        "speaker": "left",
-        "text": "Всё в порядке. Ставьте багаж на весы.",
-        "answers": [
-          {
-            "next": "n4"
-          }
-        ]
-      },
-      "n4": {
+      "1.b": {
         "speaker": "right",
-        "text": "Хорошо, поставил.",
-        "answers": [
-          {
-            "next": "n5"
-          }
-        ]
+        "text": "Just a moment, I can’t find my passport.",
+        "next": "1.b.1",
+        "location": "look_passport.png"
       },
-      "n5": {
+      "1.b.1": {
         "speaker": "left",
-        "text": "Вес багажа превышает нормы, надо доплатить.",
+        "text": "Alright, please take your time to find it.",
         "answers": [
-          {
-            "next": "n6"
-          }
-        ]
+          { "text": "Here is my passport", "next": "1.a" },
+          { "text": "I don’t have a passport", "next": "1.c" }
+        ],
+        "location": "look_passport.png"
       },
-      "n6": {
+      "1.c": {
         "speaker": "right",
-        "text": "Вы можете оплатить на кассе картой или наличными. Касса сзади вас.",
-        "answers": [
-          {
-            "next": "n7"
-          }
-        ]
+        "text": "I don’t have a passport.",
+        "next": "1.c.1",
+        "location": "no-passport.png"
       },
-      "n7": {
+      "1.c.1": {
         "speaker": "left",
-        "text": "Я сходил и оплатил.",
+        "text": "I’m sorry, but without a passport you cannot check in. You may go to the information desk for assistance or reschedule your flight.",
         "answers": [
-          {
-            "next": "n8"
-          }
-        ]
+          { "text": "Go to information desk", "next": "1.c.2" },
+          { "text": "Reschedule my flight", "next": "1.c.3" }
+        ],
+        "location": "cancelled-ticket.png"
       },
-      "n8": {
+      "1.c.2": {
         "speaker": "right",
-        "text": "Вот ваш посадочный талон. Проходите в зону ожидания.",
+        "text": "Okay, I’ll go to the information desk.",
+        "next": "1.c.2.1"
+      },
+      "1.c.2.1": {
+        "speaker": "left",
+        "text": "Alright, have a good day and I hope your issue is resolved smoothly.",
         "answers": [
-          {
-            "next": "n9"
-          }
+          { "text": "Got it, thanks", "next": "end" }
         ]
       },
-      "n9": {
-        "speaker": "left",
-        "text": "Спасибо."
-      },
-      "n10": {
-        "speaker": "left",
-        "text": "Подскажите как пройти туда?",
-        "answers": [
-          {
-            "next": "n11"
-          }
-        ]
-      },
-      "n11": {
+      "1.c.3": {
         "speaker": "right",
-        "text": "Сейчас налево, затем по эскалатору наверх.",
+        "text": "I’ll reschedule my flight then.",
+        "next": "1.c.3.1",
+        "location": "date-reschedule.png"
+      },
+      "1.c.3.1": {
+        "speaker": "left",
+        "text": "Of course, I’ve noted that. You can reschedule at the counter. Have a pleasant day!",
         "answers": [
-          {
-            "next": "n12"
-          }
-        ]
+          { "text": "Got it, thanks", "next": "end" }
+        ],
+        "location": "date-reschedule.png"
       },
-      "n12": {
+
+      "1.a.1": {
         "speaker": "left",
-        "text": "Спасибо, до свидания."
+        "text": "Thank you. Everything looks good. Please place your baggage on the scale.",
+        "answers": [
+          { "text": "Alright", "next": "1.a.1.1" }
+        ],
+        "location": "luggage-scale.png"
       },
-      "n13": {
+      "1.a.1.1": {
         "speaker": "left",
-        "text": "Вес нормальный, вот ваш посадочный талон."
+        "text": "How much does your baggage weigh?",
+        "answers": [
+          { "text": "My baggage weighs 20 kg", "next": "1.a.2.a" },
+          { "text": "My baggage weighs 25 kg", "next": "1.a.2.b" }
+        ],
+        "location": "baggage-weigh.png"
       },
-      "n14": {
+      "1.a.2.a": {
         "speaker": "left",
-        "text": "У вас ошибка в билете. Извините, регистрация невозможна."
+        "text": "Your baggage weight is within the limit. You're all set.",
+        "answers": [
+          { "text": "Thank you", "next": "1.a.2.a.1" }
+        ],
+        "location": "baggage-weigh-ok.png"
       },
-      "n15": {
+      "1.a.2.b": {
+        "speaker": "left",
+        "text": "Your baggage exceeds the weight limit. You’ll need to pay the extra fee.",
+        "answers": [
+          { "text": "I’ll pay the fee", "next": "1.a.2.b.1" }
+        ],
+        "locations": ["luggage-scale-limit.png", "pay.png"]
+      },
+      "1.a.2.a.1": {
+        "speaker": "left",
+        "text": "Here is your ticket. Please proceed to the security check area.",
+        "answers": [
+          { "text": "Alright", "next": "1.a.2.a.2" },
+          { "text": "Where is the security check area?", "next": "1.a.2.a.1.1" }
+        ],
+        "location": "hand-ticket-flying.png"
+      },
+      "1.a.2.a.1.1": {
+        "speaker": "left",
+        "text": "The security check area is just past the ticket counters. There are two lanes—one on the left and one on the right. Please follow the signs.",
+        "answers": [
+          { "text": "Okay, thanks", "next": "1.a.2.a.2" }
+        ],
+        "location": "security-check-sign.png"
+      },
+      "1.a.2.b.1": {
         "speaker": "right",
-        "text": "Ой, я забыл паспорт!",
+        "text": "I’ll pay the fee.",
+        "next": "1.a.2.b.2"
+      },
+      "1.a.2.b.2": {
+        "speaker": "left",
+        "text": "You can pay the extra baggage fee at the payment counter near the ticket desks. Once paid, please proceed to the security check area.",
         "answers": [
-          {
-            "next": "n16"
-          }
+          { "text": "Okay, thanks", "next": "1.a.2.b.3" },
+          { "text": "Where exactly is the payment counter?", "next": "1.a.2.b.2.1" }
+        ],
+        "location": "payment-area.png"
+      },
+      "1.a.2.b.2.1": {
+        "speaker": "left",
+        "text": "The payment counter is right next to the main ticket desks, to the right of the information desk.",
+        "answers": [
+          { "text": "Got it, thanks", "next": "1.a.2.b.3" }
         ]
       },
-      "n16": {
+      "1.a.2.b.3": {
         "speaker": "left",
-        "text": "Извините, регистрация невозможна."
+        "text": "After paying, please proceed to the security check area.",
+        "answers": [
+          { "text": "Alright", "next": "1.a.2.a.2" }
+        ]
       },
-      "n17": {
+      "1.a.2.a.2": {
+        "speaker": "left",
+        "text": "Please place your carry-on items on the conveyor belt for security screening.",
+        "answers": [
+          { "text": "Okay", "next": "1.a.2.a.3" }
+        ],
+        "location": "security-check.png"
+      },
+      "1.a.2.a.3": {
+        "speaker": "left",
+        "text": "Do you have any liquids or a laptop in your carry-on?",
+        "answers": [
+          { "text": "Yes, I do.", "next": "1.a.2.a.4" },
+          { "text": "No, I don’t.", "next": "1.a.2.a.5" }
+        ],
+        "locations": ["laptop.png","water-bottle.png"]
+      },
+      "1.a.2.a.4": {
+        "speaker": "left",
+        "text": "Please drink or dispose of any liquids, and place the laptop in a separate tray.",
+        "answers": [
+          { "text": "Alright, I’ll do that.", "next": "1.a.2.a.5" }
+        ],
+        "location": "no-liquids.png"
+      },
+      "1.a.2.a.5": {
+        "speaker": "left",
+        "text": "Perfect, please walk through the scanner.",
+        "answers": [
+          { "text": "Okay.", "next": "1.a.2.a.6" }
+        ],
+        "location": "securyti-scanning.png"
+      },
+      "1.a.2.a.6": {
+        "speaker": "left",
+        "text": "All clear. You may collect your belongings and proceed to the waiting area.",
+        "answers": [
+          { "text": "Thank you.", "next": "1.a.2.a.7" }
+        ],
+        "location": "securyti-scanning.png"
+      },
+      "1.a.2.a.7": {
         "speaker": "right",
-        "text": "Я не могу найти паспорт",
-        "answers": [
-          {
-            "next": "n18"
-          }
-        ]
-      },
-      "n18": {
-        "speaker": "left",
-        "text": "Пожалуйста, проверьте сумку.",
-        "answers": [
-          {
-            "next": "n19"
-          }
-        ]
-      },
-      "n19": {
-        "speaker": "right",
-        "text": "Нашёл паспорт в сумке.",
-        "answers": [
-          {
-            "next": "n20"
-          }
-        ]
-      },
-      "n20": {
-        "speaker": "left",
-        "text": "Возврат к проверке данных."
-      },
-      "n21": {
-        "speaker": "right",
-        "text": "Не нашёл паспорт.",
-        "answers": [
-          {
-            "next": "n22"
-          }
-        ]
-      },
-      "n22": {
-        "speaker": "left",
-        "text": "Обратитесь в стойку поддержки."
+        "text": "Thank you.",
+        "answers": [],
+        "location": "airport-waiting-place.jpg"
       }
+
+
+
+
+      
     }
   }
 }

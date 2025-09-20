@@ -17,7 +17,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   font-family: Arial, sans-serif;
-  background-image: url('mountains.jpg');
+  background-color:darkcyan;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -338,4 +338,3 @@ footer {
 }
   
 }
-

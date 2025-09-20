@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="common.css">
   <link rel="stylesheet" href="page4.css">
 
+
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -31,36 +32,48 @@
 <body>
 
 <header>
-  <div style="flex:1;"></div> <!-- пустое место слева -->
-  <select id="DialogSelect">
-    <option disabled selected value="">Выберите диалог</option>
-  </select>
-  <div style="flex:1; display:flex; justify-content:flex-end;">
+<!-- Таймер и прогресс-бар -->
+<div id="timerContainer">
+  <span id="timeText">Успейте на посадку</span>
+  <div id="timeBarContainer">
+    <div id="timeBar"></div>
   </div>
-    <div>
+</div>
 </header>
+
+
+
+<!-- Полупрозрачный контейнер с картинками -->
+<div class="image-container" id="imageContainer"></div>
 
 <div class="dialog-container">
   <!-- Персонаж слева -->
   <div class="character left">
-    <img src="person_left.png" alt="Левый персонаж">
-    <div class="speech-bubble left-bubble">
-    </div>
+    <img id="leftCharacter" src="person_left.png" alt="Левый персонаж">
+    <div class="speech-bubble left-bubble"></div>
   </div>
 
   <!-- Персонаж справа -->
   <div class="character right">
-    <img src="person_right.png" alt="Правый персонаж">
-    <div class="speech-bubble right-bubble">
+    <img id="rightCharacter" src="person_right.png" alt="Правый персонаж">
+    <div class="speech-bubble right-bubble"></div>
+  </div>
+</div>
+
+<div class="answers" id="answers">
+  <button class="answerBtn start">Старт</button>
+  <button class="answerBtn">Ответ</button>
+</div>
+
+<div id="popup" class="popup-overlay" style="display: none;">
+  <div class="popup-window">
+    <div class="popup-message">Время вышло, вы опоздали на рейс ✈️</div>
+    <div class="popup-buttons">
+      <button id="restartBtn">Начать заново</button>
     </div>
   </div>
 </div>
 
-
-<div class="answers" id="answers">
-  <button class="answerBtn"></button>
-  <button class="answerBtn"></button>
-</div>
 
 <footer>
   <div id="footerButtons">
@@ -73,6 +86,7 @@
 
 <script src="script_4.js"></script>
 <script src="footerBtnWork.js"></script>
+<script src="canvas-confetti.js"></script>
 
 </body>
 </html>
