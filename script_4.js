@@ -64,7 +64,7 @@ function showNode(nodeKey) {
   }
   
   if (node.location === "airport-waiting-place.jpg" || node.location === "boarding-gate.png") {
-    showPopup("Поздравляем, вы смогли улететь ✈️", true);
+    showPopup("Поздравляем, вы в зоне ожидания ✈️", true);
     return;
 }
 
@@ -146,7 +146,7 @@ function updateImage(node) {
 
 
 // Таймер на 3 минуты
-let totalTime = 3 * 60; // 3 минуты в секундах
+let totalTime = 1 * 60; // 3 минуты в секундах
 let remainingTime = totalTime;
 
 const timeText = document.getElementById('timeText');
@@ -259,6 +259,7 @@ function showPopup(message, isSuccess = true) {
     });
   }
 }
+
 
 
 
