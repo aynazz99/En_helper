@@ -1,253 +1,323 @@
+// ==========================
+// Глобальные переменные
+// ==========================
+
+// Хранилище диалогов
 let dialogs = {};
 let currentDialog = null;
 let currentNode = null;
-let timerInterval;
-let timerActive = false; // активность таймера
 
+// Таймер
+let timerInterval;
+let totalTime = 3 * 60; // 3 минуты (в секундах)
+let remainingTime = totalTime;
+let modifiedLocations = new Set(); // отслеживание применённых модификаторов
+
+// ==========================
+// DOM-элементы
+// ==========================
 const dialogSelect = document.getElementById("DialogSelect");
+
 const leftBubble = document.querySelector(".left-bubble");
 const rightBubble = document.querySelector(".right-bubble");
 const answersContainer = document.getElementById("answers");
 const imageContainer = document.getElementById("imageContainer");
+
 const startBtn = document.getElementById("startBtn");
 const answerBtns = document.querySelectorAll(".answerBtn");
 
-// Получаем персонажей и пузыри
 const leftCharacterContainer = document.querySelector(".character.left");
 const rightCharacterContainer = document.querySelector(".character.right");
 
-// Скрываем их изначально
-leftCharacterContainer.style.display = "none";
-rightCharacterContainer.style.display = "none";
+const timeText = document.getElementById("timeText");
+const timeBar = document.getElementById("timeBar");
 
-// Сначала скрываем все кнопки, кроме первой
-answerBtns.forEach((btn, i) => {
-  if (i !== 0) btn.style.display = "none";
-});
+const popup = document.getElementById("popup");
+const popupMessage = popup.querySelector(".popup-message");
+const restartBtn = document.getElementById("restartBtn");
 
-// Устанавливаем первую кнопку как Старт
-answerBtns[0].textContent = "Get Started";
+// ==========================
+// Константы
+// ==========================
 
-// таблица соответствий location → картинка левого персонажа
+// Соответствие location → картинка левого персонажа
 const leftCharacterMap = {
   "security-check.png": "security.png",
   "checkin.jpg": "airport_staff.png",
-  "boarding-gate.png": "gate_staff.png",
-  "customs.png": "customs_officer.png"
+  "airport_coffee.png": "megaphone.png"
 };
 
+// Таблица "локация → коэффициент уменьшения оставшегося времени"
+const timeModifiers = {
+  "look_passport.png": 0.7,
+  "the-end.jpg": 0.01,
+  "baggage-weigh-ok.png": 1.5,
+  "no-liquids.png": 0.7,
+  "pay.png": 0.5,
+  "agree.png": 1.5,
 
-// Показ узла
+};
+
+// Константы таймингов
+const ANSWER_DELAY = 0; // задержка перед показом ответа, мс
+
+// ==========================
+// Инициализация
+// ==========================
+
+// Скрываем персонажей
+leftCharacterContainer.style.display = "none";
+rightCharacterContainer.style.display = "none";
+
+// Скрываем все кнопки, кроме первой ("Старт")
+answerBtns.forEach((btn, i) => {
+  if (i !== 0) btn.style.display = "none";
+});
+answerBtns[0].textContent = "Get Started";
+
+// ==========================
+// Основные функции
+// ==========================
+
+// ==========================
+// Конфиг модификаторов левого персонажа
+// ==========================
+const leftCharacterModifiers = {
+  "airport-waiting-place.jpg": { visible: false }, // скрыть персонажа
+  "checkin.jpg": { visible: true, src: "airport_staff.png" }, // показать с другой картинкой
+  "security-check.png": { visible: true, src: "security.png" },
+  "lounge-sleep.png": { visible: true, src: "megaphone.png"},
+  "airport_coffee.png": { visible: true, src: "megaphone.png"},
+  "barista-write.png": { visible: true, src: "barista.png"},
+};
+
+const defaultLeftCharacterSrc = "person_left.png"; // стандартная картинка
+
+// ==========================
+// Функция применения модификатора
+// ==========================
+function applyLeftCharacterModifier(node) {
+  const loc = (node.locations || [node.location])[0];
+  const mod = leftCharacterModifiers[loc];
+
+  const leftCharacterImg = leftCharacterContainer.querySelector("img");
+
+  if (!leftCharacterImg) return; // если img нет, выходим
+
+  if (mod) {
+    // Видимость контейнера и пузыря
+    if (mod.visible !== undefined) {
+      leftCharacterContainer.style.display = mod.visible === false ? "none" : "";
+      leftBubble.style.display = mod.visible === false ? "none" : "";
+    }
+
+    // Меняем картинку только если указана src
+    if (mod.src) {
+      leftCharacterImg.src = mod.src;
+    }
+  } else {
+    // Локация не в списке — оставляем текущую картинку и видимость без изменений
+    // Ничего не делаем
+  }
+}
+
+// ==========================
+// Показ узла диалога
+// ==========================
 function showNode(nodeKey) {
   const node = currentDialog.nodes[nodeKey];
   currentNode = nodeKey;
-  currentNodeObj = node; // сохраняем объект текущего узла
 
-  updateImage(node);
-
-  // Сброс пузырей
+  // Сброс текстовых пузырей
   leftBubble.textContent = "";
   rightBubble.textContent = "";
 
+  // Обновляем фон/локацию
+  updateImage(node);
+
+  // Применяем модификатор времени
+  checkTimeModifier(node);
+
+  // Применяем модификатор левого персонажа
+  applyLeftCharacterModifier(node);
+
   // Реплика персонажа
   if (node.speaker === "left") {
-    const leftCharacter = document.getElementById("leftCharacter");
-
-    // Меняем картинку ТОЛЬКО если есть соответствие
-    if (node.location && leftCharacterMap[node.location]) {
-      leftCharacter.src = leftCharacterMap[node.location];
-    }
-
     leftBubble.textContent = node.text;
   } else if (node.speaker === "right") {
     rightBubble.textContent = node.text;
   }
-  
-  if (node.location === "airport-waiting-place.jpg" || node.location === "boarding-gate.png") {
-    showPopup("Поздравляем, вы в зоне ожидания ✈️", true);
+
+  // Проверка на успешное завершение
+  if (["walking-to-gate.png", "boarding-gate.png"].includes(node.location)) {
+    showPopup("Поздравляем, вы смогли улететь ✈️", true);
     return;
+  }
+
+  // Отрисовка возможных ответов или автоматический переход
+  renderAnswers(node);
+}
+
+
+// Сброс текстовых пузырей
+function resetBubbles() {
+  leftBubble.textContent = "";
+  rightBubble.textContent = "";
 }
 
 
 
-  // Кнопки только если есть ответы
+// Отрисовка возможных ответов
+function renderAnswers(node) {
   answersContainer.innerHTML = "";
+
   if (node.answers) {
     node.answers.forEach(ans => {
-      const nextNodeKey = ans.next;
-      const nextNode = currentDialog.nodes[nextNodeKey];
-
       const btn = document.createElement("button");
       btn.className = "answerBtn";
-      
-      // Используем текст кнопки из JSON
       btn.textContent = ans.text;
 
+      btn.onclick = () => handleAnswerClick(ans);
+      answersContainer.appendChild(btn);
+    });
+  } else if (!node.next || !(node.next in currentDialog.nodes)) {
+    // Нет ответов и нет перехода — конец диалога
+    rightBubble.textContent = "Диалог завершён.";
+  } else {
+    // Автоматический переход
+    showNode(node.next);
+  }
+}
 
-btn.onclick = () => {
+// Обработчик клика по ответу
+function handleAnswerClick(ans) {
   const allBtns = answersContainer.querySelectorAll("button");
 
-  // показываем ответ пользователя
-  leftBubble.textContent = "";
+  // Показываем ответ пользователя
   rightBubble.textContent = ans.text || "";
 
-  // показываем картинку nextNode, если это right
+  // Если следующий узел "правый", обновляем картинку
   const nextNode = currentDialog.nodes[ans.next];
   if (nextNode.speaker === "right") {
     updateImage(nextNode);
   }
 
-  // скрываем кнопки
-  allBtns.forEach(b => b.style.display = "none");
+  // Скрываем кнопки
+  allBtns.forEach(b => (b.style.display = "none"));
 
-  // через 1.5 секунды показываем их снова и переходим дальше
+  // Через 1.5 сек. переходим дальше
   setTimeout(() => {
     showNode(ans.next);
-    allBtns.forEach(b => b.style.display = "");
-  }, 1500);
-};
-
-
-
-
-      answersContainer.appendChild(btn);
-    });
-
-  } else {
-    // Если у текущей ноды нет ответов и next нет — диалог завершён
-    if (!node.next || !(node.next in currentDialog.nodes)) {
-      leftBubble.textContent = "";
-      rightBubble.textContent = "Диалог завершён.";
-      answersContainer.style.display = "none"; // скрываем кнопки
-    } else {
-      showNode(node.next);
-    }
-  }
+    allBtns.forEach(b => (b.style.display = ""));
+  }, ANSWER_DELAY);
 }
 
-
+// Отрисовка картинки локации
 function updateImage(node) {
   imageContainer.innerHTML = "";
+  const locs = node.locations || [node.location];
 
-  if (node.locations) {
-    node.locations.forEach(loc => {
-      const img = document.createElement("img");
-      img.src = "locations/" + loc;
-      img.alt = "Location";
-      imageContainer.appendChild(img);
-    });
-  } else if (node.location) {
+  locs.forEach(loc => {
     const img = document.createElement("img");
-    img.src = "locations/" + node.location;
+    img.src = "locations/" + loc;
     img.alt = "Location";
     imageContainer.appendChild(img);
-  }
+  });
 }
 
-
-// Таймер на 3 минуты
-let totalTime = 1 * 60; // 3 минуты в секундах
-let remainingTime = totalTime;
-
-const timeText = document.getElementById('timeText');
-const timeBar = document.getElementById('timeBar');
+// ==========================
+// Таймер
+// ==========================
 
 // Форматирование времени в mm:ss
 function formatTime(seconds) {
-  const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-  const s = (seconds % 60).toString().padStart(2, '0');
+  const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+  const s = (seconds % 60).toString().padStart(2, "0");
   return `${m}:${s}`;
 }
 
-// Функция для динамического цвета прогресс-бара
+// Цвет прогресс-бара
 function getDynamicColor(percent) {
-  // Инвертируем прогресс: 100% -> 0%, 0% -> 100% (чтобы цвет уменьшался)
   const inverted = 100 - percent;
+  let hue = inverted < 50
+    ? 120 - (inverted / 50) * 60 // зелёный → жёлтый
+    : 60 - ((inverted - 50) / 50) * 60; // жёлтый → красный
 
-  let hue;
-  if (inverted < 50) {
-    // верхняя половина: зелёный -> желтый
-    hue = 120 - (inverted / 50) * 60; // 120° → 60°
-  } else {
-    // нижняя половина: желтый -> красный
-    hue = 60 - ((inverted - 50) / 50) * 60; // 60° → 0°
-  }
   return `hsl(${hue}, 90%, 50%)`;
 }
 
+// Проверка модификаторов времени
+function checkTimeModifier(node) {
+  if (!node) return;
 
-// Функция запуска игры
+  const locs = node.locations || [node.location];
+  locs.forEach(loc => {
+    if (timeModifiers[loc] && !modifiedLocations.has(loc)) {
+      remainingTime = Math.floor(remainingTime * timeModifiers[loc]);
+      modifiedLocations.add(loc);
+    }
+  });
+}
+
+// Обновление таймера
+function updateTimer() {
+  timeText.textContent = `Оставшееся время: ${formatTime(remainingTime)}`;
+  const progressPercent = (remainingTime / totalTime) * 100;
+  timeBar.style.width = `${progressPercent}%`;
+  timeBar.style.backgroundColor = getDynamicColor(progressPercent);
+
+  if (remainingTime > 0) {
+    remainingTime--;
+  } else {
+    clearInterval(timerInterval);
+    showPopup("К сожалению, вы не смогли улететь ❌", false);
+  }
+}
+
+// ==========================
+// Управление игрой
+// ==========================
+
+// Запуск игры
 function startGame() {
+  resetGameState();
   fetch("dialogs.json")
     .then(res => res.json())
     .then(data => {
       dialogs = data;
-
       const firstTopic = Object.keys(dialogs)[0];
       currentDialog = dialogs[firstTopic];
       currentNode = currentDialog.start;
 
-      // Скрываем кнопку Старт
+      // Прячем кнопку "Старт"
       answerBtns[0].style.display = "none";
 
-      // Показываем персонажей
+      // Показываем персонажей и остальные кнопки
       leftCharacterContainer.style.display = "";
       rightCharacterContainer.style.display = "";
+      answerBtns.forEach(btn => (btn.style.display = ""));
 
-      // Показываем остальные кнопки
-      answerBtns.forEach(btn => btn.style.display = "");
-
-      // Показываем первый узел
+      // Первый узел
       showNode(currentNode);
 
-      // Сбрасываем таймер
+      // Запускаем таймер
       clearInterval(timerInterval);
       remainingTime = totalTime;
       timerInterval = setInterval(updateTimer, 1000);
     });
 }
 
-  // Обработчик на кнопку "Старт"
-  answerBtns[0].addEventListener("click", startGame);
-
-function updateTimer() {
-  // Обновляем текст и прогресс-бар
-  timeText.textContent = `Оставшееся время до вылета самолёта: ${formatTime(remainingTime)}`;
-  const progressPercent = (remainingTime / totalTime) * 100;
-  timeBar.style.width = `${progressPercent}%`;
-  timeBar.style.backgroundColor = getDynamicColor(progressPercent);
-
-  // Уменьшаем оставшееся время
-  if (remainingTime > 0) {
-    remainingTime--;
-  } else {
-    clearInterval(timerInterval); // останавливаем таймер
-    showPopup("Время вышло, вы опоздали на рейс ❌", false);
-    return; // дальше не показываем кнопки
-  }
-}
-
-
-
-
+// Попап (успех / провал)
 function showPopup(message, isSuccess = true) {
-  clearInterval(timerInterval); // останавливаем таймер на всякий случай
-  
-  const popup = document.getElementById("popup");
-  popup.style.display = "flex";
+  clearInterval(timerInterval);
 
-  const popupMessage = popup.querySelector(".popup-message");
+  popup.style.display = "flex";
   popupMessage.textContent = message;
 
-  const restartBtn = document.getElementById("restartBtn");
-  restartBtn.onclick = () => {
-    popup.style.display = "none";
-    startGame(); // перезапуск игры
-  };
+  popup.style.backgroundColor = isSuccess
+    ? "rgba(0,255,0,0.2)"
+    : "rgba(255,0,0,0.3)";
 
-  // Можно добавить разные стили для успеха/провала
-  popup.style.backgroundColor = isSuccess ? "rgba(0,255,0,0.2)" : "rgba(255,0,0,0.3)";
-  // Конфетти только при успехе
   if (isSuccess && typeof confetti === "function") {
     confetti({
       particleCount: 200,
@@ -255,11 +325,46 @@ function showPopup(message, isSuccess = true) {
       startVelocity: 30,
       gravity: 0.5,
       ticks: 600,
-      origin: { x: 0.5, y: 0.4 }
+      origin: { x: 0.5, y: 0.4 },
     });
   }
 }
 
+// ==========================
+// Слушатели событий
+// ==========================
+answerBtns[0].addEventListener("click", startGame);
+restartBtn.addEventListener("click", () => {
+  popup.style.display = "none";
+  startGame();
+});
 
 
 
+// ==========================
+// Функция сброса состояния перед запуском игры
+// ==========================
+function resetGameState() {
+  // Сбрасываем таймер
+  clearInterval(timerInterval);
+  remainingTime = totalTime;
+
+  // Сбрасываем модификаторы
+  modifiedLocations.clear();
+
+  // Сбрасываем диалоги
+  currentDialog = null;
+  currentNode = null;
+
+  // Сбрасываем текстовые пузыри
+  resetBubbles();
+
+  // Сбрасываем кнопки ответов
+  answersContainer.innerHTML = "";
+
+  // Сбрасываем персонажей
+  leftCharacterContainer.style.display = "none";
+  rightCharacterContainer.style.display = "none";
+  const leftImg = leftCharacterContainer.querySelector("img");
+  if (leftImg) leftImg.src = defaultLeftCharacterSrc;
+}

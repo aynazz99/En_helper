@@ -4,73 +4,76 @@
     "nodes": {
       "end": {
         "speaker": "system",
-        "text": "Диалог завершён."
+        "text": "Диалог не завершён.",
+        "location": "the-end.jpg"
       },
       "1": {
         "speaker": "left",
         "text": "Good afternoon! May I see your passport, please?",
         "answers": [
-          { "text": "Here is my passport", "next": "1.a" },
-          { "text": "I’m looking for my passport", "next": "1.b" },
-          { "text": "I don’t have a passport", "next": "1.c" }
+          { "text": "Here is my passport", "next": "1a" },
+          { "text": "I’m looking for my passport", "next": "1b" },
+          { "text": "I don’t have a passport", "next": "1c" }
         ],
         "location": "checkin.jpg"
       },
-      "1.a": {
+      "1a": {
         "speaker": "right",
         "text": "Here is my passport.",
-        "next": "1.a.1",
+        "next": "2",
         "location": "here_is_passport.png"
       },
-      "1.b": {
+      "1b": {
         "speaker": "right",
         "text": "Just a moment, I can’t find my passport.",
-        "next": "1.b.1",
+        "next": "3",
         "location": "look_passport.png"
       },
-      "1.b.1": {
+      "3": {
         "speaker": "left",
         "text": "Alright, please take your time to find it.",
         "answers": [
-          { "text": "Here is my passport", "next": "1.a" },
-          { "text": "I don’t have a passport", "next": "1.c" }
+          { "text": "Here is my passport", "next": "1a" },
+          { "text": "I don’t have a passport", "next": "1c" }
         ],
         "location": "look_passport.png"
       },
-      "1.c": {
+      "1c": {
         "speaker": "right",
         "text": "I don’t have a passport.",
-        "next": "1.c.1",
+        "next": "4",
         "location": "no-passport.png"
       },
-      "1.c.1": {
+      "4": {
         "speaker": "left",
         "text": "I’m sorry, but without a passport you cannot check in. You may go to the information desk for assistance or reschedule your flight.",
         "answers": [
-          { "text": "Go to information desk", "next": "1.c.2" },
-          { "text": "Reschedule my flight", "next": "1.c.3" }
+          { "text": "Go to information desk", "next": "4a" },
+          { "text": "Reschedule my flight", "next": "4b" }
         ],
         "location": "cancelled-ticket.png"
       },
-      "1.c.2": {
+      "4a": {
         "speaker": "right",
         "text": "Okay, I’ll go to the information desk.",
-        "next": "1.c.2.1"
+        "next": "4a1",
+        "location": "info-desk.png"
       },
-      "1.c.2.1": {
+      "4a1": {
         "speaker": "left",
         "text": "Alright, have a good day and I hope your issue is resolved smoothly.",
         "answers": [
           { "text": "Got it, thanks", "next": "end" }
-        ]
+        ], 
+        "location": "info-desk.png"
       },
-      "1.c.3": {
+      "4b": {
         "speaker": "right",
         "text": "I’ll reschedule my flight then.",
-        "next": "1.c.3.1",
+        "next": "4b1",
         "location": "date-reschedule.png"
       },
-      "1.c.3.1": {
+      "4b1": {
         "speaker": "left",
         "text": "Of course, I’ve noted that. You can reschedule at the counter. Have a pleasant day!",
         "answers": [
@@ -78,137 +81,221 @@
         ],
         "location": "date-reschedule.png"
       },
-
-      "1.a.1": {
+      "2": {
         "speaker": "left",
         "text": "Thank you. Everything looks good. Please place your baggage on the scale.",
         "answers": [
-          { "text": "Alright", "next": "1.a.1.1" }
+          { "text": "Alright", "next": "5" }
         ],
         "location": "luggage-scale.png"
       },
-      "1.a.1.1": {
+      "5": {
         "speaker": "left",
         "text": "How much does your baggage weigh?",
         "answers": [
-          { "text": "My baggage weighs 20 kg", "next": "1.a.2.a" },
-          { "text": "My baggage weighs 25 kg", "next": "1.a.2.b" }
+          { "text": "My baggage weighs 20 kg", "next": "5a" },
+          { "text": "My baggage weighs 25 kg", "next": "5b" }
         ],
         "location": "baggage-weigh.png"
       },
-      "1.a.2.a": {
+      "5a": {
         "speaker": "left",
         "text": "Your baggage weight is within the limit. You're all set.",
         "answers": [
-          { "text": "Thank you", "next": "1.a.2.a.1" }
+          { "text": "Thank you", "next": "5a1" }
         ],
         "location": "baggage-weigh-ok.png"
       },
-      "1.a.2.b": {
+      "5a1": {
         "speaker": "left",
-        "text": "Your baggage exceeds the weight limit. You’ll need to pay the extra fee.",
+        "text": "By the way, would you like to upgrade your ticket to business class for a small fee?",
         "answers": [
-          { "text": "I’ll pay the fee", "next": "1.a.2.b.1" }
+          { "text": "Yes, I want to upgrade", "next": "5a1a" },
+          { "text": "No, thank you", "next": "5a1b" }
         ],
-        "locations": ["luggage-scale-limit.png", "pay.png"]
+        "location": "business-class.jpg"
       },
-      "1.a.2.a.1": {
+      "5a1a": {
+        "speaker": "right",
+        "text": "Yes, I want to upgrade.",
+        "next": "5a1b1",
+        "location": "agree.png"
+      },
+      "5a1b": {
+        "speaker": "right",
+        "text": "No, thank you.",
+        "next": "5a1b1",
+        "location": "no-no-no.png"
+      },
+      "5a1b1": {
         "speaker": "left",
-        "text": "Here is your ticket. Please proceed to the security check area.",
+        "text": "Here is your ticket. Please proceed to the security check. Your flight is Kazan 040.",
         "answers": [
-          { "text": "Alright", "next": "1.a.2.a.2" },
-          { "text": "Where is the security check area?", "next": "1.a.2.a.1.1" }
+          { "text": "Alright", "next": "6" },
+          { "text": "Where is the security check area?", "next": "5a1b2" }
         ],
         "location": "hand-ticket-flying.png"
       },
-      "1.a.2.a.1.1": {
+      "5a1b2": {
         "speaker": "left",
         "text": "The security check area is just past the ticket counters. There are two lanes—one on the left and one on the right. Please follow the signs.",
         "answers": [
-          { "text": "Okay, thanks", "next": "1.a.2.a.2" }
+          { "text": "Okay, thanks", "next": "6" }
         ],
         "location": "security-check-sign.png"
       },
-      "1.a.2.b.1": {
+      "5b": {
+        "speaker": "left",
+        "text": "Your baggage exceeds the weight limit. You’ll need to pay the extra fee.",
+        "answers": [
+          { "text": "I’ll pay the fee", "next": "5b1" }
+        ],
+        "locations": ["luggage-scale-limit.png", "pay.png"]
+      },
+      "5b1": {
         "speaker": "right",
         "text": "I’ll pay the fee.",
-        "next": "1.a.2.b.2"
+        "next": "5b2",
+        "location": "pay.png"
       },
-      "1.a.2.b.2": {
+      "5b2": {
         "speaker": "left",
         "text": "You can pay the extra baggage fee at the payment counter near the ticket desks. Once paid, please proceed to the security check area.",
         "answers": [
-          { "text": "Okay, thanks", "next": "1.a.2.b.3" },
-          { "text": "Where exactly is the payment counter?", "next": "1.a.2.b.2.1" }
+          { "text": "Okay, thanks", "next": "5a1" },
+          { "text": "Where exactly is the payment counter?", "next": "5b2a" }
         ],
         "location": "payment-area.png"
       },
-      "1.a.2.b.2.1": {
+      "5b2a": {
         "speaker": "left",
         "text": "The payment counter is right next to the main ticket desks, to the right of the information desk.",
         "answers": [
-          { "text": "Got it, thanks", "next": "1.a.2.b.3" }
-        ]
+          { "text": "Got it, thanks", "next": "5a1" }
+        ], 
+        "location": "pointing_hand.png"
       },
-      "1.a.2.b.3": {
-        "speaker": "left",
-        "text": "After paying, please proceed to the security check area.",
-        "answers": [
-          { "text": "Alright", "next": "1.a.2.a.2" }
-        ]
-      },
-      "1.a.2.a.2": {
+      "6": {
         "speaker": "left",
         "text": "Please place your carry-on items on the conveyor belt for security screening.",
         "answers": [
-          { "text": "Okay", "next": "1.a.2.a.3" }
+          { "text": "Okay", "next": "7" }
         ],
         "location": "security-check.png"
       },
-      "1.a.2.a.3": {
+      "7": {
         "speaker": "left",
         "text": "Do you have any liquids or a laptop in your carry-on?",
         "answers": [
-          { "text": "Yes, I do.", "next": "1.a.2.a.4" },
-          { "text": "No, I don’t.", "next": "1.a.2.a.5" }
+          { "text": "Yes, I do.", "next": "7a" },
+          { "text": "No, I don’t.", "next": "7b" }
         ],
         "locations": ["laptop.png","water-bottle.png"]
       },
-      "1.a.2.a.4": {
+      "7a": {
         "speaker": "left",
         "text": "Please drink or dispose of any liquids, and place the laptop in a separate tray.",
         "answers": [
-          { "text": "Alright, I’ll do that.", "next": "1.a.2.a.5" }
+          { "text": "Alright, I’ll do that.", "next": "7b" }
         ],
         "location": "no-liquids.png"
       },
-      "1.a.2.a.5": {
+      "7b": {
         "speaker": "left",
         "text": "Perfect, please walk through the scanner.",
         "answers": [
-          { "text": "Okay.", "next": "1.a.2.a.6" }
+          { "text": "Okay.", "next": "8" }
         ],
         "location": "securyti-scanning.png"
       },
-      "1.a.2.a.6": {
+      "8": {
         "speaker": "left",
         "text": "All clear. You may collect your belongings and proceed to the waiting area.",
         "answers": [
-          { "text": "Thank you.", "next": "1.a.2.a.7" }
+          { "text": "Thank you.", "next": "9" }
         ],
         "location": "securyti-scanning.png"
       },
-      "1.a.2.a.7": {
+      "9": {
         "speaker": "right",
-        "text": "Thank you.",
-        "answers": [],
+        "text": "At last, I’m in the waiting area.",
+        "answers": [
+          { "text": "Go to the business lounge", "next": "9a" },
+          { "text": "Go to the Coffee Chop", "next": "9b" }
+        ],
         "location": "airport-waiting-place.jpg"
-      }
-
-
-
-
+      },
+      "9a": {
+        "speaker": "right",
+        "text": "The business lounge looks inviting — quiet, comfortable, and with free drinks.",
+        "answers": [
+          { "text": "Have a glass of wine", "next": "9a1" },
+          { "text": "Take a cup of coffee", "next": "9a2" }
+        ],
+        "location": "business-lounge.jpg"
+      },
+      "9a1": {
+        "speaker": "right",
+        "text": "The wine is smooth… I feel like I should just lie down for a bit.",
+        "answers": [
+          { "text": "Find a place to rest", "next": "9a1a" }
+        ],
+        "location": "bottle-and-glass-wine.png"
+      },
+      "9a1a": {
+        "speaker": "left",
+        "text": "Attention please: Boarding for flight Kazan 040 has now closed.",
+        "answers": [
+          { "text": "I overslept and missed my flight.", "next": "end" }
+        ],
+        "location": "lounge-sleep.png"
+      },   
+      "9a2": {
+        "speaker": "right",
+        "text": "The coffee wakes me up. I take a seat by the window and watch the planes taxiing outside.",
+        "next": "10",
+        "location": "cup-of-coffee.png"
+      },
       
+      "9b": {
+        "speaker": "left",
+        "text": "Hi there! What can I get you today?",
+        "answers": [
+          { "text": "One cappuccino, please.", "next": "9b1" }
+        ],
+        "location": "barista-write.png"
+      },
+
+      "9b1": {
+        "speaker": "left",
+        "text": "Your order is ready!",
+        "answers": [
+          { "text": "Thank you very much.", "next": "9b2" }
+        ],
+        "location": "barista-with-coffee.png"
+      },
+
+      "9b2": {
+        "speaker": "right",
+        "text": "The coffee wakes me up. I take a seat by the window and watch the planes taxiing outside.",
+        "next": "10",
+        "location": "airport_coffee.png"
+      },
+      "10": {
+        "speaker": "left",
+        "text": "Attention please: final call for flight Kazan 040. Passengers should proceed to the gate immediately.",
+        "answers": [
+          { "text": "That's my flight!", "next": "11"},
+          { "text": "That's not my flight.", "next": "end"}
+        ],
+        "location": "airport_coffee.png"
+      },
+      "11": {
+        "speaker": "right",
+        "text": "I grab my bag and hurry to the gate.",
+        "next": "12",
+        "location": "walking-to-gate.png"
+      }
     }
   }
 }
