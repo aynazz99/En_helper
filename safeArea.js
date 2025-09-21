@@ -1,4 +1,4 @@
-const BASE_PADDING = 20; // тот самый padding, который был раньше
+const BASE_PADDING = 35; // тот самый padding, который был раньше
 
 document.addEventListener("DOMContentLoaded", () => {
     const tg = window.Telegram?.WebApp;
@@ -15,3 +15,4 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTelegramSafeArea();
     window.addEventListener("resize", applyTelegramSafeArea);
 });
+
