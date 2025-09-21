@@ -1,17 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
+
     tg.ready();
 
-    const header = document.querySelector("header");
-    if (!header) return;
+    const safeTop = tg.viewportStableOffsetTop || 0;
+    const header = document.querySelector('header');
+    if (header) header.style.transform = `translateY(${safeTop}px)`;
 
-    function applyTelegramSafeArea() {
+    // Чтобы реагировать на изменение размера экрана
+    window.addEventListener("resize", () => {
         const safeTop = tg.viewportStableOffsetTop || 0;
-        header.style.paddingTop = 12 + safeTop + "px"; // базовый padding + offset
-    }
-
-    applyTelegramSafeArea();
-    window.addEventListener("resize", applyTelegramSafeArea);
+        if (header) header.style.transform = `translateY(${safeTop}px)`;
+    });
 });
-
