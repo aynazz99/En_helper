@@ -194,12 +194,32 @@
       },
       "7a": {
         "speaker": "left",
-        "text": "Please drink or dispose of any liquids, and place the laptop in a separate tray.",
+        "text": "Please drink or dispose of any liquids, and place the laptop in a separate tray. Also, it looks like you have scissors inside — that’s not allowed.",
         "answers": [
-          { "text": "Alright, I’ll do that.", "next": "7b" }
+        { "text": "Alright, I’ll do that and throw the scissors away.", "next": "7b" },
+        { "text": "Why? I want to keep them.", "next": "7c" }
         ],
-        "location": "no-liquids.png"
-      },
+        "locations": ["no-liquids.png","no-scissors.png"]
+        },
+        "7c": {
+        "speaker": "left",
+        "text": "I’m afraid that’s impossible. If you don’t discard them, we’ll have to check your bag more thoroughly.",
+        "answers": [
+        { "text": "Fine, I’ll give them up.", "next": "7b" },
+        { "text": "Keep arguing", "next": "7c1" }
+        ],
+        "location": "security-argue.png"
+        },
+        "7c1": {
+        "speaker": "left",
+        "text": "I’ll have to check your bag more carefully. You can still catch your flight, but you’re going to lose a bit of time.",
+        "answers": [
+        { "text": "Proceed", "next": "8" }
+        ],
+        "location": "security-delay.png"
+        },
+
+
       "7b": {
         "speaker": "left",
         "text": "Perfect, please walk through the scanner.",
@@ -221,7 +241,8 @@
         "text": "At last, I’m in the waiting area.",
         "answers": [
           { "text": "Go to the business lounge", "next": "9a" },
-          { "text": "Go to the Coffee Chop", "next": "9b" }
+          { "text": "Go to the Coffee Shop", "next": "9b" },
+          { "text": "Go to duty free", "next": "9c" }
         ],
         "location": "airport-waiting-place.jpg"
       },
@@ -278,10 +299,52 @@
       "9b2": {
         "speaker": "right",
         "text": "The coffee wakes me up. I take a seat by the window and watch the planes taxiing outside.",
-        "next": "10",
+        "next": "10a",
         "location": "airport_coffee.png"
       },
-      "10": {
+
+      "9c": {
+        "speaker": "left",
+        "text": "Hello! Looking for anything special?",
+        "answers": [
+          { "text": "I want a souvenir", "next": "9c1_pay" },
+          { "text": "I want some cosmetics", "next": "9c1_pay" },
+          { "text": "I want chocolate", "next": "9c1_pay" },
+          { "text": "I want alcohol", "next": "9c1_pay" }
+        ],
+        "location": "dutyfree-counter.png"
+      },
+      "9c1_pay": {
+        "speaker": "left",
+        "text": "How would you like to pay? Card or cash?",
+        "answers": [
+          { "text": "I’ll pay by card.", "next": "9c1_card" },
+          { "text": "I’ll pay in cash.", "next": "10b" }
+        ],
+        "location": "payment.png"
+      },
+      "9c1_cash": {
+        "speaker": "right",
+        "text": "I’ll pay in cash.",
+        "next": "10b",
+        "location": "cash-pay.png"
+      }, 
+      "9c1_card": {
+        "speaker": "right",
+        "text": "I’ll pay by card.",
+        "next": "9c2",
+        "location": "card-pay.png"
+      }, 
+      "9c2": {
+        "speaker": "left",
+        "text": "The payment hasn’t gone through yet, please wait a moment.",
+        "answers": [
+          { "text": "Wait", "next": "10b" }
+        ],
+        "location": "payment-wait.png"
+      },
+        
+      "10a": {
         "speaker": "left",
         "text": "Attention please: final call for flight Kazan 040. Passengers should proceed to the gate immediately.",
         "answers": [
@@ -290,6 +353,17 @@
         ],
         "location": "airport_coffee.png"
       },
+      "10b": {
+        "speaker": "left",
+        "text": "Attention please: final call for flight Kazan 040. Passengers should proceed to the gate immediately.",
+        "answers": [
+          { "text": "That's my flight!", "next": "11"},
+          { "text": "That's not my flight.", "next": "end"}
+        ],
+        "location": "airport-waiting-place_2.jpg"
+      },      
+
+
       "11": {
         "speaker": "right",
         "text": "I grab my bag and hurry to the gate.",

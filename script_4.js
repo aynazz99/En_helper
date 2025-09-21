@@ -9,7 +9,7 @@ let currentNode = null;
 
 // Таймер
 let timerInterval;
-let totalTime = 3 * 60; // 3 минуты (в секундах)
+let totalTime = 2 * 60; // 3 минуты (в секундах)
 let remainingTime = totalTime;
 let modifiedLocations = new Set(); // отслеживание применённых модификаторов
 
@@ -40,26 +40,22 @@ const restartBtn = document.getElementById("restartBtn");
 // Константы
 // ==========================
 
-// Соответствие location → картинка левого персонажа
-const leftCharacterMap = {
-  "security-check.png": "security.png",
-  "checkin.jpg": "airport_staff.png",
-  "airport_coffee.png": "megaphone.png"
-};
-
 // Таблица "локация → коэффициент уменьшения оставшегося времени"
 const timeModifiers = {
   "look_passport.png": 0.7,
   "the-end.jpg": 0.01,
   "baggage-weigh-ok.png": 1.5,
   "no-liquids.png": 0.7,
-  "pay.png": 0.5,
+  "payment-area.png": 0.5,
   "agree.png": 1.5,
+  "security-argue.png": 0.6,
+  "security-delay.png": 0.4,
+  "payment-wait.png": 0.7
 
 };
 
 // Константы таймингов
-const ANSWER_DELAY = 1500; // задержка перед показом ответа, мс
+const ANSWER_DELAY = 0; // задержка перед показом ответа, мс
 
 // ==========================
 // Инициализация
@@ -84,11 +80,13 @@ answerBtns[0].textContent = "Get Started";
 // ==========================
 const leftCharacterModifiers = {
   "airport-waiting-place.jpg": { visible: false }, // скрыть персонажа
-  "checkin.jpg": { visible: true, src: "airport_staff.png" }, // показать с другой картинкой
-  "security-check.png": { visible: true, src: "security.png" },
-  "lounge-sleep.png": { visible: true, src: "megaphone.png"},
-  "airport_coffee.png": { visible: true, src: "megaphone.png"},
-  "barista-write.png": { visible: true, src: "barista.png"},
+  "checkin.jpg": { visible: true, src: "airport_staff.png", label: "Airport Staff" },
+  "security-check.png": { visible: true, src: "security.png", label: "Security" },
+  "lounge-sleep.png": { visible: true, src: "megaphone.png", label: "Announcement" },
+  "airport_coffee.png": { visible: true, src: "megaphone.png", label: "Announcement" },
+  "barista-write.png": { visible: true, src: "barista.png", label: "Barista" },
+  "dutyfree-counter.png": { visible: true, src: "shop-staff.png", label: "Cashier" },
+  "airport-waiting-place_2.jpg": { visible: true, src: "megaphone.png", label: "Announcement" },
 };
 
 const defaultLeftCharacterSrc = "person_left.png"; // стандартная картинка
@@ -101,8 +99,9 @@ function applyLeftCharacterModifier(node) {
   const mod = leftCharacterModifiers[loc];
 
   const leftCharacterImg = leftCharacterContainer.querySelector("img");
+  const leftCharacterLabel = leftCharacterContainer.querySelector(".character-label");
 
-  if (!leftCharacterImg) return; // если img нет, выходим
+  if (!leftCharacterImg || !leftCharacterLabel) return; // если элементов нет, выходим
 
   if (mod) {
     // Видимость контейнера и пузыря
@@ -115,11 +114,38 @@ function applyLeftCharacterModifier(node) {
     if (mod.src) {
       leftCharacterImg.src = mod.src;
     }
+
+    // Меняем подпись только если указана label
+    if (mod.label !== undefined) {
+      leftCharacterLabel.textContent = mod.label;
+      leftCharacterLabel.style.display = ""; // показать подпись
+    } else {
+      leftCharacterLabel.style.display = "none"; // скрыть, если не задана
+    }
+
   } else {
-    // Локация не в списке — оставляем текущую картинку и видимость без изменений
-    // Ничего не делаем
+    // Локация не в списке — оставляем текущие значения
   }
 }
+
+
+// Функция для показа временной картинки
+function showIntroImage(src) {
+  const imageContainer = document.getElementById("imageContainer");
+  
+  // Очищаем контейнер от предыдущих картинок
+  imageContainer.innerHTML = "";
+
+  // Создаём и добавляем новую картинку
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = "Intro Image";
+  img.id = "introImage";
+  imageContainer.appendChild(img);
+}
+
+// Показываем картинку в начале
+showIntroImage("airport.jpg");
 
 // ==========================
 // Показ узла диалога
@@ -246,15 +272,51 @@ function getDynamicColor(percent) {
   return `hsl(${hue}, 90%, 50%)`;
 }
 
-// Проверка модификаторов времени
+function showBubble(value) {
+  const bubble = document.createElement('div');
+  bubble.className = 'time-bubble';
+
+  // Добавляем + или - перед числом
+  bubble.textContent = (value >= 1 ? '+' : '-') + value;
+
+  // Координаты — центр экрана
+  const x = window.innerWidth / 2;
+  const y = window.innerHeight / 2;
+
+  bubble.style.left = x + 'px';
+  bubble.style.top = y + 'px';
+  bubble.style.backgroundColor = value >= 1 ? 'green' : 'red';
+  document.body.appendChild(bubble);
+
+  // Удаление после анимации
+  setTimeout(() => bubble.remove(), 1000);
+}
+
+
+
+// Проверка модификаторов времени и отображение пузыря
 function checkTimeModifier(node) {
   if (!node) return;
 
   const locs = node.locations || [node.location];
   locs.forEach(loc => {
     if (timeModifiers[loc] && !modifiedLocations.has(loc)) {
-      remainingTime = Math.floor(remainingTime * timeModifiers[loc]);
+      const modifier = timeModifiers[loc];
+      remainingTime = Math.floor(remainingTime * modifier);
       modifiedLocations.add(loc);
+
+      // Координаты пузыря: центр контейнера с картинкой или центр окна
+      let x = window.innerWidth / 2;
+      let y = window.innerHeight / 2;
+
+      const img = document.querySelector("#imageContainer img");
+      if (img) {
+        const rect = img.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top;
+      }
+
+      showBubble(modifier, x, y);
     }
   });
 }
@@ -274,6 +336,7 @@ function updateTimer() {
   }
 }
 
+
 // ==========================
 // Управление игрой
 // ==========================
@@ -291,6 +354,18 @@ function startGame() {
 
       // Прячем кнопку "Старт"
       answerBtns[0].style.display = "none";
+
+      // Прячем интро-оверлей
+      const introOverlay = document.getElementById("introOverlay");
+      if (introOverlay) {
+        introOverlay.style.display = "none";
+      }
+
+      // В startGame() очищаем контейнер с картинкой
+      const imageContainer = document.getElementById("imageContainer");
+      if (imageContainer) {
+        imageContainer.innerHTML = ""; // очищаем все элементы внутри
+      }
 
       // Показываем персонажей и остальные кнопки
       leftCharacterContainer.style.display = "";

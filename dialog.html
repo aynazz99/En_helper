@@ -46,11 +46,25 @@
 <!-- Полупрозрачный контейнер с картинками -->
 <div class="image-container" id="imageContainer"></div>
 
+<!-- Новый временный контейнер -->
+<div id="introOverlay">
+  <div class="intro-text">
+    <b>Добро пожаловать!</b> 
+
+    Вы — пассажир самолёта, и ваша цель — вовремя улететь ✈️.
+
+Каждое ваше решение важно: 
+правильные шаги прибавляют время 🢁, ошибки его отнимают 🢃, 
+а некоторые поступки могут полностью лишить вас рейса ❌ .
+  </div>
+</div>
+
 <div class="dialog-container">
   <!-- Персонаж слева -->
   <div class="character left">
     <img id="leftCharacter" src="person_left.png" alt="Левый персонаж">
     <div class="speech-bubble left-bubble"></div>
+    <div class="character-label">Airport Staff</div>
   </div>
 
   <!-- Персонаж справа -->
@@ -64,6 +78,7 @@
   <button class="answerBtn start">Старт</button>
   <button class="answerBtn">Ответ</button>
 </div>
+
 
 <div id="popup" class="popup-overlay" style="display: none;">
   <div class="popup-window">
@@ -80,10 +95,11 @@
     <button id="testBtn">Test</button>
     <button id="levelBtn">Lvl Check</button>
     <button id="cardsBtn">Cards</button> 
-    <button id="DialogBtn">Dialogs</button>
+    <button id="DialogBtn">Airport</button>
   </div>
 </footer>
 
+<script src="safeArea.js"></script>
 <script src="script_4.js"></script>
 <script src="footerBtnWork.js"></script>
 <script src="canvas-confetti.js"></script>

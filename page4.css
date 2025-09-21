@@ -157,7 +157,7 @@ header {
 /* Левое облако: на уровне персонажа, смещено вправо */
 .left-bubble {
   bottom: 10%;
-  left: 95%; 
+  left: 105%; 
 }
 
 /* Правое облако: на уровне персонажа, смещено влево */
@@ -165,6 +165,22 @@ header {
   bottom: 30%; 
   right: 95%; 
 }
+
+
+/* Стили для подписи */
+.character-label {
+  margin-top: 5px;
+  padding: 6px 15px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #222;
+  background: rgba(255, 255, 255, 0.8); /* полупрозрачный фон */
+  border-radius: 20px; /* делает капсулу */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* лёгкая тень */
+  backdrop-filter: blur(6px); /* стеклянный эффект */
+  -webkit-backdrop-filter: blur(6px); /* поддержка Safari */
+}
+
 
 *,
 *::before,
@@ -200,50 +216,11 @@ header {
   object-fit: contain;     /* сохраняет пропорции */
 }
 
-/* Адаптация для маленьких экранов (iPhone и т.п.) */
-@media (max-width: 480px) {
-/* Обычные картинки (две и более) */
-.image-container img {
-  width: 48%;
-  max-width: 100%;
-  height: auto;
-  border-radius: 15px;
-  object-fit: contain;
-}
-
-/* Если картинка одна */
-.image-container img:only-child {
-  width: 100%;
-  max-width: 80%;
-  border-radius: 15px;
-}
-#timerContainer {
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 12px;
-}
-
-#timeText {
-  font-size: 11px;
-}
-
-#timeBarContainer {
-  width: 100%
-  height: 10px;
-  border-radius: 10px;
-}
-
-#timeBar {
-  border-radius: 10px 0 0 10px;
-}
-}
-
-
-
 
 
 
 #timerContainer {
+  width: 35%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -252,7 +229,7 @@ header {
   font-size: clamp(12px, 2.5vw, 16px);
   color: #ffffff;
   text-align: center;
-  background: rgba(0, 0, 0, 0.35); /* полупрозрачный фон */
+  background: rgba(0, 0, 0, 0.2); /* полупрозрачный фон */
   padding: 8px 16px;
   border-radius: 16px;
   backdrop-filter: blur(6px); /* лёгкое размытие фона */
@@ -278,11 +255,13 @@ header {
 }
 
 #timeBar {
+  transform-origin: bottom;
   width: 100%;
   height: 100%;
-  background:rgba(76, 175, 79, 0);
+  background: rgba(76, 175, 79, 0); /* полностью видимый зелёный */
   transition: width 0.4s ease, background 0.4s ease;
 }
+
 
 /* Сообщения */
 .popup-message,
@@ -357,4 +336,119 @@ header {
   max-width: 400px;
   text-align: center;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Оверлей */
+#introOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0); /* полупрозрачный фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50; /* поверх всех */
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.intro-text {
+  max-width: 400px;
+  background: rgba(255,255,255,0.15);
+  padding: 20px 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 18px;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+/* Чтобы кнопка старт была выше оверлея */
+.answerBtn.start {
+  position: relative;
+  z-index: 100;
+}
+
+/* Класс для плавного исчезновения */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.8s ease; /* скорость и плавность */
+}
+
+
+.time-bubble {
+  position: absolute;
+  padding: 8px 12px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+  animation: floatUp 4s ease-out forwards;
+  opacity: 0.9;
+  z-index: 1000;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-250px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+
+
+
+/* Адаптация для маленьких экранов (iPhone и т.п.) */
+@media (max-width: 480px) {
+/* Обычные картинки (две и более) */
+.image-container img {
+  width: 48%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  object-fit: contain;
+}
+
+/* Если картинка одна */
+.image-container img:only-child {
+  width: 100%;
+  max-width: 80%;
+  border-radius: 15px;
+}
+#timerContainer {
+  width: 90%;       /* 80% от ширины экрана */
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 12px;
+}
+
+#timeText {
+  font-size: 11px;
+}
+
+#timeBarContainer {
+  width: 90%;
+  height: 10px;
+  border-radius: 10px;
+}
+
+#timeBar {
+  border-radius: 10px 0 0 10px;
+}
+
+/* Стиль только для начальной картинки */
+#introImage {
+  width: 100%;            /* занимает весь контейнер */
+  max-width: 600px;       /* максимальная ширина */
+  border-radius: 15px;    /* скругление углов */
+
+}
 }
