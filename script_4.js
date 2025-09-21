@@ -55,7 +55,7 @@ const timeModifiers = {
 };
 
 // Константы таймингов
-const ANSWER_DELAY = 0; // задержка перед показом ответа, мс
+const ANSWER_DELAY = 1500; // задержка перед показом ответа, мс
 
 // ==========================
 // Инициализация
@@ -443,3 +443,4 @@ function resetGameState() {
   const leftImg = leftCharacterContainer.querySelector("img");
   if (leftImg) leftImg.src = defaultLeftCharacterSrc;
 }
+
