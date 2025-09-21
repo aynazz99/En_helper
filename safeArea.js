@@ -1,26 +1,25 @@
-// safeArea.js
-const tg = window.Telegram.WebApp;
-tg.ready();
+document.addEventListener("DOMContentLoaded", () => {
+    const tg = window.Telegram?.WebApp;
 
-function applySafeArea() {
-    const safeTop = tg.viewportStableOffsetTop;
-    const safeBottom = tg.viewportStableOffsetBottom;
+    if (tg) {
+        tg.ready();
 
-    // Отступ шапки
-    const header = document.querySelector("header");
-    if (header) header.style.paddingTop = safeTop + "px";
+        const safeTop = tg.viewportStableOffsetTop || 20;
+        const safeBottom = tg.viewportStableOffsetBottom || 20;
 
-    // Отступ нижнего контейнера (кнопки, таймер)
-    const bottomContainer = document.querySelector(".bottom-container");
-    if (bottomContainer) bottomContainer.style.paddingBottom = safeBottom + "px";
+        // Добавляем отступ **к header**
+        const header = document.querySelector("header");
+        if (header) header.style.paddingTop = safeTop + "px";
 
-    // Можно добавить отступ для всего body, если нужно
-    document.body.style.paddingTop = safeTop + "px";
-    document.body.style.paddingBottom = safeBottom + "px";
-}
+        // Для body (если нужно, чтобы остальной контент тоже не ушёл под вырез)
+        document.body.style.paddingTop = safeTop + "px";
+        document.body.style.paddingBottom = safeBottom + "px";
 
-// Применяем сразу
-applySafeArea();
-
-// Пересчёт при изменении ориентации или размера экрана
-window.addEventListener("resize", applySafeArea);
+        // Для пересчёта при повороте экрана
+        window.addEventListener("resize", () => {
+            header.style.paddingTop = tg.viewportStableOffsetTop + "px";
+            document.body.style.paddingTop = tg.viewportStableOffsetTop + "px";
+            document.body.style.paddingBottom = tg.viewportStableOffsetBottom + "px";
+        });
+    }
+});
