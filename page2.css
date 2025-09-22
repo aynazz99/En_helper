@@ -289,8 +289,9 @@ button.red-border {
 @media (max-height: 460px) {
 /* Сам контейнер */
 .image-container {
-  height: 15px;            /* высота контейнера */
+  height: 60px;            /* высота контейнера */
 }
 }
+
 
 
