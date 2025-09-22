@@ -286,10 +286,11 @@ button.red-border {
 }
 
 /* Адаптация для устройств с максимальной высотой 460px */
-@media (max-height: 460px) {
+@media (max-height: 420px) {
 /* Сам контейнер */
 .image-container {
-  height: 50px;            /* высота контейнера */
+  height: 35px;            /* высота контейнера */
 }
 }
+
 
