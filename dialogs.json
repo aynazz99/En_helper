@@ -15,7 +15,7 @@
           { "text": "I’m looking for my passport", "next": "1b" },
           { "text": "I don’t have a passport", "next": "1c" }
         ],
-        "location": "checkin.jpg"
+        "location": "checkin.png"
       },
       "1a": {
         "speaker": "right",
@@ -373,3 +373,4 @@
     }
   }
 }
+
