@@ -28,7 +28,7 @@ header {
 }
 
 /* Только кнопка Старт */
-.answerBtn.start {
+.startBtn {
   grid-column: 1 / -1;   /* на всю ширину */
   justify-self: center;
   padding: 18px 100px; 
@@ -341,19 +341,23 @@ header {
 /* Оверлей */
 #introOverlay {
   position: fixed;
-  top: 5%;
+  top: 13%;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0); /* полупрозрачный фон */
+  background: rgba(0,0,0,0); /* прозрачный фон */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;   /* элементы один под другим */
+  justify-content: center;  /* центрируем по вертикали */
+  align-items: center;      /* центрируем по горизонтали */
+  gap: 20px;                /* расстояние между текстом и кнопкой */
+  
   z-index: 50; /* поверх всех */
   color: #fff;
   text-align: center;
   padding: 20px;
 }
+
 
 .intro-text {
   max-width: 400px;
@@ -401,60 +405,4 @@ header {
     transform: translateY(-250px) scale(1.2);
     opacity: 0;
   }
-}
-
-
-
-
-/* Адаптация для маленьких экранов (iPhone и т.п.) */
-@media (max-width: 480px) {
-/* Обычные картинки (две и более) */
-.image-container img {
-  width: 48%;
-  max-width: 100%;
-  height: auto;
-  border-radius: 15px;
-  object-fit: contain;
-}
-
-/* Если картинка одна */
-.image-container img:only-child {
-  width: 100%;
-  max-width: 80%;
-  border-radius: 15px;
-}
-#timerContainer {
-  width: 90%;       /* 80% от ширины экрана */
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 12px;
-}
-
-#timeText {
-  font-size: 11px;
-}
-
-#timeBarContainer {
-  width: 90%;
-  height: 10px;
-  border-radius: 10px;
-}
-
-#timeBar {
-  border-radius: 10px 0 0 10px;
-}
-
-/* Стиль только для начальной картинки */
-#introImage {
-  width: 100%;            /* занимает весь контейнер */
-  max-width: 600px;       /* максимальная ширина */
-  border-radius: 15px;    /* скругление углов */
-
-}
-/* Оверлей */
-#introOverlay {
-  top: 0;
-
-}
-
 }

@@ -65,11 +65,6 @@ const ANSWER_DELAY = 0; // задержка перед показом ответ
 leftCharacterContainer.style.display = "none";
 rightCharacterContainer.style.display = "none";
 
-// Скрываем все кнопки, кроме первой ("Старт")
-answerBtns.forEach((btn, i) => {
-  if (i !== 0) btn.style.display = "none";
-});
-answerBtns[0].textContent = "Get Started";
 
 // ==========================
 // Основные функции
@@ -133,7 +128,7 @@ function applyLeftCharacterModifier(node) {
 function showIntroImage(src) {
   const imageContainer = document.getElementById("imageContainer");
   
-  // Очищаем контейнер от предыдущих картинок
+  // Очищаем контейнер от предыдущихintroOverlay.start картинок
   imageContainer.innerHTML = "";
 
   // Создаём и добавляем новую картинку
@@ -352,8 +347,6 @@ function startGame() {
       currentDialog = dialogs[firstTopic];
       currentNode = currentDialog.start;
 
-      // Прячем кнопку "Старт"
-      answerBtns[0].style.display = "none";
 
       // Прячем интро-оверлей
       const introOverlay = document.getElementById("introOverlay");
@@ -408,7 +401,10 @@ function showPopup(message, isSuccess = true) {
 // ==========================
 // Слушатели событий
 // ==========================
-answerBtns[0].addEventListener("click", startGame);
+if (startBtn) {
+  startBtn.addEventListener("click", startGame);
+}
+
 restartBtn.addEventListener("click", () => {
   popup.style.display = "none";
   startGame();

@@ -9,7 +9,7 @@
   <!-- Стили -->
   <link rel="stylesheet" href="common.css">
   <link rel="stylesheet" href="page4.css">
-
+  <link rel="stylesheet" href="Iphone-size.css">
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -48,8 +48,7 @@
 
 <!-- Новый временный контейнер -->
 <div id="introOverlay">
-  <div class="intro-text">
-    <b>Добро пожаловать!</b> 
+  <div class="intro-text"><b>Добро пожаловать!</b> 
 
     Вы — пассажир самолёта, и ваша цель — вовремя улететь ✈️.
 
@@ -57,6 +56,8 @@
 правильные шаги прибавляют время ⬆️, ошибки его отнимают ⬇️, 
 а некоторые поступки могут полностью лишить вас рейса ❌ .
   </div>
+  
+  <button id="startBtn" class="startBtn">Get Started</button>
 </div>
 
 <div class="dialog-container">
@@ -75,8 +76,6 @@
 </div>
 
 <div class="answers" id="answers">
-  <button class="answerBtn start">Старт</button>
-  <button class="answerBtn">Ответ</button>
 </div>
 
 
@@ -103,7 +102,7 @@
 <script src="script_4.js"></script>
 <script src="footerBtnWork.js"></script>
 <script src="canvas-confetti.js"></script>
-<script src="timer.js"></script>
+
 
 </body>
 </html>
