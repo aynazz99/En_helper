@@ -53,11 +53,11 @@ header {
 }
 
 body.tg-fullscreen {
-  --header-padding-top: calc(12px + env(safe-area-inset-top));
+  --header-padding-top: 35px;
 }
 
 body.tg-mini {
-  --header-padding-top: 12px;
+  --header-padding-top: 35px;
 }
 
 
@@ -354,4 +354,5 @@ footer {
 }
   
 }
+
 
