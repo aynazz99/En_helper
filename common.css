@@ -41,8 +41,8 @@ header {
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  position: relative; /* вместо sticky */
   gap: 10px;
-  position: sticky;
   top: 0;
   z-index: 100;
   background: rgba(0,0,0,0.0);
@@ -354,3 +354,4 @@ footer {
 }
   
 }
+
