@@ -75,7 +75,7 @@ rightCharacterContainer.style.display = "none";
 // ==========================
 const leftCharacterModifiers = {
   "airport-waiting-place.jpg": { visible: false }, // скрыть персонажа
-  "checkin.jpg": { visible: true, src: "airport_staff.png", label: "Airport Staff" },
+  "checkin.png": { visible: true, src: "airport_staff.png", label: "Airport Staff" },
   "security-check.png": { visible: true, src: "security.png", label: "Security" },
   "lounge-sleep.png": { visible: true, src: "megaphone.png", label: "Announcement" },
   "airport_coffee.png": { visible: true, src: "megaphone.png", label: "Announcement" },
@@ -439,3 +439,4 @@ function resetGameState() {
   const leftImg = leftCharacterContainer.querySelector("img");
   if (leftImg) leftImg.src = defaultLeftCharacterSrc;
 }
+
