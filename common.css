@@ -45,6 +45,17 @@ header {
   z-index: 100;
 }
 
+/* --- если WebApp в fullscreen --- */
+body.tg-fullscreen header {
+  /* отступ сверху (учёт Telegram шапки/статус-бара) */
+  padding-top: calc(12px + env(safe-area-inset-top));
+}
+
+/* --- если WebApp в мини-режиме --- */
+body.tg-mini header {
+  padding-top: 20px; /* обычный отступ */
+}
+
 
 #title {
   font-weight: bold;
