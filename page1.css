@@ -210,14 +210,7 @@
 #addBtn { background-color: #4CAF50; color: white; }
 #openBtn { background-color: #2196F3; color: white; }
 
-@media (max-width:480px) {
-  #listSelect {
-    min-width: 100px;   /* вместо 200px */
-    max-width: 30vw;    /* максимум 30% экрана */
-    font-size: 0.9rem; /* чуть меньше шрифт */
-    padding: 6px 4px;   /* компактнее */
-  }
-}
+
 
 /* Сам контейнер */
 .image-container {
@@ -247,6 +240,18 @@
 
 
 
+@media (max-width:480px) {
+  #listSelect {
+    min-width: 100px;   /* вместо 200px */
+    max-width: 30vw;    /* максимум 30% экрана */
+    font-size: 0.9rem; /* чуть меньше шрифт */
+    padding: 6px 4px;   /* компактнее */
+  }
+
+
+}
+
+
 /* Адаптация для устройств с максимальной высотой 460px */
 @media (max-height: 460px) {
 /* Сам контейнер */
@@ -254,12 +259,68 @@
   height: 0px;            /* высота контейнера */
   margin: 0px auto;
 }
-#word { margin: 0px 0 }
+#word { margin: 0px 0!important }
 
 #submitWrapper {
-  position: sticky;
-  bottom: 50px!important;
+  bottom: 60px!important;
 
 }
 
+}
+
+@media (min-height: 460px) {
+/* Сам контейнер */
+.image-container {
+  height: 200px;            /* высота контейнера */
+  margin: 0px auto;
+}
+#word { margin: 0px 0!important }
+
+#submitWrapper {
+  bottom: 70px!important;
+
+}
+
+}
+
+@media (max-height: 600px) {
+/* Сам контейнер */
+.image-container {
+  height: 130px;            /* высота контейнера */
+  margin: 0px auto;
+}
+#word { margin: 0px 0!important }
+
+#submitWrapper {
+  bottom: 70px!important;
+
+}
+}
+
+@media (max-height:525px) {
+/* Сам контейнер */
+.image-container {
+  height: 70px;            /* высота контейнера */
+  margin: 0px auto;
+}
+#word { margin: 0px 0!important }
+
+#submitWrapper {
+  bottom: 70px!important;
+
+}
+}
+
+@media (max-height:470px) {
+/* Сам контейнер */
+.image-container {
+  height: 0px;            /* высота контейнера */
+  margin: 0px auto;
+}
+#word { margin: 0px 0!important }
+
+#submitWrapper {
+  bottom: 70px!important;
+
+}
 }
