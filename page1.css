@@ -227,7 +227,7 @@
   margin: 20px auto;
   width: 90%;               /* растягиваем почти на всю ширину */
   max-width: 550px;         /* максимум по ширине */
-  height: 300px;            /* высота контейнера */
+  height: 250px;            /* высота контейнера */
   background: rgba(255, 255, 255, 0);
 
   border-radius: 20px;
@@ -243,4 +243,23 @@
   max-height: 100%;
   border-radius: 15px;
   object-fit: contain;     /* сохраняет пропорции */
+}
+
+
+
+/* Адаптация для устройств с максимальной высотой 460px */
+@media (max-height: 460px) {
+/* Сам контейнер */
+.image-container {
+  height: 0px;            /* высота контейнера */
+  margin: 0px auto;
+}
+#word { margin: 0px 0 }
+
+#submitWrapper {
+  position: sticky;
+  bottom: 50px!important;
+
+}
+
 }
