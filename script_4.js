@@ -439,4 +439,3 @@ function resetGameState() {
   const leftImg = leftCharacterContainer.querySelector("img");
   if (leftImg) leftImg.src = defaultLeftCharacterSrc;
 }
-

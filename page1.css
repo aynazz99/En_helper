@@ -248,6 +248,8 @@
     padding: 6px 4px;   /* компактнее */
   }
 
+  #word { margin: 10px 0!important }
+
 
 }
 
@@ -259,7 +261,7 @@
   height: 0px;            /* высота контейнера */
   margin: 0px auto;
 }
-#word { margin: 0px 0!important }
+#word { margin: 20px 0!important }
 
 #submitWrapper {
   bottom: 60px!important;
@@ -274,7 +276,6 @@
   height: 200px;            /* высота контейнера */
   margin: 0px auto;
 }
-#word { margin: 0px 0!important }
 
 #submitWrapper {
   bottom: 70px!important;
@@ -289,7 +290,6 @@
   height: 130px;            /* высота контейнера */
   margin: 0px auto;
 }
-#word { margin: 0px 0!important }
 
 #submitWrapper {
   bottom: 70px!important;
@@ -303,7 +303,7 @@
   height: 70px;            /* высота контейнера */
   margin: 0px auto;
 }
-#word { margin: 0px 0!important }
+
 
 #submitWrapper {
   bottom: 70px!important;
@@ -317,7 +317,7 @@
   height: 0px;            /* высота контейнера */
   margin: 0px auto;
 }
-#word { margin: 0px 0!important }
+
 
 #submitWrapper {
   bottom: 70px!important;

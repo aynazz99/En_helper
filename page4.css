@@ -32,7 +32,7 @@ header {
   grid-column: 1 / -1;   /* на всю ширину */
   justify-self: center;
   padding: 18px 100px; 
-  background-color: rgba(0, 255, 0, 0.4);
+  background-color: rgba(9, 255, 0, 0.2);
   color: #ffffff;
   font-size: 1.5rem;
   font-weight: 700;
@@ -47,6 +47,12 @@ header {
   /* Чтобы выглядело более "стеклянно" */
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 14px;
+}
+
+.startBtn:hover {
+  background-color: rgba(9, 255, 0, 0.3);
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 
@@ -369,13 +375,9 @@ header {
   font-size: 18px;
   line-height: 1.2;
   white-space: pre-line;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-/* Чтобы кнопка старт была выше оверлея */
-.answerBtn.start {
-  position: relative;
-  z-index: 100;
-}
 
 /* Класс для плавного исчезновения */
 .fade-out {

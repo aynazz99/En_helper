@@ -285,14 +285,3 @@ button.red-border {
   object-fit: contain;     /* сохраняет пропорции */
 }
 
-/* Адаптация для устройств с максимальной высотой 460px */
-@media (max-height: 460px) {
-/* Сам контейнер */
-.image-container {
-  height: 30px;            /* высота контейнера */
-  margin: 0px auto;
-}
-}
-
-
-
