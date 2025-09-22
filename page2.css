@@ -284,3 +284,11 @@ button.red-border {
   border-radius: 15px;
   object-fit: contain;     /* сохраняет пропорции */
 }
+
+/* Адаптация для устройств с максимальной высотой 460px */
+@media (max-height: 460px) {
+/* Сам контейнер */
+.image-container {
+  height: 60px;            /* высота контейнера */
+}
+}
