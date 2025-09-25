@@ -347,7 +347,7 @@ footer {
   height: 40px;
   background: rgba(255,255,255,0);
 
-  padding: 10px 5px;
+  padding: 20px 5px;
   font-size: 0.8rem;
   font-weight: bold;
   color: #ffffff;
@@ -372,3 +372,4 @@ header button {
 }
   
 }
+
