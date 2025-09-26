@@ -118,6 +118,11 @@ header {
   bottom: 0%;
   right: 0%;
 }
+
+.answers {
+margin-bottom: 75px;
+}
+
 }
 
 /* Планшеты: 768px — 1024px */
@@ -407,4 +412,28 @@ header {
     transform: translateY(-250px) scale(1.2);
     opacity: 0;
   }
+}
+
+
+@media (max-height: 750px) {
+.intro-text {
+  font-size: 14px;
+}
+
+}
+
+@media (max-height: 635px) {
+.intro-text {
+  font-size: 12px;
+  padding: 5px;
+}
+
+}
+
+@media (max-height: 590px) {
+.intro-text {
+  font-size: 10px;
+  padding: 10px;
+}
+
 }
