@@ -1,76 +1,85 @@
- /* === Базовые стили для полноэкранного PWA === */
+/* ================================================= */
+/* === Базовые стили для полноэкранного PWA === */
+/* ================================================= */
 
 html, body {
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;            /* прокрутка отключена */
-  touch-action: auto;         /* касания работают нормально */
-  overscroll-behavior: auto;  /* эффект отскока на iOS */
+  width: 100%;                  /* Занимаем всю доступную ширину */
+  height: 100%;                 /* Занимаем всю доступную высоту */
+  min-height: 100vh;            /* Минимальная высота - 100% от высоты окна просмотра */
+  margin: 0;                    /* Убираем внешние отступы */
+  padding: 0;                   /* Убираем внутренние отступы */
+  overflow: hidden;             /* Прокрутка отключена для полноэкранного эффекта */
+  touch-action: auto;           /* Позволяет браузеру определять жесты касания (например, прокрутку, если она будет) */
+  overscroll-behavior: auto;    /* Управление тем, что происходит при прокрутке за границы контента (эффект отскока на iOS) */
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  font-family: Arial, sans-serif;
-  background-color:darkcyan;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: white;
-    /* чтобы фон заходил под статус-бар */
-  background-attachment: fixed; 
+  display: flex;                /* Используем Flexbox для выравнивания содержимого */
+  flex-direction: column;       /* Элементы расположены вертикально */
+  align-items: center;          /* Выравнивание по горизонтали (по центру) */
+  justify-content: flex-start;  /* Выравнивание по вертикали (начинаем сверху) */
+  font-family: Arial, sans-serif; /* Базовый шрифт */
+  background-color: darkcyan;   /* Фоновый цвет */
+  background-size: cover;       /* Фон занимает всю область, сохраняя пропорции */
+  background-position: center;  /* Фон центрирован */
+  background-repeat: no-repeat; /* Фон не повторяется */
+  color: white;                 /* Основной цвет текста - белый */
+  background-attachment: fixed; /* Фиксируем фон. Полезно для PWA, чтобы фон заходил под статус-бар */
 }
 
-/* === Шапка === */
+/* ================================================= */
+/* === Шапка (Header) и Управление === */
+/* ================================================= */
+
+/* Определяем переменную для верхнего отступа шапки */
 :root {
   --header-padding-top: 12px;
 }
 
 header {
-  padding-top: var(--header-padding-top);
+  /* Отступы */
+  padding-top: var(--header-padding-top); /* Используем переменную для верхнего отступа */
   padding-right: 8px;
   padding-bottom: 12px;
   padding-left: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  gap: 10px;
-  top: 0;
-  z-index: 100;
-  background: rgba(0,0,0,0.0);
+  display: flex;                /* Используем Flexbox */
+  justify-content: space-between; /* Элементы расположены по краям */
+  align-items: center;          /* Выравнивание по вертикали (по центру) */
+  width: 100%;                  /* Занимаем всю ширину */
+  box-sizing: border-box;       /* Отступы и границы входят в общую ширину/высоту */
+  gap: 10px;                    /* Расстояние между элементами шапки */
+  top: 0;                       /* Прилипает к верху */
+  z-index: 100;                 /* Располагаем поверх остального контента */
+  background: rgba(0,0,0,0.0);  /* Слегка прозрачный фон */
+  /* Эффект "размытого стекла" */
   backdrop-filter: saturate(180%) blur(10px);
-  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px); /* Для Safari */
+  /* Тень и нижняя граница */
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+/* Стили для полноэкранного режима Telegram (учитываем безопасную зону) */
 body.tg-fullscreen {
-  --header-padding-top: calc(12px + env(safe-area-inset-top));
+  --header-padding-top: calc(12px + env(safe-area-inset-top)); /* Добавляем отступ для "чёлки" iPhone */
 }
 
+/* Стили для мини-приложения Telegram */
 body.tg-mini {
-  --header-padding-top: 12px;
+  --header-padding-top: 12px; /* Стандартный отступ */
 }
 
-
-
+/* Стиль для заголовка */
 #title {
   font-weight: bold;
   font-size: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 120px;
+  white-space: nowrap;          /* Запрет переноса */
+  overflow: hidden;             /* Скрываем лишний текст */
+  text-overflow: ellipsis;      /* Многоточие, если текст не влезает */
+  max-width: 120px;             /* Ограничиваем ширину */
 }
 
-/* Общие стили для всех селектов */
+/* Общие стили для всех элементов <select> (выпадающие списки) */
 #listSelect,
 #ProfileSelect,
 #CardSelect,
@@ -97,17 +106,18 @@ body.tg-mini {
   display: none;
 }
 
-
+/* Контейнеры для элементов управления слева и справа в шапке */
 #leftControls,
 #rightControls {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 6px;                 /* Расстояние между кнопками */
+  flex-shrink: 0;           /* Запрет сжатия */
 }
 
+/* Стили для кнопок в шапке */
 header button {
-  background-color: rgba(255,255,255,0.15);
+  background-color: rgba(255,255,255,0.15); /* Полупрозрачный фон */
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 10px;
   width: 36px;
@@ -119,142 +129,166 @@ header button {
   font-weight: 600;
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: background-color 0.2s, transform 0.1s; /* Плавный переход при наведении */
   padding: 0;
 }
 
+/* Эффект при наведении (hover) на кнопку в шапке */
 header button:hover {
   background-color: rgba(255,255,255,0.25);
-  transform: scale(1.05);
+  transform: scale(1.05); /* Немного увеличиваем */
 }
 
+/* ================================================= */
+/* === Приветственный экран и Обёртка === */
+/* ================================================= */
+
+/* Обёртка, которая центрирует контейнер приветствия */
+#welcomeWrapper {
+  flex-grow: 1;                 /* Занимает всё доступное место по вертикали */
+  display: flex;
+  flex-direction: column;       /* Вертикальное расположение */
+  justify-content: center;      /* Центрирование по вертикали */
+  align-items: center;          /* Центрирование по горизонтали */
+  gap: 20px;                    /* Расстояние между элементами внутри */
+  text-align: center;
+}
+
+/* Контейнер для текста приветствия */
 #welcomeContainer {
-  background: rgba(0, 0, 0, 0.05); /* чёрный полупрозрачный фон */
-  backdrop-filter: blur(8px); /* лёгкое размытие фона за контейнером */
-  border-radius: 16px; /* закруглённые углы */
-  padding: 20px 30px; /* внутренние отступы */
+  background: rgba(0, 0, 0, 0.05);  /* Чёрный полупрозрачный фон */
+  backdrop-filter: blur(8px);       /* Эффект размытия фона за контейнером */
+  border-radius: 16px;              /* Закруглённые углы */
+  padding: 20px 30px;               /* Внутренние отступы */
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Красивая тень */
 }
 
-#welcomeWrapper {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column; /* вертикально */
-  justify-content: center; /* по вертикали */
-  align-items: center;     /* по горизонтали */
-  gap: 20px;               /* расстояние между элементами */
-  text-align: center;
-  
-}
-
+/* Основной заголовок */
 #welcome {
   font-size: 3rem;
   font-weight: bold;
   text-align: center;
   color: #ffffff;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-  
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* Тень для лучшей читаемости */
 }
 
+/* Подзаголовок / Дополнительный текст */
 #welcomeSubtext {
-  font-size: 1.5rem; /* меньше, чем основной заголовок */
-  color: white;    /* тот же цвет */
+  font-size: 1.5rem;            /* Меньше, чем основной заголовок */
+  color: white;                 /* Белый цвет */
   text-align: center;
-  line-height: 1.4; /* делаем строки читабельными */
-  max-width: 300px; /* ограничиваем ширину для iPhone */
-  margin: 0 auto 20px auto; /* центрируем и добавляем отступ снизу */
+  line-height: 1.4;             /* Межстрочный интервал для читабельности */
+  max-width: 300px;             /* Ограничение ширины для мобильных */
+  margin: 0 auto 20px auto;     /* Центрирование и отступ снизу */
 }
 
-/* Кнопки под приветствием */
+/* ================================================= */
+/* === Кнопки в Футере (Footer Buttons) === */
+/* ================================================= */
+
+/* Контейнер для кнопок в нижней части экрана */
 #footerButtons {
-  position: fixed;       /* фиксируем относительно окна */
-  bottom: 20px;          /* отступ снизу */
-  left: 50%;             /* по горизонтали центрируем */
-  transform: translateX(-50%);
+  position: fixed;              /* Фиксированное положение относительно окна */
+  bottom: 20px;                 /* Отступ снизу */
+  left: 50%;                    /* Начинаем от центра */
+  transform: translateX(-50%);  /* Сдвигаем назад на половину своей ширины для центрирования */
   display: flex;
   justify-content: center;
-  gap: 15px;
-  z-index: 1000;         /* чтобы кнопки были поверх всего */
+  gap: 15px;                    /* Расстояние между кнопками */
+  z-index: 1000;                /* Располагаем поверх всего */
 }
 
+/* Стили для кнопок в футере */
 #footerButtons button {
-  background: rgba(0,0,0,0);
-  border: 2px solid rgba(255,255,255,0);
+  background: rgba(0,0,0,0);    /* Прозрачный фон */
+  border: 2px solid rgba(255,255,255,0); /* Прозрачная рамка */
   border-radius: 12px;
   padding: 10px 20px;
   font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
-  
   cursor: pointer;
   transition: background 0.2s, transform 0.1s, border 0.2s;
 }
 
+/* Эффект при наведении на кнопки в футере */
 #footerButtons button:hover {
   background: rgba(0,0,0,0.2);
-  transform: scale(1.3);
+  transform: scale(1.05); /* Немного увеличиваем */
 }
 
+/* Стиль для активной кнопки */
 #footerButtons button.active {
-  color: rgb(0, 0, 0);
-  border: 2px solid rgba(255,255,255,0.2);
+  color: rgb(0, 0, 0);          /* Цвет текста для активной кнопки */
+  background: white;            /* Фон для активной кнопки */
+  border: 2px solid rgba(255,255,255,0.2); /* Рамка */
   border-radius: 12px;
 }
 
+/* ================================================= */
+/* === Поле ввода (Input Field) === */
+/* ================================================= */
 
-/* Поле ввода */
 #answerInput {
   width: 100%;
   font-size: 1.3rem;
   padding: 14px;
   border-radius: 14px;
   border: 2px solid #ccc;
-  box-sizing: border-box;
+  box-sizing: border-box;       /* Отступы и границы внутри ширины */
   margin-top: 5px;
-  margin-bottom: 5px;  /* снизу */
+  margin-bottom: 5px;
   background: #fff;
   color: #000;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
+
+/* Стили для поля ввода при ошибке */
 #answerInput.error {
   border: 2px solid red !important;
   box-shadow: 0 0 10px red;
 }
+#answerInput.error::placeholder {
+  color: #ff4d4d; /* Placeholder тоже красный при ошибке */
+}
+
+/* Стили для поля ввода при успехе */
 #answerInput.success {
   border: 2px solid #00a550 !important;
   box-shadow: 0 0 10px #00a550;
 }
 
-#answerInput.error::placeholder {
-  color: #ff4d4d; /* placeholder тоже красный */
-}
+/* ================================================= */
+/* === Анимации и Границы === */
+/* ================================================= */
 
-/* === Анимации === */
+/* Анимация "отскока" */
 @keyframes bounce {
-  0%   { transform: translateY(0); }
-  25%  { transform: translateY(-12px); }
-  50%  { transform: translateY(0); }
-  75%  { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
+  0%    { transform: translateY(0); }
+  25%   { transform: translateY(-12px); }
+  50%   { transform: translateY(0); }
+  75%   { transform: translateY(-6px); }
+  100%  { transform: translateY(0); }
 }
 
-/* bounce для любых элементов */
+/* Применение анимации "bounce" */
 .bounce {
   animation: bounce 0.6s ease;
 }
 
-/* зелёная граница */
+/* Стиль для зелёной границы */
 .green-border {
   border: 2px solid #4CAF50 !important;
 }
-/* красная граница */
+/* Стиль для красной границы */
 .red-border {
   border: 2px solid #f44336 !important;
 }
 
+/* Красная граница с анимацией для select */
 select.red-border {
   border: 2px solid red;
   box-shadow: 0 0 5px red;
@@ -263,113 +297,109 @@ select.red-border {
 }
 
 
-/* === Адаптив под айфон === */
+/* ================================================= */
+/* === Адаптив под мобильные (макс. ширина 480px) === */
+/* ================================================= */
+
 @media (max-width: 480px) {
+  /* Запрет выделения текста на мобильных устройствах */
+  * {
+    -webkit-user-select: none;    /* Safari, iOS */
+    -moz-user-select: none;       /* Firefox */
+    -ms-user-select: none;        /* IE/Edge */
+    user-select: none;            /* Современные браузеры */
+    -webkit-touch-callout: none;  /* Отключаем меню при долгом тапе на iPhone */
+  }
+
+  /* --- Стили для Header на мобильных --- */
+  header button {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* --- Стили для Welcome Container на мобильных --- */
   #welcomeContainer {
-    padding: 15px 20px; 
+    padding: 15px 20px;
     border-radius: 12px;
-    width: 95%;          /* уменьшаем ширину под маленький экран */
-    max-width: 300px;    /* ограничение для iPhone SE и похожих */
-    margin: 0 auto;      /* центрируем контейнер */
+    width: 95%;                   /* Уменьшаем ширину */
+    max-width: 300px;             /* Ограничение для маленьких экранов */
+    margin: 0 auto;               /* Центрируем */
     box-sizing: border-box;
   }
 
   #welcomeWrapper {
-    gap: 15px;           /* уменьшаем расстояние между элементами */
+    gap: 15px;                    /* Уменьшаем расстояние между элементами */
   }
 
   #welcome {
-    font-size: 2rem;     /* уменьшаем заголовок */
+    font-size: 2rem;              /* Уменьшаем основной заголовок */
   }
 
   #welcomeSubtext {
-    font-size: 1.2rem;   /* чуть меньше подзаголовок */
-    max-width: 100%;     /* подстраиваем под контейнер */
+    font-size: 1.2rem;            /* Уменьшаем подзаголовок */
+    max-width: 100%;
     margin-bottom: 15px;
   }
 
+  /* --- Стили для Футера на мобильных (фиксированное положение) --- */
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.302); /* Слегка прозрачный фон футера */
+    display: flex;
+    justify-content: center;      /* По горизонтали */
+    align-items: center;          /* По вертикали */
+    height: 70px;                 /* Фиксированная высота футера */
+    z-index: 1000;
+  }
+
+  /* Контейнер кнопок в футере */
   #footerButtons {
-    margin-top: 15px;
-    gap: 10px;               /* чуть меньше расстояние между кнопками */
-    flex-wrap: wrap;          /* если кнопки не влезают, переход на новую строку */
+    position: static;
+    transform: none;
+    bottom: auto;
+    left: auto;
+
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+    padding: 0 10px; /* Добавляем небольшие горизонтальные отступы по краям футера */
+    
+    /* === ИЗМЕНЕНИЯ ДЛЯ РАСТЯГИВАНИЯ НА ВСЮ ШИРИНУ === */
+    width: 100%;                  /* 1. Устанавливаем ширину 100% */
+    margin: 0;                    /* 2. Убираем 'margin: 0 auto', чтобы избежать центрирования */
+    justify-content: space-around; /* 3. Распределяем кнопки равномерно по всей ширине (или space-between) */
+    /* === КОНЕЦ ИЗМЕНЕНИЙ === */
+
+    max-width: 100%;
   }
 
+  /* Сами кнопки в футере на мобильных */
   #footerButtons button {
-    font-size: 1rem;          /* чуть меньше шрифт на iPhone */
-    padding: 12px 18px;       /* фиксируем отступы */
-    height: 44px;             /* фиксированная высота для всех кнопок */
-    min-width: 80px;          /* минимальная ширина кнопки */
-    box-sizing: border-box;   /* padding и border учитываются в высоте */
+    flex: 1;                        /* Все кнопки делят ширину поровну */
+    min-width: 0;                   /* Чтобы текст не ломал сетку */
+    white-space: normal;          /* Разрешаем перенос текста */
+    word-wrap: break-word;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;       /* Текст под иконкой (если есть) */
+    height: 40px;                 /* Фиксированная высота */
+    background: rgba(255,255,255,0); /* Прозрачный фон */
+    margin-top: -20px; /* поднимаем кнопки выше */
+    padding: 10px 5px;            /* Уменьшаем отступы */
+    font-size: 0.8rem;            /* Меньший шрифт */
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, border 0.2s;
   }
 
-   /* Запрет выделения текста на iPhone */
-  * {
-    -webkit-user-select: none;   /* Safari, iOS */
-    -moz-user-select: none;      /* Firefox */
-    -ms-user-select: none;       /* IE/Edge */
-    user-select: none;           /* Современные браузеры */
-    -webkit-touch-callout: none; /* Отключаем меню при долгом тапе на iPhone */
+  #footerButtons button:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.05);
   }
-
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.302);
-  display: flex;
-  justify-content: center;   /* по горизонтали */
-  align-items: center;       /* по вертикали */
-  height: 70px;              /* высота футера = высота кнопок + отступы */
-  z-index: 1000;
 }
-
-#footerButtons {
-  display: flex;
-
-  gap: 10px;
-  flex-wrap: nowrap;       /* не переносим сами кнопки */
-  padding: 0;              /* убираем лишние отступы */
-  margin: 0 auto;          /* центрируем блок по горизонтали */
-  
-  max-width: 100%;         /* не выходит за экран */
-}
-
-#footerButtons button {
-  white-space: normal;     
-  word-wrap: break-word;
-  text-align: center;
-  display: inline-flex;        /* flex внутри кнопки для текста */
-  align-items: center;         /* центр текста вертикально */
-  justify-content: center;     /* центр текста горизонтально */
-
-  flex-direction: column; /* иконка сверху, текст снизу */
-  height: 40px;
-  background: rgba(255,255,255,0);
-
-  padding: 20px 5px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s, border 0.2s;
-}
-
-#footerButtons button:hover {
-  background: rgba(255,255,255,0.25);
-  transform: scale(1.05);
-}
-
-#footerButtons button.active {
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 12px;
-}
-
-header button {
-  width: 30px;
-  height: 30px;
-
-}
-  
-}
-
