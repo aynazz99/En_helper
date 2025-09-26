@@ -194,3 +194,31 @@
   background: transparent;
   color: gold;
 }
+
+@media (max-height: 740px) {
+  .transparent-container {
+    height: 100px; /* высота контейнера */
+  }
+}
+
+@media (max-height: 690px) {
+  .transparent-container {
+    height: 50px; /* высота контейнера */
+  }
+}
+
+@media (max-height: 640px) {
+  .transparent-container {
+    height: 50px; /* высота контейнера */
+    margin: 0px;
+    padding: 0px;
+  }
+}
+
+@media (max-height: 565px) {
+  .transparent-container {
+    height: 0px; /* высота контейнера */
+    margin: 0px;
+    padding: 0px;
+  }
+}
