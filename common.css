@@ -37,8 +37,8 @@ body {
 
 :root {
   /* отступ сверху учитывает safe-area + дополнительный внутренний паддинг */
-  --header-padding-top: calc(env(safe-area-inset-top) + 12px);
-  --header-padding-top-legacy: calc(constant(safe-area-inset-top) + 12px);
+  --header-padding-top: calc(env(safe-area-inset-top) + 50px);
+  --header-padding-top-legacy: calc(constant(safe-area-inset-top) + 50px);
 }
 
 header {
@@ -400,6 +400,7 @@ select.red-border {
     transform: scale(1.05);
   }
 }
+
 
 
 
