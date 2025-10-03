@@ -62,8 +62,9 @@ const ANSWER_DELAY = 1500; // задержка перед показом отв�
 // ==========================
 
 // Скрываем персонажей
-leftCharacterContainer.style.display = "none";
-rightCharacterContainer.style.display = "none";
+// leftCharacterContainer.style.display = "none";
+// rightCharacterContainer.style.display = "none";
+
 
 
 // ==========================
@@ -361,9 +362,10 @@ function startGame() {
       }
 
       // Показываем персонажей и остальные кнопки
-      leftCharacterContainer.style.display = "";
-      rightCharacterContainer.style.display = "";
-      answerBtns.forEach(btn => (btn.style.display = ""));
+leftCharacterContainer.style.visibility = "visible";
+rightCharacterContainer.style.visibility = "visible";
+answersContainer.style.visibility = "visible";
+
 
       // Первый узел
       showNode(currentNode);
@@ -431,11 +433,11 @@ function resetGameState() {
   resetBubbles();
 
   // Сбрасываем кнопки ответов
-  answersContainer.innerHTML = "";
+answersContainer.style.visibility = "visible";
 
   // Сбрасываем персонажей
-  leftCharacterContainer.style.display = "none";
-  rightCharacterContainer.style.display = "none";
+leftCharacterContainer.style.visibility = "visible";
+rightCharacterContainer.style.visibility = "visible";
   const leftImg = leftCharacterContainer.querySelector("img");
   if (leftImg) leftImg.src = defaultLeftCharacterSrc;
 }
