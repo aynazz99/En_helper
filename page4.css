@@ -47,7 +47,18 @@ header {
   /* Чтобы выглядело более "стеклянно" */
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 14px;
+
+  /* Пульсация */
+  animation: pulse 1.5s infinite;
 }
+
+/* Анимация пульсации */
+@keyframes pulse {
+  0%   { transform: scale(1); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+  50%  { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+  100% { transform: scale(1); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+}
+
 
 .startBtn:hover {
   background-color: rgba(9, 255, 0, 0.3);
@@ -444,4 +455,5 @@ margin-bottom: 75px;
 .answers {
   display: none;
 }
+
 
