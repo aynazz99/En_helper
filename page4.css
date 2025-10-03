@@ -438,3 +438,10 @@ margin-bottom: 75px;
 
 }
 
+/* Скрываем элементы по умолчанию, чтобы не было мерцания */
+.character.left,
+.character.right,
+.answers {
+  display: none;
+}
+
