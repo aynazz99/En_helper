@@ -64,9 +64,13 @@ header {
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+body.tg-fullscreen header {
+  margin-top: 40px; /* просто добавляем 40px сверху */
+}
+
 /* Стили для полноэкранного режима Telegram (учитываем безопасную зону) */
 body.tg-fullscreen {
-  --header-padding-top: calc(12px + env(safe-area-inset-top) + 40px);
+  --header-padding-top: calc(12px + env(safe-area-inset-top) );
 }
 
 
@@ -409,6 +413,7 @@ select.red-border {
     transform: scale(1.05);
   }
 }
+
 
 
 
