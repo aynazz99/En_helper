@@ -66,7 +66,7 @@ header {
 
 /* Стили для полноэкранного режима Telegram (учитываем безопасную зону) */
 body.tg-fullscreen {
-  --header-padding-top: calc(12px + env(safe-area-inset-top)); /* Добавляем отступ для "чёлки" iPhone */
+  --header-padding-top: calc(40px + env(safe-area-inset-top)); /* Добавляем отступ для "чёлки" iPhone */
 }
 
 /* Стили для мини-приложения Telegram */
@@ -408,3 +408,4 @@ select.red-border {
     transform: scale(1.05);
   }
 }
+
