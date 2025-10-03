@@ -5,7 +5,7 @@
 html, body {
   width: 100%;                  /* Занимаем всю доступную ширину */
   height: 100%;                 /* Занимаем всю доступную высоту */
-  min-height: 100vh;            /* Минимальная высота - 100% от высоты окна просмотра */
+min-height: -webkit-fill-available;
   margin: 0;                    /* Убираем внешние отступы */
   padding: 0;                   /* Убираем внутренние отступы */
   overflow: hidden;             /* Прокрутка отключена для полноэкранного эффекта */
@@ -24,16 +24,21 @@ body {
   background-position: center;  /* Фон центрирован */
   background-repeat: no-repeat; /* Фон не повторяется */
   color: white;                 /* Основной цвет текста - белый */
-  background-attachment: fixed; /* Фиксируем фон. Полезно для PWA, чтобы фон заходил под статус-бар */
+  /* ⚠️ На iOS WebView background-attachment: fixed ломает safe-area */
+  background-attachment: scroll;
+
+  color: white;
+  box-sizing: border-box;
 }
 
 /* ================================================= */
 /* === Шапка (Header) и Управление === */
 /* ================================================= */
 
-/* Определяем переменную для верхнего отступа шапки */
 :root {
-  --header-padding-top: 12px;
+  /* отступ сверху учитывает safe-area + дополнительный внутренний паддинг */
+  --header-padding-top: calc(env(safe-area-inset-top) + 12px);
+  --header-padding-top-legacy: calc(constant(safe-area-inset-top) + 12px);
 }
 
 header {
