@@ -1,4 +1,6 @@
+// ==========================
 // script_2.js
+// ==========================
 
 // Инициализация Firebase
 const firebaseConfig = {
@@ -15,44 +17,63 @@ const database = firebase.database();
 
 let currentProfileId = null;
 const imageContainer = document.getElementById('imageContainer');
-if(imageContainer) imageContainer.style.display = 'none';
+if (imageContainer) imageContainer.style.display = 'none';
 
-// Подробный лог действий профиля
-async function logProfileAction(profileId, action, details = "") {
-  const logRef = database.ref(`profiles/${profileId}/log`);
-  const timestamp = new Date().toISOString();
-  await logRef.push({ timestamp, action, details });
+// ==========================
+// Встроенная панель логов
+// ==========================
+function showLogs(message) {
+  let logDiv = document.getElementById("logDiv");
+
+  if (!logDiv) {
+    logDiv = document.createElement("div");
+    logDiv.id = "logDiv";
+    logDiv.style.position = "fixed";
+    logDiv.style.bottom = "0";
+    logDiv.style.left = "0";
+    logDiv.style.width = "100%";
+    logDiv.style.maxHeight = "150px";
+    logDiv.style.overflowY = "auto";
+    logDiv.style.background = "rgba(0,0,0,0.7)";
+    logDiv.style.color = "white";
+    logDiv.style.fontSize = "12px";
+    logDiv.style.fontFamily = "monospace";
+    logDiv.style.padding = "5px";
+    logDiv.style.zIndex = "9999";
+    document.body.appendChild(logDiv);
+  }
+
+  const p = document.createElement("div");
+  p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+  logDiv.appendChild(p);
+  logDiv.scrollTop = logDiv.scrollHeight;
 }
 
-// Функция обновления счётчика knownWords
-async function updateKnownCounter() {
-  if (!currentProfileId) return;
+// ==========================
+// Логирование действий профиля
+// ==========================
+async function logProfileAction(profileId, action, details = "") {
+  const logMessage = `${action}: ${details}`;
+  showLogs(logMessage); // показываем в UI
 
   try {
-    const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
-    const words = snapshot.val() || [];
-    const uniqueWords = [...new Set(words)];
-
-    const numberElement = document.querySelector("#knownCounter .kc-number");
-    if (numberElement) {
-      numberElement.textContent = uniqueWords.length;
-      numberElement.classList.add("bounce");
-      setTimeout(() => numberElement.classList.remove("bounce"), 600);
-    }
-
-    await logProfileAction(currentProfileId, "updateKnownCounter", `Count: ${uniqueWords.length}`);
+    const logRef = database.ref(`profiles/${profileId}/log`);
+    const timestamp = new Date().toISOString();
+    await logRef.push({ timestamp, action, details });
   } catch (error) {
-    console.error("Ошибка updateKnownCounter:", error);
-    if (currentProfileId) await logProfileAction(currentProfileId, "error", `updateKnownCounter: ${error.message}`);
+    showLogs(`ERROR writing to Firebase: ${error.message}`);
+    console.error(error);
   }
 }
 
-// Автоматический вход через Telegram Mini App
+// ==========================
+// Автоматический вход через Telegram
+// ==========================
 async function autoLogin() {
   try {
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     if (!tgUser) {
-      console.error("Telegram user data not found!");
+      showLogs("Telegram user data not found!");
       return;
     }
 
@@ -60,34 +81,56 @@ async function autoLogin() {
     const profileName = tgUser.username || tgUser.first_name || `User${profileId}`;
     currentProfileId = profileId;
 
+    showLogs(`Attempting to load profile ${profileName} (ID: ${profileId})`);
+
     const profileRef = database.ref(`profiles/${profileId}`);
     const snapshot = await profileRef.get();
 
     if (!snapshot.exists()) {
-      // Создаём новый профиль
       await profileRef.set({
         name: profileName,
         knownWords: [],
         log: {}
       });
-      console.log(`Создан новый профиль: ${profileName}`);
+      showLogs(`Profile created: ${profileName}`);
       await logProfileAction(profileId, "createProfile", `Profile created for ${profileName}`);
     } else {
-      console.log(`Профиль найден: ${snapshot.val().name}`);
+      showLogs(`Profile loaded: ${snapshot.val().name}`);
       await logProfileAction(profileId, "loadProfile", `Profile loaded: ${snapshot.val().name}`);
     }
 
-    // Показ интерфейса викторины
     showQuizUI();
     await updateKnownCounter();
 
   } catch (error) {
-    console.error("Ошибка autoLogin:", error);
-    if (currentProfileId) await logProfileAction(currentProfileId, "error", `autoLogin: ${error.message}`);
+    showLogs(`ERROR in autoLogin: ${error.message}`);
+    console.error(error);
   }
 }
 
-// Функция показа UI викторины
+// ==========================
+// Обновление счётчика knownWords
+// ==========================
+async function updateKnownCounter() {
+  if (!currentProfileId) return;
+
+  const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
+  const words = snapshot.val() || [];
+  const uniqueWords = [...new Set(words)];
+
+  const numberElement = document.querySelector("#knownCounter .kc-number");
+  if (numberElement) {
+    numberElement.textContent = uniqueWords.length;
+    numberElement.classList.add("bounce");
+    setTimeout(() => numberElement.classList.remove("bounce"), 600);
+  }
+
+  await logProfileAction(currentProfileId, "updateCounter", `Known words: ${uniqueWords.length}`);
+}
+
+// ==========================
+// Интерфейс квиза
+// ==========================
 function showQuizUI() {
   const inputModeDiv = document.getElementById("inputModeDiv");
   const submitWrapper = document.getElementById("submitWrapper");
@@ -98,21 +141,35 @@ function showQuizUI() {
   if (inputModeDiv) inputModeDiv.style.display = "block";
   if (submitWrapper) submitWrapper.style.display = "block";
   if (counter) counter.style.display = "flex";
-  if (imageContainer) imageContainer.style.display = 'flex';
+  if(imageContainer) imageContainer.style.display = 'flex';
 
   const container = document.getElementById('welcomeContainer');
-  if (container) container.remove();
+  if(container) container.remove();
+
+  showLogs("Quiz UI shown");
 }
 
-// Проверка слова
+// ==========================
+// Проверка валидности слова
+// ==========================
 function isValidWord(word) {
   return /^[a-zA-Z\s'-]+$/.test(word);
 }
 
-// Обработчик добавления слова
+// ==========================
+// Обработка отправки ответа
+// ==========================
+const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+const answerInput = document.getElementById("answerInput");
+
 submitAnswerBtn.addEventListener("click", async () => {
   const newWord = answerInput.value.trim();
-  if (!currentProfileId) return;
+
+  if (!currentProfileId) {
+    showFeedbackInsideInput("Профиль не загружен!", true);
+    showLogs("Attempted to submit word without profile");
+    return;
+  }
 
   if (!newWord) {
     showFeedbackInsideInput("Введите слово!", true);
@@ -120,35 +177,34 @@ submitAnswerBtn.addEventListener("click", async () => {
   }
 
   if (!isValidWord(newWord)) {
-    showFeedbackInsideInput("Только английские буквы и слова", true);
+    showFeedbackInsideInput("Только английские буквы", true);
     return;
   }
 
-  try {
-    const profileRef = database.ref(`profiles/${currentProfileId}/knownWords`);
-    const snapshot = await profileRef.get();
-    const words = snapshot.val() || [];
+  const profileRef = database.ref(`profiles/${currentProfileId}/knownWords`);
+  const snapshot = await profileRef.get();
+  const words = snapshot.val() || [];
 
-    if (words.includes(newWord)) {
-      showFeedbackInsideInput("Слово уже есть!", true);
-    } else {
-      words.push(newWord);
-      await profileRef.set(words);
-      showFeedbackInsideInput("Слово добавлено!", false);
-      await logProfileAction(currentProfileId, "addWord", newWord);
-      updateKnownCounter();
-    }
-  } catch (error) {
-    console.error("Ошибка добавления слова:", error);
-    await logProfileAction(currentProfileId, "error", `addWord: ${error.message}`);
+  if (words.includes(newWord)) {
+    showFeedbackInsideInput("Слово уже есть!", true);
+    await logProfileAction(currentProfileId, "duplicateWord", newWord);
+  } else {
+    words.push(newWord);
+    await profileRef.set(words);
+    showFeedbackInsideInput("Слово добавлено!", false);
+    await logProfileAction(currentProfileId, "addWord", newWord);
+    updateKnownCounter();
   }
 });
 
+// ==========================
 // Подсказка внутри input
+// ==========================
 function showFeedbackInsideInput(message, isError) {
   const originalPlaceholder = "Введите слово на английском";
   answerInput.value = "";
   answerInput.placeholder = message;
+
   answerInput.classList.add("bounce");
   answerInput.style.borderColor = isError ? "red" : "green";
 
@@ -160,22 +216,28 @@ function showFeedbackInsideInput(message, isError) {
   }, 1500);
 }
 
+// ==========================
 // Отключение масштабирования
-document.addEventListener('gesturestart', e => e.preventDefault());
-let lastTouchEnd = 0;
-document.addEventListener('touchend', e => {
-  const now = new Date().getTime();
-  if (now - lastTouchEnd <= 300) e.preventDefault();
-  lastTouchEnd = now;
+// ==========================
+document.addEventListener('gesturestart', e=>e.preventDefault());
+let lastTouchEnd=0;
+document.addEventListener('touchend', e=>{
+  const now=new Date().getTime();
+  if(now-lastTouchEnd<=300) e.preventDefault();
+  lastTouchEnd=now;
 }, false);
-document.addEventListener('touchstart', e => { if(e.touches.length > 1) e.preventDefault(); }, {passive:false});
+document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
 
-// Запуск авто-входа после загрузки страницы
-document.addEventListener("DOMContentLoaded", autoLogin);
+// ==========================
+// Автологин при загрузке
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+  autoLogin();
 
-// Регистрация Service Worker
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js")
-    .then(() => console.log("✅ Service Worker зарегистрирован"))
-    .catch(err => console.error("❌ Ошибка Service Worker:", err));
-}
+  // Регистрация Service Worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => showLogs("Service Worker registered"))
+      .catch(err => showLogs("Service Worker registration error: " + err.message));
+  }
+});
