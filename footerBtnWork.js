@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const buttons = [
-    { id: "testBtn", page: "index.html", select: document.getElementById("listSelect") },
+    { id: "testBtn", page: "test.html", select: document.getElementById("listSelect") },
     { id: "levelBtn", page: "level_check_Page.html", select: document.getElementById("ProfileSelect"), extraBtn: document.getElementById("addProfileBtn") },
     { id: "cardsBtn", page: "flashCards.html", select: document.getElementById("CardSelect") },
     { id: "DialogBtn", page: "dialog.html", select: document.getElementById("DialogSelect") }
