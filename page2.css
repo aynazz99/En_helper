@@ -39,8 +39,6 @@ button.red-border {
 }
 
 
-
-
 #submitAnswerBtn {
 
   margin-bottom: 80px !important;  /* снизу */
@@ -132,7 +130,7 @@ button.red-border {
     align-items: center;
     min-height: 100vh;
 
-    padding-bottom: 120px; /* отступ футера от нижнего края */
+    padding-bottom: 100px; /* отступ футера от нижнего края */
     box-sizing: border-box;
 }
 
@@ -157,6 +155,4 @@ button.red-border {
   
     justify-content: center;                   /* центр текста */
   }
-
-
 
