@@ -14,12 +14,22 @@ const database = firebase.database();
 
 let currentProfileId = null;
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // Автоматический вход через Telegram
+document.addEventListener("DOMContentLoaded", () => {
+  showLoading(true);
+  attemptLogin(0);
+});
+
+// 🔁 Повторная попытка входа
+function attemptLogin(retryCount) {
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
 
   if (!tgUser || !tgUser.id) {
-    alert("Ошибка: данные Telegram недоступны.");
+    if (retryCount < 5) {
+      setTimeout(() => attemptLogin(retryCount + 1), 1000);
+    } else {
+      showLoading(false);
+      alert("❌ Не удалось получить данные Telegram. Проверьте соединение.");
+    }
     return;
   }
 
@@ -27,20 +37,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const displayName = tgUser.username || tgUser.first_name || "Telegram User";
 
   const profileRef = database.ref("profiles/" + currentProfileId);
-  const snapshot = await profileRef.get();
-
-  if (!snapshot.exists()) {
-    await profileRef.set({
-      name: displayName,
-      knownWords: []
+  profileRef.get()
+    .then(snapshot => {
+      if (!snapshot.exists()) {
+        return profileRef.set({ name: displayName, knownWords: [] });
+      }
+    })
+    .then(() => {
+      console.log("✅ Профиль готов:", currentProfileId);
+      showLoading(false);
+      showQuizUI();
+      updateKnownCounter();
+    })
+    .catch(error => {
+      console.error("Ошибка входа:", error);
+      showLoading(false);
+      alert("⚠️ Ошибка при загрузке профиля. Попробуйте позже.");
     });
-    console.log("🆕 Профиль создан:", currentProfileId);
-  } else {
-    console.log("✅ Профиль найден:", currentProfileId);
-  }
-
-  showQuizUI();
-  updateKnownCounter();
 
   // Регистрация Service Worker
   if ("serviceWorker" in navigator) {
@@ -48,21 +61,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       .then(() => console.log("✅ Service Worker зарегистрирован"))
       .catch(err => console.error("❌ Ошибка Service Worker:", err));
   }
-});
+}
 
-// DOM элементы
-const submitAnswerBtn = document.getElementById("submitAnswerBtn");
-const answerInput = document.getElementById("answerInput");
-const imageContainer = document.getElementById('imageContainer');
-imageContainer.style.display = 'none';
+// 🔄 Показ/скрытие загрузки
+function showLoading(show) {
+  const loader = document.getElementById("loader");
+  if (loader) loader.style.display = show ? "flex" : "none";
+}
 
-// Функция отображения интерфейса
+// 📦 Интерфейс
 function showQuizUI() {
   const inputModeDiv = document.getElementById("inputModeDiv");
   const submitWrapper = document.getElementById("submitWrapper");
   const welcome = document.getElementById("welcome");
-  const levelBtn = document.getElementById("levelBtn");
   const counter = document.getElementById("knownCounter");
+  const imageContainer = document.getElementById("imageContainer");
 
   if (welcome) welcome.style.display = "none";
   if (inputModeDiv) inputModeDiv.style.display = "block";
@@ -70,16 +83,19 @@ function showQuizUI() {
   if (counter) counter.style.display = "flex";
   if (imageContainer) imageContainer.style.display = "flex";
 
-  const container = document.getElementById('welcomeContainer');
+  const container = document.getElementById("welcomeContainer");
   if (container) container.remove();
 }
 
-// Проверка допустимого слова
+// ✅ Проверка слова
 function isValidWord(word) {
   return /^[a-zA-Z\s'-]+$/.test(word);
 }
 
-// Обработка ответа
+// ➕ Добавление слова
+const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+const answerInput = document.getElementById("answerInput");
+
 submitAnswerBtn.addEventListener("click", async () => {
   const newWord = answerInput.value.trim();
 
@@ -89,62 +105,70 @@ submitAnswerBtn.addEventListener("click", async () => {
   }
 
   if (!newWord || !isValidWord(newWord)) {
-    answerInput.classList.add("bounce");
-    answerInput.style.borderColor = "red";
-    setTimeout(() => {
-      answerInput.classList.remove("bounce");
-      answerInput.style.borderColor = "";
-    }, 1500);
+    showInputFeedback("Только английские буквы и слова", true);
     return;
   }
 
-  const profileRef = database.ref("profiles/" + currentProfileId + "/knownWords");
-  const snapshot = await profileRef.get();
-  const words = snapshot.val() || [];
+  try {
+    const profileRef = database.ref("profiles/" + currentProfileId + "/knownWords");
+    const snapshot = await profileRef.get();
+    const words = snapshot.val() || [];
 
-  if (words.includes(newWord)) {
-    answerInput.placeholder = "Слово уже есть!";
-  } else {
-    words.push(newWord);
-    await profileRef.set(words);
-    answerInput.placeholder = "Слово добавлено!";
-    updateKnownCounter();
+    if (words.includes(newWord)) {
+      showInputFeedback("Слово уже есть!", true);
+    } else {
+      words.push(newWord);
+      await profileRef.set(words);
+      showInputFeedback("Слово добавлено!", false);
+      updateKnownCounter();
+    }
+  } catch (error) {
+    console.error("Ошибка добавления слова:", error);
+    showInputFeedback("Ошибка сети!", true);
   }
+});
 
+// 🔢 Обновление счётчика
+async function updateKnownCounter() {
+  try {
+    const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
+    const words = snapshot.val() || [];
+    const uniqueWords = [...new Set(words)];
+
+    const numberElement = document.querySelector("#knownCounter .kc-number");
+    if (numberElement) {
+      numberElement.textContent = uniqueWords.length;
+      numberElement.classList.add("bounce");
+      setTimeout(() => numberElement.classList.remove("bounce"), 600);
+    }
+  } catch (error) {
+    console.error("Ошибка счётчика:", error);
+  }
+}
+
+// ✨ Анимация поля ввода
+function showInputFeedback(message, isError) {
   answerInput.value = "";
+  answerInput.placeholder = message;
   answerInput.classList.add("bounce");
-  answerInput.style.borderColor = "green";
+  answerInput.style.borderColor = isError ? "red" : "green";
+
   setTimeout(() => {
     answerInput.classList.remove("bounce");
     answerInput.style.borderColor = "";
     answerInput.placeholder = "Введите слово на английском";
+    answerInput.focus();
   }, 1500);
-});
-
-// Обновление счётчика
-async function updateKnownCounter() {
-  if (!currentProfileId) return;
-
-  const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
-  const words = snapshot.val() || [];
-  const uniqueWords = [...new Set(words)];
-
-  const numberElement = document.querySelector("#knownCounter .kc-number");
-  if (numberElement) {
-    numberElement.textContent = uniqueWords.length;
-    numberElement.classList.add("bounce");
-    setTimeout(() => numberElement.classList.remove("bounce"), 600);
-  }
 }
 
-// Отключение масштабирования
-document.addEventListener('gesturestart', e => e.preventDefault());
+// 🚫 Отключение масштабирования
+document.addEventListener("gesturestart", e => e.preventDefault());
 let lastTouchEnd = 0;
-document.addEventListener('touchend', e => {
+document.addEventListener("touchend", e => {
   const now = new Date().getTime();
   if (now - lastTouchEnd <= 300) e.preventDefault();
   lastTouchEnd = now;
 }, false);
-document.addEventListener('touchstart', e => {
+document.addEventListener("touchstart", e => {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
