@@ -1,4 +1,13 @@
 
+header {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+
+  justify-content: center !important;
+
+}
+
+
 #leftControls,
 #rightControls {
   display: flex;
@@ -21,8 +30,7 @@ button.red-border {
 #inputModeDiv {
   display: flex;
   flex-direction: column;
-  gap: 5px;           /* расстояние между input и feedback / другими элементами */
-  margin-top: 5px;
+  margin-top: 5px !important;
   margin-bottom: 5px!important;
   width: 95%;
   max-width: 600px;
@@ -30,9 +38,13 @@ button.red-border {
   text-align: center;  /* если нужно центрировать input и feedback */
 }
 
+#submitWrapper {
+margin-top: 5px !important;
+}
+
 
 #submitAnswerBtn {
-  margin-top: 5px !important;     /* сверху */
+
   margin-bottom: 80px !important;  /* снизу */
   width: 100%;
   font-size: 1.4rem;
@@ -61,156 +73,17 @@ button.red-border {
 }
 
 
-                                                                /* === Попап === */
-.popup {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 999;
-
-}
-
-.popup.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.popup-content {
-  background: #fff;
-  padding: 30px 25px;
-  border-radius: 16px;
-  min-width: 320px;
-  max-width: 90%;
-  width: 80%;
-  text-align: center;
-  transform: scale(0.95);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-}
-
-.popup.show .popup-content {
-  transform: scale(1);
-}
-
-.popup-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #222;
-}
-
-/* Поля ввода */
-.popup input[type="text"] {
-  width: 100%;               /* чтобы вписывалось в ширину попапа */
-  max-width: 90%;           /* не вылазило за пределы попапа */
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Состояние фокуса */
-.popup input[type="text"]:focus {
-  border-color: #00b7ff;
-  box-shadow: 0 0 8px rgba(0,183,255,0.25);
-}
-
-
-
-/* Отключаем автозаполнение браузера для поля добавления профиля */
-#profileNameInput::-webkit-autofill,
-#profileNameInput:-webkit-autofill,
-#profileNameInput:-internal-autofill-selected {
-  background-color: #fff !important;
-  color: #222 !important;
-}
-
-
-/* Сообщения */
-.popup-message,
-#profileMessage {
-  min-height: 24px;
-  font-size: 0.95rem;
-  color: #333;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-/* === Контейнер кнопок === */
-.popup-buttons,
-.popup-section {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-/* Универсальные кнопки */
-.popup-buttons button,
-.popup-section button {
-  flex: 1 1 120px; /* растягиваются одинаково */
-  padding: 10px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.15);
-  background: rgba(255,255,255,0.85);
-  color: #222;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-}
-
-.popup-buttons button:hover,
-.popup-section button:hover {
-  background: rgba(255,255,255,1);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-  transform: translateY(-2px);
-}
-
-.popup-buttons button:active,
-.popup-section button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-                                                            /* Красная кнопка Закрыть */
-#deleteCancelBtn {
-  background: #ff6b6b; /* мягкий красный */
-  color: #fff;
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-  min-width: 120px;
-  border-radius: 12px;
-  padding: 10px 18px;
-  cursor: pointer;
-}
-
-#deleteCancelBtn:hover {
-  background: #ff4c4c; /* чуть ярче при наведении */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-  transform: translateY(-2px);
-}
-
-#deleteCancelBtn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-
                                                              /* Стили для счётчика */
 /* Контейнер счётчика */
 /* Изначально скрыт */
+
+/* Текст слева */
+.vocab-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  white-space: nowrap;     /* чтобы текст не переносился */
+}
+
 .known-counter {
   display: none; /* изначально скрыт */
   justify-content: center;
@@ -228,16 +101,18 @@ button.red-border {
 
 /* Сама "плашка" прозрачная */
 .kc-badge {
+  width: 100px;
   pointer-events: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;        /* меньше расстояние между цифрой и подписью */
-  background: transparent;
+  background: rgba(255, 255, 255, 0.225);
   padding: 0;
-  border: none;
+  border-radius: 10px;
   box-shadow: none;
   transition: none;
+
 }
 
 /* Цифра */
@@ -252,6 +127,17 @@ button.red-border {
   display: block;
 }
 
+.footer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* прижимает к футеру */
+    align-items: center;
+    min-height: 100vh;
+
+    padding-bottom: 100px; /* отступ футера от нижнего края */
+    box-sizing: border-box;
+}
+
 
 /* Мобильная адаптация */
 @media (max-width: 420px) {
@@ -260,29 +146,17 @@ button.red-border {
 }
 
 /* Сам контейнер */
-.image-container {
-  display: flex;
-  gap: 10px;
-  padding: 15px;
-  margin: 20px auto;
-  width: 90%;               /* растягиваем почти на всю ширину */
-  max-width: 550px;         /* максимум по ширине */
-  height: 200px;            /* высота контейнера */
-  background: rgba(255, 255, 255, 0);
+  #textContainer {
+    margin-top: 10px;
+    background-color: rgba(0, 0, 0, 0); /* полупрозрачный фон */
+    color: rgb(255, 255, 255);                        /* цвет текста */
 
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.0);
-  justify-content: center; /* по горизонтали */
-  align-items: center;      /* выравниваем картинки по центру */
-  overflow-x: auto;         /* если картинок много, появится горизонтальный скролл */
-}
-
-/* Стили для картинок внутри */
-.image-container img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 15px;
-  object-fit: contain;     /* сохраняет пропорции */
-}
-
+    border-radius: 10px;                  /* скруглённые углы */
+    width: 350px;                         /* ширина контейнера */
+    text-align: center; 
+    font-size: 19px;
+    font-weight: bold;
+  
+    justify-content: center;                   /* центр текста */
+  }
 
