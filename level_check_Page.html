@@ -1,123 +1,196 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+// ================================
+// Инициализация Firebase
+// ================================
+const firebaseConfig = {
+  apiKey: "AIzaSyCgSFDj7fRw6HSvZyOz1g5IM749f2sY55M",
+  authDomain: "wordquiz-659d7.firebaseapp.com",
+  databaseURL: "https://wordquiz-659d7-default-rtdb.firebaseio.com",
+  projectId: "wordquiz-659d7",
+  storageBucket: "wordquiz-659d7.firebasestorage.app",
+  messagingSenderId: "785560761880",
+  appId: "1:785560761880:web:9455e5767af0e0b9b1f56d"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
-<!-- Название для PWA на iOS -->
-<meta name="apple-mobile-web-app-title" content="English Helper">
-<title>English Helper</title>
+// ================================
+// DOM элементы
+// ================================
+const logContainer = document.getElementById('initDataContainer'); // для логов и debug
+const imageContainer = document.getElementById('imageContainer');
+const quizContainer = document.getElementById("inputModeDiv");
+const submitWrapper = document.getElementById("submitWrapper");
+const counter = document.getElementById("knownCounter");
+const welcome = document.getElementById("welcome");
+const welcomeContainer = document.getElementById('welcomeContainer');
+const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+const answerInput = document.getElementById("answerInput");
 
-  <!-- Стили -->
-<link rel="stylesheet" href="common.css">
-<link rel="stylesheet" href="page2.css">
-<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+imageContainer.style.display = 'none';
 
+// ================================
+// Функция логирования
+// ================================
+function log(msg, data = null) {
+  console.log(msg, data || '');
+  if (logContainer) {
+    logContainer.textContent += `[${new Date().toLocaleTimeString()}] ${msg}`;
+    if (data) logContainer.textContent += `: ${JSON.stringify(data, null, 2)}`;
+    logContainer.textContent += '\n';
+  }
+}
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+// ================================
+// Ждём инициализации WebApp
+// ================================
+const waitForWebApp = () => new Promise(res => {
+  const check = () => {
+    if (window.Telegram?.WebApp) {
+      res(window.Telegram.WebApp);
+    } else {
+      setTimeout(check, 50);
+    }
+  };
+  check();
+});
 
-  <!-- Подключаем manifest -->
-  <link rel="manifest" href="manifest.json">
+waitForWebApp().then(async tg => {
+  log("Telegram WebApp найден");
+  tg.ready();
+  log("Telegram WebApp готов");
 
-  <!-- iOS поддержка -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="English Helper">
-  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  // ================================
+  // Получаем initData
+  // ================================
+  const initData = tg.initData || {};
+  const initDataUnsafe = tg.initDataUnsafe || {};
 
-  <!-- Цвет статус-бара (Android Chrome) -->
-  <meta name="theme-color" content="#ffffff">
-</head>
+  log("initData", initData);
+  log("initDataUnsafe", initDataUnsafe);
 
-<body>
+  // ================================
+  // Определяем профиль по user_id
+  // ================================
+  const userId = initDataUnsafe.user?.id;
+  if (!userId) {
+    log("Ошибка: не удалось получить user_id");
+    alert("Не удалось определить user_id!");
+    return;
+  }
 
-<header>
-  <div style="flex:1;"></div> <!-- пустое место слева -->
-      <button id="addProfileBtn">+</button>
-  <select id="ProfileSelect">
-    <option disabled selected value="">Выберите профиль</option>
-  </select>
-      <button id="DeleteProfileBtn">🗑️</button>
-  <div style="flex:1; display:flex; justify-content:flex-end;">
-    <section id="knownCounter" class="known-counter" role="status" aria-label="Количество выученных слов">
-      <div class="kc-badge">
-        <span class="kc-number">0</span>
-      </div>
-    </section>
-  </div>
-</header>
+  let currentProfileId = userId;
+  log("Текущий профиль (user_id)", currentProfileId);
 
-<pre id="initDataContainer" style="background:#f0f0f0; padding:10px; border:1px solid #ccc; max-height:300px; overflow:auto;"></pre>
+  // ================================
+  // Проверяем профиль в Firebase
+  // ================================
+  const profileRef = database.ref(`profiles/${currentProfileId}`);
+  const snapshot = await profileRef.get();
 
-  
-<!-- Полупрозрачный контейнер с картинками -->
-<div class="image-container" id="imageContainer"></div>
+  if (!snapshot.exists()) {
+    log("Профиль не найден, создаём новый", { name: initDataUnsafe.user?.first_name || "Unknown" });
+    await profileRef.set({
+      name: initDataUnsafe.user?.first_name || "Unknown",
+      knownWords: []
+    });
+  } else {
+    log("Профиль найден", snapshot.val());
+  }
 
-<!-- режим ввода -->
-<div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
-  <div id="feedback"></div>
-  <input type="text" id="answerInput" placeholder="Введите слово на английском" autocomplete="off" autocapitalize="none" spellcheck="false">
-</div>
+  // ================================
+  // Показ UI квиза
+  // ================================
+  if (welcome) welcome.style.display = "none";
+  if (quizContainer) quizContainer.style.display = "block";
+  if (submitWrapper) submitWrapper.style.display = "block";
+  if (counter) counter.style.display = "flex";
+  if (imageContainer) imageContainer.style.display = 'flex';
+  if (welcomeContainer) welcomeContainer.remove();
+  log("UI квиза показан");
 
-<!-- кнопка ответа вынесена вниз -->
-<div id="submitWrapper" style="display:none; text-align:center; margin:20px 0; width:95%; max-width:600px;">
-  <button id="submitAnswerBtn" type="button" tabindex="-1">Добавить</button>
-</div>
+  // ================================
+  // Функция обновления счётчика knownWords
+  // ================================
+  async function updateKnownCounter() {
+    const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
+    const words = snapshot.val() || [];
+    const uniqueWords = [...new Set(words)];
 
+    const numberElement = document.querySelector("#knownCounter .kc-number");
+    if (numberElement) {
+      numberElement.textContent = uniqueWords.length;
+      numberElement.classList.add("bounce");
+      setTimeout(() => numberElement.classList.remove("bounce"), 600);
+    }
+    log("Обновлён счётчик слов", uniqueWords.length);
+  }
 
-<div id="welcomeWrapper">
-  <div id="welcomeContainer">
-    <div id="welcomeSubtext">
-     Проверим, сколько английских слов ты реально помнишь...
-    </div>
-  </div>
-</div>
+  updateKnownCounter();
 
-<div id="profilePopup" class="popup hidden">
-  <div class="popup-content">
-    <h3>Создать новый профиль</h3>
-    <input type="text" id="profileNameInput" placeholder="Введите имя профиля" autocomplete="off">
-    <div id="profileMessage" style="margin: 10px 0;"></div>
-    <div class="popup-buttons">
-      <button id="profileCancelBtn">Отмена</button>
-      <button id="profileAddBtn">Создать</button>
-    </div>
-  </div>
-</div>
+  // ================================
+  // Проверка корректности слова
+  // ================================
+  function isValidWord(word) {
+    return /^[a-zA-Z\s'-]+$/.test(word);
+  }
 
-<div id="deletePopup" class="popup hidden">
-  <div class="popup-content">
-    <h3 class="popup-title">Удаление профилей</h3>
-    <!-- Удаление текущего профиля -->
-    <div class="popup-section">
-      <button id="deleteCurrentBtn" class="btn btn-danger">Удалить текущий профиль</button>
-    </div>
-    <!-- Удаление всех профилей -->
-    <div class="popup-section">
-      <button id="deleteAllBtn" class="btn btn-danger">Удалить все профили</button>
-    </div>
-    <div id="deleteMessage" class="popup-message"></div>
-    <button id="deleteCancelBtn" class="btn btn-secondary">Закрыть</button>
-  </div>
-</div>
+  // ================================
+  // Обработчик кнопки Submit
+  // ================================
+  submitAnswerBtn.addEventListener("click", async () => {
+    const newWord = answerInput.value.trim();
+    log("Попытка добавить слово", newWord);
 
-<footer>
-  <div id="footerButtons">
-    <button id="testBtn"> <i class="fi fi-rr-list-check"></i> Test</button>
-    <button id="levelBtn" class="active" > <i class="fi fi-rr-chart-histogram"></i> Lvl</button>
-    <button id="cardsBtn"> <i class="fi fi-rr-layers"></i> Cards</button> 
-    <button id="DialogBtn"> <i class="fi fi-rr-rocket-lunch"></i> Airport</button>
-  </div>
-</footer>
+    if (!newWord) {
+      showFeedbackInsideInput("Введите слово!", true);
+      return;
+    }
 
-<script src="script_2.js"></script>
-<script src="footerBtnWork.js"></script>
-<script src="active-footer.js"></script>
-</body>
-</html>
+    if (!isValidWord(newWord)) {
+      showFeedbackInsideInput("Только английские буквы и слова", true);
+      return;
+    }
 
+    const wordsRef = database.ref(`profiles/${currentProfileId}/knownWords`);
+    const snapshot = await wordsRef.get();
+    const words = snapshot.val() || [];
 
+    if (words.includes(newWord)) {
+      showFeedbackInsideInput("Слово уже есть!", true);
+      log("Слово уже есть в профиле", newWord);
+    } else {
+      words.push(newWord);
+      await wordsRef.set(words);
+      showFeedbackInsideInput("Слово добавлено!", false);
+      updateKnownCounter();
+      log("Слово добавлено в профиль", newWord);
+    }
+  });
+
+  // ================================
+  // Подсказка в input
+  // ================================
+  function showFeedbackInsideInput(message, isError) {
+    const originalPlaceholder = "Введите слово на английском";
+    answerInput.value = "";
+    answerInput.placeholder = message;
+    answerInput.classList.add("bounce");
+    answerInput.style.borderColor = isError ? "red" : "green";
+
+    setTimeout(() => {
+      answerInput.focus();
+      answerInput.classList.remove("bounce");
+      answerInput.placeholder = originalPlaceholder;
+      answerInput.style.borderColor = "";
+    }, 1500);
+  }
+
+  // ================================
+  // Регистрация Service Worker
+  // ================================
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => log("Service Worker зарегистрирован"))
+      .catch(err => log("Ошибка Service Worker", err));
+  }
+});
