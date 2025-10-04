@@ -47,14 +47,9 @@ function showQuizUI() {
   if (counter) counter.style.display = "flex";
   if (imageContainer) imageContainer.style.display = "flex";
 
-  updateKnownCounter();
-
   const container = document.getElementById("welcomeContainer");
   if (container) container.remove();
   
-  const textContainer = document.getElementById("textContainer");
-  textContainer.textContent = "Проверим, сколько английских слов ты реально помнишь...";
-
 }
 
 // функция проверки: только английские буквы, пробел, дефис и апостроф
@@ -152,5 +147,3 @@ document.addEventListener("DOMContentLoaded", async () => {
       .catch(err => console.error("❌ Ошибка Service Worker:", err));
   }
 });
-
-
