@@ -16,7 +16,7 @@ let currentProfileId = null;
 const imageContainer = document.getElementById("imageContainer");
 imageContainer.style.display = "none";
 
-// получаем ссылки на DOM-элементы
+// ссылки на DOM-элементы
 const answerInput = document.getElementById("answerInput");
 const submitAnswerBtn = document.getElementById("submitAnswerBtn");
 
@@ -52,7 +52,7 @@ function showQuizUI() {
   if (container) container.remove();
 }
 
-// функция проверки: только английские буквы, пробел, дефис и апостроф
+// проверка: только английские буквы, пробел, дефис и апостроф
 function isValidWord(word) {
   return /^[a-zA-Z\s'-]+$/.test(word);
 }
@@ -109,15 +109,10 @@ submitAnswerBtn.addEventListener("click", async () => {
 
 // Автоматический вход через Telegram Mini App
 document.addEventListener("DOMContentLoaded", async () => {
-  // получаем пользователя из Telegram
-  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {
-    id: "test123", // фейковый id для теста в браузере
-    username: "TestUser",
-    first_name: "Test"
-  };
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
 
   if (!tgUser || !tgUser.id) {
-    alert("Ошибка: данные Telegram недоступны");
+    alert("Ошибка: данные Telegram недоступны. Запустите приложение из Telegram Mini App.");
     return;
   }
 
@@ -147,4 +142,3 @@ document.addEventListener("DOMContentLoaded", async () => {
       .catch(err => console.error("❌ Ошибка Service Worker:", err));
   }
 });
-
