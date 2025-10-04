@@ -1,5 +1,4 @@
-```javascript
-// script_2.js
+
 // Инициализация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCgSFDj7fRw6HSvZyOz1g5IM749f2sY55M",
@@ -16,6 +15,10 @@ const database = firebase.database();
 let currentProfileId = null;
 const imageContainer = document.getElementById("imageContainer");
 imageContainer.style.display = "none";
+
+// получаем ссылки на DOM-элементы
+const answerInput = document.getElementById("answerInput");
+const submitAnswerBtn = document.getElementById("submitAnswerBtn");
 
 // функция для обновления счётчика knownWords текущего профиля
 async function updateKnownCounter() {
@@ -106,7 +109,12 @@ submitAnswerBtn.addEventListener("click", async () => {
 
 // Автоматический вход через Telegram Mini App
 document.addEventListener("DOMContentLoaded", async () => {
-  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  // получаем пользователя из Telegram
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {
+    id: "test123", // фейковый id для теста в браузере
+    username: "TestUser",
+    first_name: "Test"
+  };
 
   if (!tgUser || !tgUser.id) {
     alert("Ошибка: данные Telegram недоступны");
@@ -139,4 +147,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       .catch(err => console.error("❌ Ошибка Service Worker:", err));
   }
 });
-```
+
