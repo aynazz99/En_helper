@@ -134,7 +134,7 @@ margin-top: 5px !important;
     align-items: center;
     min-height: 100vh;
 
-    padding-bottom: 100px; /* отступ футера от нижнего края */
+    padding-bottom: 120px; /* отступ футера от нижнего края */
     box-sizing: border-box;
 }
 
@@ -159,4 +159,5 @@ margin-top: 5px !important;
   
     justify-content: center;                   /* центр текста */
   }
+
 
