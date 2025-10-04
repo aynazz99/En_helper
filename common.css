@@ -36,10 +36,16 @@ body {
 /* ================================================= */
 
 :root {
-  /* отступ сверху учитывает safe-area + дополнительный внутренний паддинг */
+  /* Значение по умолчанию для всех случаев (браузер, мини-апп не в фулскрине и т.д.) */
+  --header-padding-top: 20px;
+}
+
+/* Только для Telegram Mini App в полноэкранном режиме */
+body.tg-fullscreen {
   --header-padding-top: calc(env(safe-area-inset-top) + 50px);
   --header-padding-top-legacy: calc(constant(safe-area-inset-top) + 50px);
 }
+
 
 header {
   /* Отступы */
@@ -400,6 +406,7 @@ select.red-border {
     transform: scale(1.05);
   }
 }
+
 
 
 
