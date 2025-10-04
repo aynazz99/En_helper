@@ -1,19 +1,3 @@
-// Получаем реальные данные из Telegram, если есть
-let initData = window.Telegram?.WebApp?.initDataUnsafe || "Нет данных из Telegram";
-
-// Функция вывода на экран
-function showInitData(data) {
-  const output = document.getElementById("initDataOutput");
-
-  if (typeof data === "string") {
-    output.textContent = data;
-  } else {
-    output.textContent = JSON.stringify(data, null, 2);
-  }
-}
-
-// Выводим initData
-showInitData(initData);
 
 // Анимация карточек
 const cards = document.querySelectorAll('.card');
