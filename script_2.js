@@ -34,32 +34,6 @@ if (webApp) {
 }
 
 // ==============================
-// Создание профиля Telegram в Firebase
-// ==============================
-async function createOrGetTelegramProfile() {
-  if (!telegramUser) return;
-
-  const profileId = telegramUser.id; // уникальный Telegram ID
-  const profileRef = database.ref("profiles/" + profileId);
-  const snapshot = await profileRef.get();
-
-  if (!snapshot.exists()) {
-    await profileRef.set({
-      name: telegramUser.first_name || "User",
-      username: telegramUser.username || "",
-      knownWords: []
-    });
-    console.log("Создан новый профиль Telegram:", telegramUser.first_name);
-  } else {
-    console.log("Профиль Telegram уже существует:", snapshot.val().name);
-  }
-
-  currentProfileId = profileId;
-  updateKnownCounter();
-  showQuizUI();
-}
-
-// ==============================
 // Обновление счётчика слов
 // ==============================
 async function updateKnownCounter() {
@@ -154,9 +128,41 @@ function showFeedbackInsideInput(message, isError) {
 // Запуск при загрузке страницы
 // ==============================
 document.addEventListener("DOMContentLoaded", async () => {
-  if (telegramUser) {
-    await createOrGetTelegramProfile();
+  if (window.Telegram && window.Telegram.WebApp) {
+    const webApp = window.Telegram.WebApp;
+    webApp.ready(); // уведомляем, что WebApp готов
+
+    const telegramUser = webApp.initDataUnsafe?.user;
+    if (telegramUser) {
+      await createOrGetTelegramProfile(telegramUser);
+    } else {
+      alert("Не удалось получить данные пользователя Telegram");
+    }
   } else {
     alert("Эта версия работает только внутри Telegram Mini App");
   }
 });
+
+// Переделанная функция для передачи пользователя
+async function createOrGetTelegramProfile(telegramUser) {
+  if (!telegramUser) return;
+
+  const profileId = telegramUser.id;
+  const profileRef = database.ref("profiles/" + profileId);
+  const snapshot = await profileRef.get();
+
+  if (!snapshot.exists()) {
+    await profileRef.set({
+      name: telegramUser.first_name || "User",
+      username: telegramUser.username || "",
+      knownWords: []
+    });
+    console.log("Создан новый профиль Telegram:", telegramUser.first_name);
+  } else {
+    console.log("Профиль Telegram уже существует:", snapshot.val().name);
+  }
+
+  currentProfileId = profileId;
+  updateKnownCounter();
+  showQuizUI();
+}
