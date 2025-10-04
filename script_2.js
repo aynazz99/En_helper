@@ -67,12 +67,29 @@ async function logProfileAction(profileId, action, details = "") {
 }
 
 // ==========================
+// Подробная трассировка загрузки
+// ==========================
+async function traceProfileStep(profileId, step, details = "") {
+  showLogs(`TRACE - ${step}: ${details}`);
+  try {
+    const traceRef = database.ref(`profiles/${profileId}/loadTrace`);
+    const timestamp = new Date().toISOString();
+    await traceRef.push({ timestamp, step, details });
+  } catch (error) {
+    showLogs(`ERROR writing trace to Firebase: ${error.message}`);
+  }
+}
+
+// ==========================
 // Автоматический вход через Telegram
 // ==========================
 async function autoLogin() {
   try {
+    traceProfileStep("unknown", "Start autoLogin", "Begin auto login process");
+
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     if (!tgUser) {
+      traceProfileStep("unknown", "Telegram user not found");
       showLogs("Telegram user data not found!");
       return;
     }
@@ -81,26 +98,33 @@ async function autoLogin() {
     const profileName = tgUser.username || tgUser.first_name || `User${profileId}`;
     currentProfileId = profileId;
 
-    showLogs(`Attempting to load profile ${profileName} (ID: ${profileId})`);
+    traceProfileStep(profileId, "Telegram user found", `Name: ${profileName}, ID: ${profileId}`);
 
     const profileRef = database.ref(`profiles/${profileId}`);
+    traceProfileStep(profileId, "Firebase check", "Checking if profile exists");
+
     const snapshot = await profileRef.get();
 
     if (!snapshot.exists()) {
+      traceProfileStep(profileId, "Profile not found", "Creating new profile");
       await profileRef.set({
         name: profileName,
         knownWords: [],
-        log: {}
+        log: {},
+        loadTrace: {}
       });
-      showLogs(`Profile created: ${profileName}`);
+      traceProfileStep(profileId, "Profile created", `Profile ${profileName} created`);
       await logProfileAction(profileId, "createProfile", `Profile created for ${profileName}`);
     } else {
-      showLogs(`Profile loaded: ${snapshot.val().name}`);
+      traceProfileStep(profileId, "Profile loaded", `Profile exists: ${snapshot.val().name}`);
       await logProfileAction(profileId, "loadProfile", `Profile loaded: ${snapshot.val().name}`);
     }
 
+    traceProfileStep(profileId, "Show UI", "Displaying quiz interface");
     showQuizUI();
     await updateKnownCounter();
+
+    traceProfileStep(profileId, "AutoLogin finished", "Profile fully loaded");
 
   } catch (error) {
     showLogs(`ERROR in autoLogin: ${error.message}`);
