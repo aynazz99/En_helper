@@ -113,7 +113,7 @@
           { "text": "Yes, I want to upgrade", "next": "5a1a" },
           { "text": "No, thank you", "next": "5a1b" }
         ],
-        "location": "business-class.jpg"
+        "location": "business-class.png"
       },
       "5a1a": {
         "speaker": "right",
@@ -373,3 +373,4 @@
     }
   }
 }
+
