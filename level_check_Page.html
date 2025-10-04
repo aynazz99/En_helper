@@ -38,19 +38,23 @@
 <body>
 
 <header>
-  <div style="flex:1;"></div> <!-- пустое место слева -->
-
-  <div style="flex:1; display:flex; justify-content:flex-end;">
-    <section id="knownCounter" class="known-counter" role="status" aria-label="Количество выученных слов">
+  <div class="header-center">
+    <span class="vocab-label">Ваш словарный запас</span>
+    <div id="knownCounter" class="known-counter" role="status" aria-label="Количество выученных слов">
       <div class="kc-badge">
         <span class="kc-number">0</span>
       </div>
-    </section>
+    </div>
   </div>
 </header>
 
-<!-- Полупрозрачный контейнер с картинками -->
-<div class="image-container" id="imageContainer"></div>
+
+<div class="footer-wrapper">
+<!-- Текстовый контейнер -->
+<div class="text-container" id="textContainer">
+  <p>Проверим, сколько английских слов ты реально помнишь...</p>
+</div>
+
 
 <!-- режим ввода -->
 <div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
@@ -64,13 +68,6 @@
 </div>
 
 
-<div id="welcomeWrapper">
-  <div id="welcomeContainer">
-    <div id="welcomeSubtext">
-     Проверим, сколько английских слов ты реально помнишь...
-    </div>
-  </div>
-</div>
 
 
 <footer>
@@ -81,6 +78,7 @@
     <button id="DialogBtn"> <i class="fi fi-rr-rocket-lunch"></i> Airport</button>
   </div>
 </footer>
+</div>
 
 <script src="script_2.js"></script>
 <script src="footerBtnWork.js"></script>
