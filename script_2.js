@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   showQuizUI();
-  updateKnownCounter();
+  await updateKnownCounter(); 
 
   // Регистрация Service Worker
   if ("serviceWorker" in navigator) {
@@ -147,3 +147,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       .catch(err => console.error("❌ Ошибка Service Worker:", err));
   }
 });
+
