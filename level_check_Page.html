@@ -36,19 +36,9 @@
 <body>
 
 <header>
-  <div style="flex:1;"></div> <!-- пустое место слева -->
-      <button id="addProfileBtn">+</button>
-  <select id="ProfileSelect">
-    <option disabled selected value="">Выберите профиль</option>
-  </select>
-      <button id="DeleteProfileBtn">🗑️</button>
-  <div style="flex:1; display:flex; justify-content:flex-end;">
-    <section id="knownCounter" class="known-counter" role="status" aria-label="Количество выученных слов">
-      <div class="kc-badge">
-        <span class="kc-number">0</span>
-      </div>
-    </section>
-  </div>
+<div id="loader" style="display:none; justify-content:center; align-items:center; height:100vh;">
+  <span>🔄 Загрузка профиля...</span>
+</div>
 </header>
 
 <!-- Полупрозрачный контейнер с картинками -->
@@ -116,4 +106,5 @@
 <script src="active-footer.js"></script>
 </body>
 </html>
+
 
