@@ -1,6 +1,6 @@
-// ==============================
+// script_2.js
+
 // Инициализация Firebase
-// ==============================
 const firebaseConfig = {
   apiKey: "AIzaSyCgSFDj7fRw6HSvZyOz1g5IM749f2sY55M",
   authDomain: "wordquiz-659d7.firebaseapp.com",
@@ -13,142 +13,30 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// ==============================
-// Переменные
-// ==============================
 let currentProfileId = null;
-const imageContainer = document.getElementById('imageContainer');
-imageContainer.style.display = 'none';
-const submitAnswerBtn = document.getElementById("submitAnswerBtn");
-const answerInput = document.getElementById("answerInput");
 
-// ==============================
-// Telegram WebApp
-// ==============================
-const webApp = window.Telegram?.WebApp;
-let telegramUser = null;
-
-if (webApp) {
-  webApp.ready();
-  telegramUser = webApp.initDataUnsafe?.user || null;
-}
-
-// ==============================
-// Обновление счётчика слов
-// ==============================
-async function updateKnownCounter() {
-  if (!currentProfileId) return;
-
-  const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
-  const words = snapshot.val() || [];
-  const uniqueWords = [...new Set(words)];
-
-  const numberElement = document.querySelector("#knownCounter .kc-number");
-  if (numberElement) {
-    numberElement.textContent = uniqueWords.length;
-    numberElement.classList.add("bounce");
-    setTimeout(() => numberElement.classList.remove("bounce"), 600);
-  }
-}
-
-// ==============================
-// Показ UI после выбора профиля
-// ==============================
-function showQuizUI() {
-  const inputModeDiv = document.getElementById("inputModeDiv");
-  const submitWrapper = document.getElementById("submitWrapper");
-  const welcome = document.getElementById("welcome");
-  const counter = document.getElementById("knownCounter");
-
-  if (welcome) welcome.style.display = "none";
-  if (inputModeDiv) inputModeDiv.style.display = "block";
-  if (submitWrapper) submitWrapper.style.display = "block";
-  if (counter) counter.style.display = "flex";
-  if(imageContainer) imageContainer.style.display = 'flex';
-
-  const container = document.getElementById('welcomeContainer');
-  if (container) container.remove();
-}
-
-// ==============================
-// Добавление нового слова
-// ==============================
-function isValidWord(word) {
-  return /^[a-zA-Z\s'-]+$/.test(word);
-}
-
-submitAnswerBtn.addEventListener("click", async () => {
-  const newWord = answerInput.value.trim();
-
-  if (!currentProfileId) return;
-
-  if (!newWord) {
-    showFeedbackInsideInput("Введите слово!", true);
-    return;
-  }
-
-  if (!isValidWord(newWord)) {
-    showFeedbackInsideInput("Только английские буквы и слова", true);
-    return;
-  }
-
-  const profileRef = database.ref(`profiles/${currentProfileId}/knownWords`);
-  const snapshot = await profileRef.get();
-  const words = snapshot.val() || [];
-
-  if (words.includes(newWord)) {
-    showFeedbackInsideInput("Слово уже есть!", true);
-  } else {
-    words.push(newWord);
-    await profileRef.set(words);
-    showFeedbackInsideInput("Слово добавлено!", false);
-    updateKnownCounter();
-  }
-});
-
-// ==============================
-// Подсказка внутри input с подпрыгиванием
-// ==============================
-function showFeedbackInsideInput(message, isError) {
-  const originalPlaceholder = "Введите слово на английском";
-  answerInput.value = "";
-  answerInput.placeholder = message;
-  answerInput.classList.add("bounce");
-  answerInput.style.borderColor = isError ? "red" : "green";
-
-  setTimeout(() => {
-    answerInput.focus();
-    answerInput.classList.remove("bounce");
-    answerInput.placeholder = originalPlaceholder;
-    answerInput.style.borderColor = "";
-  }, 1500);
-}
-
-// ==============================
-// Запуск при загрузке страницы
-// ==============================
 document.addEventListener("DOMContentLoaded", async () => {
-  if (window.Telegram && window.Telegram.WebApp) {
-    const webApp = window.Telegram.WebApp;
-    webApp.ready(); // уведомляем, что WebApp готов
-
-    const telegramUser = webApp.initDataUnsafe?.user;
-    if (telegramUser) {
-      await createOrGetTelegramProfile(telegramUser);
-    } else {
-      alert("Не удалось получить данные пользователя Telegram");
-    }
-  } else {
+  const webApp = window.Telegram?.WebApp;
+  if (!webApp) {
     alert("Эта версия работает только внутри Telegram Mini App");
+    return;
   }
-});
 
-// Переделанная функция для передачи пользователя
-async function createOrGetTelegramProfile(telegramUser) {
-  if (!telegramUser) return;
+  webApp.ready();
+  const telegramUser = webApp.initDataUnsafe?.user;
+  if (!telegramUser) {
+    alert("Не удалось получить данные Telegram");
+    return;
+  }
 
-  const profileId = telegramUser.id;
-  const profileRef = database.ref("profiles/" + profileId);
+  const answerInput = document.getElementById("answerInput");
+  const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+  const imageContainer = document.getElementById("imageContainer");
+  imageContainer.style.display = "none";
+
+  // Создаём или получаем профиль
+  currentProfileId = telegramUser.id;
+  const profileRef = database.ref("profiles/" + currentProfileId);
   const snapshot = await profileRef.get();
 
   if (!snapshot.exists()) {
@@ -157,12 +45,71 @@ async function createOrGetTelegramProfile(telegramUser) {
       username: telegramUser.username || "",
       knownWords: []
     });
-    console.log("Создан новый профиль Telegram:", telegramUser.first_name);
-  } else {
-    console.log("Профиль Telegram уже существует:", snapshot.val().name);
   }
 
-  currentProfileId = profileId;
-  updateKnownCounter();
   showQuizUI();
-}
+  await updateKnownCounter();
+
+  // Обработчик добавления слова
+  submitAnswerBtn.addEventListener("click", async () => {
+    const newWord = answerInput.value.trim();
+    if (!newWord) {
+      showFeedback("Введите слово!", true);
+      return;
+    }
+    if (!/^[a-zA-Z\s'-]+$/.test(newWord)) {
+      showFeedback("Только английские буквы", true);
+      return;
+    }
+
+    const wordsSnapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
+    const words = wordsSnapshot.val() || [];
+    if (words.includes(newWord)) {
+      showFeedback("Слово уже есть!", true);
+      return;
+    }
+
+    words.push(newWord);
+    await database.ref(`profiles/${currentProfileId}/knownWords`).set(words);
+    showFeedback("Слово добавлено!", false);
+    updateKnownCounter();
+  });
+
+  async function updateKnownCounter() {
+    const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
+    const words = snapshot.val() || [];
+    const numberElement = document.querySelector("#knownCounter .kc-number");
+    if (numberElement) {
+      numberElement.textContent = [...new Set(words)].length;
+      numberElement.classList.add("bounce");
+      setTimeout(() => numberElement.classList.remove("bounce"), 600);
+    }
+  }
+
+  function showQuizUI() {
+    const inputModeDiv = document.getElementById("inputModeDiv");
+    const submitWrapper = document.getElementById("submitWrapper");
+    const counter = document.getElementById("knownCounter");
+    const container = document.getElementById('welcomeContainer');
+
+    if (inputModeDiv) inputModeDiv.style.display = "block";
+    if (submitWrapper) submitWrapper.style.display = "block";
+    if (counter) counter.style.display = "flex";
+    if (imageContainer) imageContainer.style.display = 'flex';
+    if (container) container.remove();
+  }
+
+  function showFeedback(message, isError) {
+    const originalPlaceholder = "Введите слово на английском";
+    answerInput.value = "";
+    answerInput.placeholder = message;
+    answerInput.classList.add("bounce");
+    answerInput.style.borderColor = isError ? "red" : "green";
+    setTimeout(() => {
+      answerInput.classList.remove("bounce");
+      answerInput.placeholder = originalPlaceholder;
+      answerInput.style.borderColor = "";
+      answerInput.focus();
+    }, 1500);
+  }
+});
