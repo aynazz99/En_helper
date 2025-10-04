@@ -38,9 +38,7 @@ button.red-border {
   text-align: center;  /* если нужно центрировать input и feedback */
 }
 
-#submitWrapper {
-margin-top: 5px !important;
-}
+
 
 
 #submitAnswerBtn {
@@ -159,5 +157,6 @@ margin-top: 5px !important;
   
     justify-content: center;                   /* центр текста */
   }
+
 
 
