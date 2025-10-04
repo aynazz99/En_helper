@@ -1,12 +1,5 @@
-// Здесь может быть реальный initData, например:
-// let initData = Telegram.WebApp.initDataUnsafe;
-
-// Для примера возьмём тестовые данные:
-let initData = {
-  user: { id: 12345, name: "Alex", lang: "ru" },
-  session: "abcd1234",
-  features: ["cards", "test", "dialog"]
-};
+// Получаем реальные данные из Telegram, если есть
+let initData = window.Telegram?.WebApp?.initDataUnsafe || "Нет данных из Telegram";
 
 // Функция вывода на экран
 function showInitData(data) {
