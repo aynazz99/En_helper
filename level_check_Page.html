@@ -1,38 +1,47 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="apple-mobile-web-app-title" content="English Helper">
-  <title>English Helper</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Название для PWA на iOS -->
+<meta name="apple-mobile-web-app-title" content="English Helper">
+<title>English Helper</title>
 
   <!-- Стили -->
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="page2.css">
-  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="page2.css">
+<link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-  <!-- Telegram WebApp -->
-  <script>
-    window.Telegram.WebApp.ready();
-  </script>
-
-  <!-- PWA -->
+  <!-- Подключаем manifest -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- iOS поддержка -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="English Helper">
   <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+  <!-- Цвет статус-бара (Android Chrome) -->
+  <meta name="theme-color" content="#ffffff">
 </head>
 
 <body>
 
-<!-- 🔢 Счётчик -->
 <header>
-  <div style="flex:1;"></div>
+  <div style="flex:1;"></div> <!-- пустое место слева -->
+      <button id="addProfileBtn">+</button>
+  <select id="ProfileSelect">
+    <option disabled selected value="">Выберите профиль</option>
+  </select>
+      <button id="DeleteProfileBtn">🗑️</button>
   <div style="flex:1; display:flex; justify-content:flex-end;">
     <section id="knownCounter" class="known-counter" role="status" aria-label="Количество выученных слов">
       <div class="kc-badge">
@@ -42,47 +51,69 @@
   </div>
 </header>
 
-<!-- 🖼️ Картинки -->
+<!-- Полупрозрачный контейнер с картинками -->
 <div class="image-container" id="imageContainer"></div>
 
-<!-- ✍️ Ввод слова -->
+<!-- режим ввода -->
 <div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
   <div id="feedback"></div>
   <input type="text" id="answerInput" placeholder="Введите слово на английском" autocomplete="off" autocapitalize="none" spellcheck="false">
 </div>
 
-<!-- ➕ Кнопка добавления -->
+<!-- кнопка ответа вынесена вниз -->
 <div id="submitWrapper" style="display:none; text-align:center; margin:20px 0; width:95%; max-width:600px;">
   <button id="submitAnswerBtn" type="button" tabindex="-1">Добавить</button>
 </div>
 
-<!-- 👋 Приветствие -->
+
 <div id="welcomeWrapper">
   <div id="welcomeContainer">
     <div id="welcomeSubtext">
-      Проверим, сколько английских слов ты реально помнишь...
+     Проверим, сколько английских слов ты реально помнишь...
     </div>
   </div>
 </div>
 
-<!-- 🔄 Индикатор загрузки -->
-<div id="loader" style="display:none; justify-content:center; align-items:center; height:100vh; font-size:18px;">
-  🔄 Загрузка профиля...
+<div id="profilePopup" class="popup hidden">
+  <div class="popup-content">
+    <h3>Создать новый профиль</h3>
+    <input type="text" id="profileNameInput" placeholder="Введите имя профиля" autocomplete="off">
+    <div id="profileMessage" style="margin: 10px 0;"></div>
+    <div class="popup-buttons">
+      <button id="profileCancelBtn">Отмена</button>
+      <button id="profileAddBtn">Создать</button>
+    </div>
+  </div>
 </div>
 
-<!-- 📱 Нижнее меню -->
+<div id="deletePopup" class="popup hidden">
+  <div class="popup-content">
+    <h3 class="popup-title">Удаление профилей</h3>
+    <!-- Удаление текущего профиля -->
+    <div class="popup-section">
+      <button id="deleteCurrentBtn" class="btn btn-danger">Удалить текущий профиль</button>
+    </div>
+    <!-- Удаление всех профилей -->
+    <div class="popup-section">
+      <button id="deleteAllBtn" class="btn btn-danger">Удалить все профили</button>
+    </div>
+    <div id="deleteMessage" class="popup-message"></div>
+    <button id="deleteCancelBtn" class="btn btn-secondary">Закрыть</button>
+  </div>
+</div>
+
 <footer>
   <div id="footerButtons">
     <button id="testBtn"> <i class="fi fi-rr-list-check"></i> Test</button>
-    <button id="levelBtn" class="active"> <i class="fi fi-rr-chart-histogram"></i> Lvl</button>
-    <button id="cardsBtn"> <i class="fi fi-rr-layers"></i> Cards</button>
+    <button id="levelBtn" class="active" > <i class="fi fi-rr-chart-histogram"></i> Lvl</button>
+    <button id="cardsBtn"> <i class="fi fi-rr-layers"></i> Cards</button> 
     <button id="DialogBtn"> <i class="fi fi-rr-rocket-lunch"></i> Airport</button>
   </div>
 </footer>
 
-<!-- 📦 Скрипты -->
 <script src="script_2.js"></script>
 <script src="footerBtnWork.js"></script>
 <script src="active-footer.js"></script>
 </body>
 </html>
+
