@@ -33,7 +33,7 @@ button.red-border {
 
 #submitAnswerBtn {
   margin-top: 5px !important;     /* сверху */
-  margin-bottom: 5px !important;  /* снизу */
+  margin-bottom: 80px !important;  /* снизу */
   width: 100%;
   font-size: 1.4rem;
   padding: 16px;
@@ -284,4 +284,5 @@ button.red-border {
   border-radius: 15px;
   object-fit: contain;     /* сохраняет пропорции */
 }
+
 
