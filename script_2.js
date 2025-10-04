@@ -1,7 +1,3 @@
-// =======================================
-// Firebase и Mini App автологин с логами
-// =======================================
-
 // Инициализация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCgSFDj7fRw6HSvZyOz1g5IM749f2sY55M",
@@ -15,99 +11,133 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// Основная переменная для текущего профиля
-let currentProfileId = null;
-
-// Контейнер для логов (можно добавить на страницу или смотреть в консоли)
-function showLogs(message, type="info") {
-    const prefix = new Date().toLocaleTimeString();
-    const fullMessage = `[${prefix}] ${message}`;
-    console.log(fullMessage);
-}
-
-// =======================================
-// Автологин через Telegram Mini App
-// =======================================
-window.Telegram.WebApp.ready();
-
 document.addEventListener("DOMContentLoaded", async () => {
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  const imageContainer = document.getElementById('imageContainer');
+  const quizContainer = document.getElementById("inputModeDiv");
+  const submitWrapper = document.getElementById("submitWrapper");
+  const counter = document.getElementById("knownCounter");
+  const welcome = document.getElementById("welcome");
+  const welcomeContainer = document.getElementById('welcomeContainer');
+  const initDataContainer = document.getElementById('initDataContainer');
 
-    showLogs("Start autoLogin: Begin auto login process", "trace");
+  imageContainer.style.display = 'none';
 
-    if (!tgUser || !tgUser.id) {
-        showLogs("Telegram user not found! Fallback to manual mode.", "error");
-        // Здесь можно вызвать старый селект выбора профиля или показать сообщение
-        return;
-    }
+  // Проверяем, есть ли Telegram WebApp
+  if (!window.Telegram?.WebApp) {
+    alert("Этот скрипт работает только внутри Telegram Mini App!");
+    return;
+  }
 
-    showLogs("Telegram user found:", "trace");
-    showLogs(`User ID: ${tgUser.id}`, "trace");
-    showLogs(`Username: ${tgUser.username}`, "trace");
-    showLogs(`First name: ${tgUser.first_name}`, "trace");
+  // Получаем initData
+  const tg = window.Telegram.WebApp;
+  const initData = tg.initData || {};
+  const initDataUnsafe = tg.initDataUnsafe || {};
 
-    const profileId = tgUser.id.toString(); // уникальный ключ по Telegram ID
-    currentProfileId = profileId;
+  // Показываем на экране все данные initData
+  if (initDataContainer) {
+    initDataContainer.textContent = JSON.stringify({ initData, initDataUnsafe }, null, 2);
+  }
 
-    try {
-        const profileRef = database.ref("profiles/" + profileId);
-        const snapshot = await profileRef.get();
+  // Берём user_id для профиля
+  const userId = initDataUnsafe.user?.id;
+  if (!userId) {
+    alert("Не удалось определить user_id из initData!");
+    return;
+  }
 
-        if (!snapshot.exists()) {
-            showLogs("Profile not found in Firebase. Creating new profile...", "trace");
-            const name = tgUser.username || tgUser.first_name || `User#${tgUser.id}`;
-            await profileRef.set({
-                name: name,
-                knownWords: []
-            });
-            showLogs(`Created profile: ${name} (${profileId})`, "success");
-        } else {
-            showLogs(`Profile loaded: ${snapshot.val().name} (${profileId})`, "success");
-        }
+  let currentProfileId = userId;
 
-        // После загрузки или создания профиля показываем UI
-        showQuizUI();
-        await updateKnownCounter();
-        showLogs("Auto login finished successfully", "success");
-    } catch (err) {
-        console.error(err);
-        showLogs("Error during autoLogin: " + err.message, "error");
-    }
-});
+  // Загружаем профиль по user_id
+  const profileRef = database.ref(`profiles/${currentProfileId}`);
+  const snapshot = await profileRef.get();
 
-// =======================================
-// Обновление счетчика knownWords
-// =======================================
-async function updateKnownCounter() {
-    if (!currentProfileId) return;
+  if (!snapshot.exists()) {
+    // Если профиля нет — создаём пустой
+    await profileRef.set({
+      name: initDataUnsafe.user?.first_name || "Unknown",
+      knownWords: []
+    });
+  }
+
+  // Показываем UI квиза
+  if (welcome) welcome.style.display = "none";
+  if (quizContainer) quizContainer.style.display = "block";
+  if (submitWrapper) submitWrapper.style.display = "block";
+  if (counter) counter.style.display = "flex";
+  if (imageContainer) imageContainer.style.display = 'flex';
+  if (welcomeContainer) welcomeContainer.remove();
+
+  // Функция обновления счётчика
+  async function updateKnownCounter() {
     const snapshot = await database.ref(`profiles/${currentProfileId}/knownWords`).get();
     const words = snapshot.val() || [];
     const uniqueWords = [...new Set(words)];
 
     const numberElement = document.querySelector("#knownCounter .kc-number");
     if (numberElement) {
-        numberElement.textContent = uniqueWords.length;
-        numberElement.classList.add("bounce");
-        setTimeout(() => numberElement.classList.remove("bounce"), 600);
+      numberElement.textContent = uniqueWords.length;
+      numberElement.classList.add("bounce");
+      setTimeout(() => numberElement.classList.remove("bounce"), 600);
     }
-}
+  }
 
-// =======================================
-// Отображение интерфейса
-// =======================================
-function showQuizUI() {
-    const inputModeDiv = document.getElementById("inputModeDiv");
-    const submitWrapper = document.getElementById("submitWrapper");
-    const welcome = document.getElementById("welcome");
-    const counter = document.getElementById("knownCounter");
-    const imageContainer = document.getElementById('imageContainer');
+  updateKnownCounter();
 
-    if (welcome) welcome.style.display = "none";
-    if (inputModeDiv) inputModeDiv.style.display = "block";
-    if (submitWrapper) submitWrapper.style.display = "block";
-    if (counter) counter.style.display = "flex";
-    if (imageContainer) imageContainer.style.display = 'flex';
+  // Проверка корректности слова
+  function isValidWord(word) {
+    return /^[a-zA-Z\s'-]+$/.test(word);
+  }
 
-    const container = document.getElementById('welcomeContainer');
-    if (container) container.remove();
-}
+  // Обработчик кнопки Submit
+  const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+  const answerInput = document.getElementById("answerInput");
+
+  submitAnswerBtn.addEventListener("click", async () => {
+    const newWord = answerInput.value.trim();
+
+    if (!newWord) {
+      showFeedbackInsideInput("Введите слово!", true);
+      return;
+    }
+
+    if (!isValidWord(newWord)) {
+      showFeedbackInsideInput("Только английские буквы и слова", true);
+      return;
+    }
+
+    const profileRef = database.ref(`profiles/${currentProfileId}/knownWords`);
+    const snapshot = await profileRef.get();
+    const words = snapshot.val() || [];
+
+    if (words.includes(newWord)) {
+      showFeedbackInsideInput("Слово уже есть!", true);
+    } else {
+      words.push(newWord);
+      await profileRef.set(words);
+      showFeedbackInsideInput("Слово добавлено!", false);
+      updateKnownCounter();
+    }
+  });
+
+  function showFeedbackInsideInput(message, isError) {
+    const originalPlaceholder = "Введите слово на английском";
+    answerInput.value = "";
+    answerInput.placeholder = message;
+    answerInput.classList.add("bounce");
+    answerInput.style.borderColor = isError ? "red" : "green";
+
+    setTimeout(() => {
+      answerInput.focus();
+      answerInput.classList.remove("bounce");
+      answerInput.placeholder = originalPlaceholder;
+      answerInput.style.borderColor = "";
+    }, 1500);
+  }
+
+  // Регистрация Service Worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("✅ Service Worker зарегистрирован"))
+      .catch(err => console.error("❌ Ошибка Service Worker:", err));
+  }
+});
