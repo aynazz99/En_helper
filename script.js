@@ -106,7 +106,6 @@ function loadNextWord() {
   index++;
 
   // Скрываем текст
-  document.getElementById('welcome').style.display = 'none';
   document.getElementById('welcomeSubtext').style.display = 'none';
   
 
