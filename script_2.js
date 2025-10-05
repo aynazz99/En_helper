@@ -109,9 +109,9 @@ submitAnswerBtn.addEventListener("click", async () => {
 
 // Автоматический вход через Telegram Mini App
 document.addEventListener("DOMContentLoaded", async () => {
-  // получаем пользователя из Telegram
+  // 1. Получаем пользователя из Telegram или тестовые данные
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {
-    id: "test123", // фейковый id для теста в браузере
+    id: "test123",
     username: "TestUser",
     first_name: "Test"
   };
@@ -122,10 +122,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   currentProfileId = tgUser.id.toString();
+  const profileRef = database.ref(`profiles/${currentProfileId}`);
 
-  const profileRef = database.ref("profiles/" + currentProfileId);
+  // 2. Проверяем наличие профиля в Firebase
   const snapshot = await profileRef.get();
-
   if (snapshot.exists()) {
     console.log("✅ Профиль найден:", snapshot.val());
   } else {
@@ -137,14 +137,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("✅ Создан новый профиль:", newProfile);
   }
 
+  // 3. Сначала обновляем счётчик, потом показываем интерфейс
+  await updateKnownCounter();
   showQuizUI();
-  await updateKnownCounter(); 
 
-  // Регистрация Service Worker
+  // 4. Регистрируем Service Worker отдельно
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js")
       .then(() => console.log("✅ Service Worker зарегистрирован"))
       .catch(err => console.error("❌ Ошибка Service Worker:", err));
   }
 });
+
 
