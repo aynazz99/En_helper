@@ -41,7 +41,6 @@ button.red-border {
 
 #submitAnswerBtn {
 
-  margin-bottom: 120px !important;  /* снизу */
   width: 100%;
   font-size: 1.4rem;
   padding: 16px;
@@ -128,10 +127,11 @@ button.red-border {
     flex-direction: column;
     justify-content: flex-end; /* прижимает к футеру */
     align-items: center;
-    min-height: 100vh;
-
+    min-height: 65vh;
+    width: 90%;
     padding-bottom: 100px; /* отступ футера от нижнего края */
     box-sizing: border-box;
+    margin-bottom: 80px;
 }
 
 
