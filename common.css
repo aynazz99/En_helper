@@ -17,7 +17,7 @@ body {
   display: flex;                /* Используем Flexbox для выравнивания содержимого */
   flex-direction: column;       /* Элементы расположены вертикально */
   align-items: center;          /* Выравнивание по горизонтали (по центру) */
-
+  justify-content: flex-start;  /* Выравнивание по вертикали (начинаем сверху) */
   font-family: Arial, sans-serif; /* Базовый шрифт */
   background-color: darkcyan;   /* Фоновый цвет */
   background-size: cover;       /* Фон занимает всю область, сохраняя пропорции */
