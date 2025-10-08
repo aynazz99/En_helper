@@ -133,14 +133,6 @@ button.red-border {
     box-sizing: border-box;
     margin-bottom: 80px;
 }
-
-
-/* Мобильная адаптация */
-@media (max-width: 420px) {
-  .kc-number { font-size: 18px; }
-  .kc-label { font-size: 10px; }
-}
-
 /* Сам контейнер */
   #textContainer {
     margin-top: 10px;
@@ -155,4 +147,16 @@ button.red-border {
   
     justify-content: center;                   /* центр текста */
   }
+
+
+/* Мобильная адаптация */
+@media (max-width: 420px) {
+  .kc-number { font-size: 18px; }
+  .kc-label { font-size: 10px; }
+  
+  .footer-wrapper {
+    padding-bottom: 120px; /* отступ футера от нижнего края */
+}
+}
+
 
