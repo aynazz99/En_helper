@@ -30,8 +30,7 @@ const submitWrapper=document.getElementById('submitWrapper');
 const progressDiv=document.getElementById('progress');
 const progressFill=document.getElementById('progressFill');
 const progressBar = document.getElementById('progressBar');
-const imageContainer = document.getElementById('imageContainer');
-imageContainer.style.display = 'none';
+
 
 
 // Скрываем прогресс при загрузке страницы
@@ -390,7 +389,6 @@ listSelect.onchange = () => {
     fiftyBtn.style.display = 'inline-block';
     modeBtn.style.display = 'inline-block';
     progressBar.style.display = 'block';
-    imageContainer.style.display = 'flex'
     loadNextWord();
   });
 };
