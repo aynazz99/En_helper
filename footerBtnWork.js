@@ -43,3 +43,57 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+(function() {
+  const onlyMobile = true;
+  if (onlyMobile && window.matchMedia && !window.matchMedia('(max-width:480px)').matches) return;
+
+  const footer = document.querySelector('footer');
+  if (!footer) return;
+  if (document.getElementById('bottomContainer')) return; // уже создан
+
+  // Создаём контейнер
+  const bottomContainer = document.createElement('div');
+  bottomContainer.id = 'bottomContainer';
+
+  // Список элементов, которые перемещаем
+  const idsToMove = [
+    'word',
+    'answers',
+    'inputModeDiv',
+    'progressBar',
+    'progress',
+    'submitWrapper',
+    'submitAnswerBtn'
+  ];
+
+  idsToMove.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) bottomContainer.appendChild(el);
+  });
+
+  // Вставляем контейнер перед футером
+  footer.parentNode.insertBefore(bottomContainer, footer);
+
+  // следим за клавиатурой
+  function updateKeyboardHeight() {
+    let keyboardHeight = 0;
+    if (window.visualViewport) {
+      const vv = window.visualViewport;
+      const layoutH = window.innerHeight;
+      const visualH = vv.height;
+      const offsetTop = vv.offsetTop || 0;
+      keyboardHeight = Math.max(0, layoutH - visualH - offsetTop);
+    }
+    document.documentElement.style.setProperty('--keyboard-height', keyboardHeight + 'px');
+  }
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateKeyboardHeight);
+    window.visualViewport.addEventListener('scroll', updateKeyboardHeight);
+  } else {
+    window.addEventListener('resize', updateKeyboardHeight);
+  }
+  updateKeyboardHeight();
+})();
+
