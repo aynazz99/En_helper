@@ -139,6 +139,10 @@ button.red-border {
 @media (max-width: 420px) {
   .kc-number { font-size: 18px; }
   .kc-label { font-size: 10px; }
+
+  .footer-wrapper {
+    padding-bottom: 120px; /* отступ футера от нижнего края *
+}
 }
 
 /* Сам контейнер */
@@ -155,4 +159,5 @@ button.red-border {
   
     justify-content: center;                   /* центр текста */
   }
+
 
