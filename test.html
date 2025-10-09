@@ -44,8 +44,7 @@
   </div>
 </header>
 
-<!-- Полупрозрачный контейнер с картинками -->
-<div class="image-container" id="imageContainer"></div>
+
   
 <div id="addListForm">
   <input type="text" id="newListName" placeholder="Имя нового списка">
@@ -63,32 +62,19 @@
 </div>
 
 <!-- режим ввода -->
-<div id="inputModeDiv" style="display:none; margin:20px 0; text-align:center; width:95%; max-width:600px;">
+<div id="inputModeDiv">
   <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
 </div>
+
 
 <div id="progressBar"><div id="progressFill"></div></div>
 <div id="progress"></div>
 
 <!-- кнопка ответа вынесена вниз -->
-<div id="submitWrapper" style="display:none; text-align:center; margin:20px 0; width:95%; max-width:600px;">
+<div id="submitWrapper" style="display:none; ">
   <button id="submitAnswerBtn" type="button" tabindex="-1">Ответить</button>
 </div>
 
-<!-- Модальный попап -->
-<div id="customModal" class="modal">
-  <div class="modal-content">
-    <p> Вы можете просто ОТКРЫТЬ, не сохраняя,<br>
-      Либо ДОБАВИТЬ на сайт</p>
- <div class="modal-buttons top-buttons">
-      <button id="addBtn">Добавить</button>
-      <button id="openBtn">Открыть</button>
-    </div>
-    <div class="modal-buttons bottom-button">
-      <button id="cancelBtn">Отмена</button>
-    </div>
-  </div>
-</div>
 
 <div id="welcomeWrapper">
   <div id="welcomeContainer">
