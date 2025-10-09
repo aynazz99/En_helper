@@ -7,26 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
       webapp.ready();
     }
 
-    // Функция для переключения классов body
-    function updateMode() {
-      if (webapp.isExpanded) {
-        document.body.classList.add("tg-fullscreen");
-        document.body.classList.remove("tg-mini");
-      } else {
-        document.body.classList.add("tg-mini");
-        document.body.classList.remove("tg-fullscreen");
-      }
+    // Принудительно разворачиваем на полный экран
+    if (typeof webapp.expand === "function") {
+      webapp.expand();
     }
 
-    // первый вызов
-    updateMode();
+    // Можно для стилей добавить класс fullscreen
+    document.body.classList.add("tg-fullscreen");
 
-    // слушаем изменения размера окна Telegram WebApp
-    if (typeof webapp.onEvent === "function") {
-      webapp.onEvent("viewportChanged", updateMode);
-    } else {
-      window.addEventListener("resize", updateMode);
-    }
   } else {
     console.log("Сайт открыт не в Telegram WebApp");
   }
