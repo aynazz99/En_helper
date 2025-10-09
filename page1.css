@@ -75,7 +75,7 @@
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom, 20px);
   
-  background: rgba(255, 255, 255, 0.9); /* почти прозрачный фон */
+  background: rgba(255, 255, 255, 0); /* прозрачный фон */
   border-radius: 12px;                  /* закругляем углы контейнера */
   overflow: hidden;                      /* обрезаем фон по углам */
   background-clip: padding-box;          /* фон не вылезает за рамки */
@@ -253,4 +253,5 @@
   }
 
 }
+
 
