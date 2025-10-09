@@ -112,6 +112,7 @@ cardSelect.addEventListener('change', () => {
   const folder = cardSelect.value;
   if (!folder || !folders[folder]) return;
 
+  imageContainer.style.display = "block"
   answersContainer.style.display = "grid"; 
   if (fiftyBtn) fiftyBtn.style.display = "inline-block";
 

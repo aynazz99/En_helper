@@ -1,10 +1,27 @@
+/* Контейнер */
+#quizContainer {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  top: 100px;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  padding: 0 10px;
+}
 
+/* Элементы внутри контейнера */
+#quizContainer > * {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 .answers {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
-  width: 95%;
   max-width: 600px;
 }
 
@@ -108,7 +125,6 @@
 
 /* Flip-карточка */
 .flip-card {
-  width: 350px;             /* фиксированная ширина карточки */
   height: 150px;            /* фиксированная высота карточки */
   perspective: 1000px;
   flex-shrink: 0;           /* чтобы карточка не сжималась */
@@ -195,30 +211,13 @@
   color: gold;
 }
 
-@media (max-height: 740px) {
-  .transparent-container {
-    height: 100px; /* высота контейнера */
+@media (max-width:480px) {
+
+  /* Контейнер */
+  #quizContainer {
+    top: auto;
+    bottom: 80px;
   }
+
 }
 
-@media (max-height: 690px) {
-  .transparent-container {
-    height: 50px; /* высота контейнера */
-  }
-}
-
-@media (max-height: 640px) {
-  .transparent-container {
-    height: 50px; /* высота контейнера */
-    margin: 0px;
-    padding: 0px;
-  }
-}
-
-@media (max-height: 565px) {
-  .transparent-container {
-    height: 0px; /* высота контейнера */
-    margin: 0px;
-    padding: 0px;
-  }
-}
