@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-  if (Telegram?.WebApp?.initDataUnsafe?.user) {
-    Telegram.WebApp.expand();
+  const webapp = Telegram?.WebApp;
+  if (webapp?.initDataUnsafe?.user && webapp.expand) {
+    webapp.ready();
+    webapp.expand();
+    document.body.classList.add('tg-fullscreen'); // этот класс подключается к body
   }
 });
+
+
 
 // Анимация карточек
 const cards = document.querySelectorAll('.card');
@@ -13,5 +18,6 @@ setInterval(() => {
   cards[current].style.transform = 'scale(1.1)';
   current = (current + 1) % cards.length;
 }, 1000);
+
 
 
