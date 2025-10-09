@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', () => {
+  if (Telegram?.WebApp?.initDataUnsafe?.user) {
+    Telegram.WebApp.expand();
+  }
+});
 
 // Анимация карточек
 const cards = document.querySelectorAll('.card');
@@ -8,4 +13,5 @@ setInterval(() => {
   cards[current].style.transform = 'scale(1.1)';
   current = (current + 1) % cards.length;
 }, 1000);
+
 
