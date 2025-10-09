@@ -44,7 +44,6 @@
   </div>
 </header>
 
-
   
 <div id="addListForm">
   <input type="text" id="newListName" placeholder="Имя нового списка">
@@ -52,29 +51,45 @@
   <button id="addListBtn">Добавить тест</button>
 </div>
 
-<div id="word" class="placeholder"></div>
+<div id="quizContainer">
+  <div id="word" class="placeholder"></div>
 
-<div class="answers" id="answers">
-  <button class="answerBtn"></button>
-  <button class="answerBtn"></button>
-  <button class="answerBtn"></button>
-  <button class="answerBtn"></button>
+  <div class="answers" id="answers">
+    <button class="answerBtn"></button>
+    <button class="answerBtn"></button>
+    <button class="answerBtn"></button>
+    <button class="answerBtn"></button>
+  </div>
+
+  <!-- режим ввода -->
+  <div id="inputModeDiv" style="display:none; margin:20px 0;">
+    <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
+  </div>
+
+  <div id="progressBar"><div id="progressFill"></div></div>
+  <div id="progress"></div>
+
+  <!-- кнопка ответа -->
+  <div id="submitWrapper" style="display:none; margin:20px 0;">
+    <button id="submitAnswerBtn" type="button" tabindex="-1">Ответить</button>
+  </div>
+
 </div>
 
-<!-- режим ввода -->
-<div id="inputModeDiv">
-  <input type="text" id="answerInput" placeholder="Введите ответ" autocomplete="off" autocapitalize="none" spellcheck="false">
+<!-- Модальный попап -->
+<div id="customModal" class="modal">
+  <div class="modal-content">
+    <p> Вы можете просто ОТКРЫТЬ, не сохраняя,<br>
+      Либо ДОБАВИТЬ на сайт</p>
+ <div class="modal-buttons top-buttons">
+      <button id="addBtn">Добавить</button>
+      <button id="openBtn">Открыть</button>
+    </div>
+    <div class="modal-buttons bottom-button">
+      <button id="cancelBtn">Отмена</button>
+    </div>
+  </div>
 </div>
-
-
-<div id="progressBar"><div id="progressFill"></div></div>
-<div id="progress"></div>
-
-<!-- кнопка ответа вынесена вниз -->
-<div id="submitWrapper" style="display:none; ">
-  <button id="submitAnswerBtn" type="button" tabindex="-1">Ответить</button>
-</div>
-
 
 <div id="welcomeWrapper">
   <div id="welcomeContainer">

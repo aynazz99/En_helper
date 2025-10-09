@@ -428,22 +428,6 @@ document.addEventListener('touchend', e=>{
 }, false);
 document.addEventListener('touchstart', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
 
-// --- Динамическое позиционирование кнопки на iOS PWA ---
-let vh = window.innerHeight;
-
-window.addEventListener('resize', () => {
-    const newVh = window.innerHeight;
-    const delta = vh - newVh;
-
-    if (delta > 150) { // клавиатура открылась
-        submitWrapper.style.position = 'absolute';
-        submitWrapper.style.bottom = delta + 'px';
-    } else {
-        submitWrapper.style.position = 'static';
-        submitWrapper.style.bottom = 'auto';
-    }
-});
-
 
 function showCustomModal(onAdd, onOpen) {
   const modal = document.getElementById('customModal');
