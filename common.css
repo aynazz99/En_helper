@@ -64,6 +64,10 @@ header {
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+.tg-fullscreen {
+  width: 100%;
+  height: 100%;
+}
 
 
 /* Стиль для заголовка */
@@ -400,6 +404,7 @@ select.red-border {
     transform: scale(1.05);
   }
 }
+
 
 
 
